@@ -303,6 +303,7 @@ namespace hxm
     vec3f::vec3f() : x(0), y(0), z(0) {}
     vec3f::vec3f(float v) : x(v), y(v), z(v) {}
     vec3f::vec3f(float x, float y, float z) : x(x), y(y), z(z) {}
+    vec3f::vec3f(const vec2f& v, float z) : x(v.x), y(v.y), z(z) {}
     vec3f::vec3f(const vec4f& v) : x(v.x), y(v.y), z(v.z) {}
     vec3f::vec3f(const vec3u& v) : x(float(v.x)), y(float(v.y)), z(float(v.z)) {}
     vec3f::vec3f(const vec4u& v) : x(float(v.x)), y(float(v.y)), z(float(v.z)) {}

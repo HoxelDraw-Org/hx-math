@@ -238,6 +238,7 @@ namespace hxm
         vec3f();
         vec3f(float v);
         vec3f(float x, float y, float z);
+        vec3f(const vec2f&, float z);
         vec3f(const vec3u& v);
         vec3f(const vec4f& v);
         vec3f(const vec4u& v);
