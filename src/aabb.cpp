@@ -96,6 +96,26 @@ namespace hxm
 
         return result;
     }
+    
+    int aabbi::bulk(bool halfOpenInterval) const
+    {
+        if (!isValid())
+        {
+            return 0;
+        }
+        
+        vec4i tDim;
+        if (halfOpenInterval)
+        {
+            tDim = max - min;
+        }
+        else
+        {
+            tDim = (max + 1) - min;
+        }
+        
+        return tDim.x * tDim.y * tDim.z * tDim.w;
+    }
 
     void aabbi::reset()
     {
@@ -171,6 +191,16 @@ namespace hxm
         result.max.w = std::min(max.w, other.max.w);
 
         return result;
+    }
+    
+    float aabb::bulk() const
+    {
+        if (!isValid())
+        {
+            return 0.0f;
+        }
+        
+        return (max.x - min.x) * (max.y - min.y) * (max.z - min.z) * (max.w - min.w);
     }
 
     vec4f aabb::centroid() const

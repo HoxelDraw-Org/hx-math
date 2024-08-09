@@ -42,6 +42,8 @@ namespace hxm
 
         aabbi intersect(const aabbi& other) const;
         aabbi intersect(const vec4i& otherStart, const vec4i& otherEnd) const;
+        
+        int bulk(bool halfOpenInterval = true) const;
 
         void reset();
     
@@ -81,6 +83,8 @@ namespace hxm
         void addAABB(const aabb& other);
 
         aabb intersect(const aabb& other) const;
+        
+        float bulk() const;
 
         vec4f centroid() const;
 
