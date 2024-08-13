@@ -433,6 +433,11 @@ namespace hxm
         return result;
     }
 
+    inline float dot(const vec4f& a, const vec4f& b)
+    {
+        return (a.x * b.x) + (a.y * b.y) + (a.z * b.z) + (a.w * b.w);
+    }
+
 
     // VEC4I ------------------------------------------------------------------
     class vec4i {
