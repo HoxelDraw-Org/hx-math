@@ -7,6 +7,8 @@ Justin Jensen
 
 #pragma once
 
+#include "euler6.h"
+
 namespace hxm
 {
 	// 3.1415926535 8979323846 2643383279
@@ -23,5 +25,29 @@ namespace hxm
 	inline float toDeg(float thetaRad)
 	{
 		return (thetaRad / HX_PI) * 180.0f;
+	}
+
+	inline euler6 toRad(const euler6& eDeg)
+	{
+		euler6 result;
+		result.xy = toRad(eDeg.xy);
+		result.zx = toRad(eDeg.zx);
+		result.xw = toRad(eDeg.xw);
+		result.yz = toRad(eDeg.yz);
+		result.wy = toRad(eDeg.wy);
+		result.zw = toRad(eDeg.zw);
+		return result;
+	}
+
+	inline euler6 toDeg(const euler6& eRad)
+	{
+		euler6 result;
+		result.xy = toDeg(eRad.xy);
+		result.zx = toDeg(eRad.zx);
+		result.xw = toDeg(eRad.xw);
+		result.yz = toDeg(eRad.yz);
+		result.wy = toDeg(eRad.wy);
+		result.zw = toDeg(eRad.zw);
+		return result;
 	}
 }
