@@ -1,5 +1,5 @@
 /*
-ray4.h
+ray.h
 September 29, 2022
 Contributors:
 Justin Jensen
@@ -12,6 +12,66 @@ Justin Jensen
 
 namespace hxm
 {
+    class ray3
+    {
+    // Members
+    private:
+    protected:
+    public:
+        vec3f orig;
+        vec3f dir;
+
+        int sign[3];
+        vec3f invDir;
+
+    // Functions
+    private:
+    protected:
+    public:
+        vec3f getPoint(float dist) const
+        { return orig + (dir * dist); }
+
+        ray3() : orig(0), dir(0), invDir(0)
+        {
+            sign[0] = 0;
+            sign[1] = 0;
+            sign[2] = 0;
+        }
+        ray3(const vec3f& orig, const vec3f& dir) : orig(orig), dir(dir)
+        {
+            invDir = 1.0f / dir;
+            sign[0] = int(invDir.x >= 0);
+            sign[1] = int(invDir.y >= 0);
+            sign[2] = int(invDir.z >= 0);
+        }
+        ~ray3() {};
+    };
+
+    inline ray3 operator*(const Mat4& m, const ray3& ray) {
+        vec3f newOrig(0);
+        vec3f newDir(0);
+
+        // multiply the origin by the matrix as a point (5th component: 1.0)
+        float oX = ray.orig.x;
+        float oY = ray.orig.y;
+        float oZ = ray.orig.z;
+        newOrig.x = (m[0] * oX) + (m[4] * oY) + (m[8] * oZ) + m[12];
+        newOrig.y = (m[1] * oX) + (m[5] * oY) + (m[9] * oZ) + m[13];
+        newOrig.z = (m[2] * oX) + (m[6] * oY) + (m[10] * oZ) + m[14];
+        //newOrig.w = (m[3] * oX) + (m[7] * oY) + (m[11] * oZ) + m[15];
+
+        // multiply the direction by the matrix as a vector (4th component: 0.0)
+        float dX = ray.dir.x;
+        float dY = ray.dir.y;
+        float dZ = ray.dir.z;
+        newDir.x = (m[0] * dX) + (m[4] * dY) + (m[8] * dZ) + m[12];
+        newDir.y = (m[1] * dX) + (m[5] * dY) + (m[9] * dZ) + m[13];
+        newDir.z = (m[2] * dX) + (m[6] * dY) + (m[10] * dZ) + m[14];
+        //newDir.w = (m[3] * dX) + (m[7] * dY) + (m[11] * dZ) + m[15];
+
+        return ray3(newOrig, newDir);
+    }
+
     class ray4
     {
     // Members

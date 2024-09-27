@@ -140,7 +140,7 @@ bool testAABB()
 	return false;
 }
 
-bool testRay4()
+bool testRay()
 {
 	return false;
 }

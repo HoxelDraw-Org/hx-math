@@ -17,9 +17,9 @@ int main()
 		std::printf("AABB tests failed!--------------------------\n\n");
 	}
 
-	if (!testRay4())
+	if (!testRay())
 	{
-		std::printf("Ray4 tests failed!--------------------------\n\n");
+		std::printf("Ray tests failed!--------------------------\n\n");
 	}
 	
 	if (!testMath())

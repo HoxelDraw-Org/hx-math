@@ -5,7 +5,7 @@ set (HEADERS
 	${INCLUDE_DIR}/euler6.h
 	${INCLUDE_DIR}/hxMath.h
 	${INCLUDE_DIR}/mat.h
-	${INCLUDE_DIR}/ray4.h
+	${INCLUDE_DIR}/ray.h
 	${INCLUDE_DIR}/vec.h)
 
 set (MATH_SOURCES

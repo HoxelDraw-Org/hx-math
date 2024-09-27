@@ -47,6 +47,7 @@ namespace hxm
         vec2f& operator/=(const vec2f& rhs);
         vec2f& operator/=(float rhs);
         float& operator[](uint32_t idx);
+        vec2f operator-() const;
 
         uint32_t minCompIdx() const;    // the index of the smallest component of this vector
         float dot(const vec2f& rhs) const;
@@ -226,6 +227,7 @@ namespace hxm
         vec3f& operator*=(float rhs);
         vec3f& operator/=(const vec3f& rhs);
         vec3f& operator/=(float rhs);
+        vec3f operator-() const;
         float& operator[](uint32_t idx);
         float  operator[](uint32_t idx) const;
         bool   operator==(const vec3f& rhs) const;
@@ -257,6 +259,16 @@ namespace hxm
 
     inline vec3f operator*(vec3f lhs, const vec3f& rhs) {
         lhs *= rhs;
+        return lhs;
+    }
+
+    inline vec3f operator+(vec3f lhs, float rhs) {
+        lhs += rhs;
+        return lhs;
+    }
+
+    inline vec3f operator-(vec3f lhs, float rhs) {
+        lhs -= rhs;
         return lhs;
     }
 
@@ -292,6 +304,22 @@ namespace hxm
         vec3f result = v;
         result /= v.length();
         return result;
+    }
+
+    inline vec3f clamp(vec3f v, float vmin, float vmax)
+    {
+        v.x = std::max(std::min(v.x, vmax), vmin);
+        v.y = std::max(std::min(v.y, vmax), vmin);
+        v.z = std::max(std::min(v.z, vmax), vmin);
+        return v;
+    }
+
+    inline vec3f clamp(vec3f v, vec3f vmin, vec3f vmax)
+    {
+        v.x = std::max(std::min(v.x, vmax.x), vmin.x);
+        v.y = std::max(std::min(v.y, vmax.y), vmin.y);
+        v.z = std::max(std::min(v.z, vmax.z), vmin.z);
+        return v;
     }
 
 
@@ -347,6 +375,7 @@ namespace hxm
         bool operator!=(const vec4f& other);
         float& operator[](uint32_t idx);
         float operator[](uint32_t idx) const;
+        vec4f operator-() const;
 
         vec4f& copy(const vec4f& v);
         vec4f& set(float x, float y, float z, float w);
@@ -436,6 +465,24 @@ namespace hxm
     inline float dot(const vec4f& a, const vec4f& b)
     {
         return (a.x * b.x) + (a.y * b.y) + (a.z * b.z) + (a.w * b.w);
+    }
+
+    inline vec4f clamp(vec4f v, float vmin, float vmax)
+    {
+        v.x = std::max(std::min(v.x, vmax), vmin);
+        v.y = std::max(std::min(v.y, vmax), vmin);
+        v.z = std::max(std::min(v.z, vmax), vmin);
+        v.w = std::max(std::min(v.w, vmax), vmin);
+        return v;
+    }
+
+    inline vec4f clamp(vec4f v, vec4f vmin, vec4f vmax)
+    {
+        v.x = std::max(std::min(v.x, vmax.x), vmin.x);
+        v.y = std::max(std::min(v.y, vmax.y), vmin.y);
+        v.z = std::max(std::min(v.z, vmax.z), vmin.z);
+        v.w = std::max(std::min(v.w, vmax.w), vmin.w);
+        return v;
     }
 
 
@@ -675,6 +722,7 @@ namespace hxm
         bool operator!=(const vec5f& other);
         float& operator[](uint32_t idx);
         float operator[](uint32_t idx) const;
+        vec5f operator-() const;
 
         vec5f& copy(const vec5f& v);
         vec5f& set(float x, float y, float z, float w, float v);
