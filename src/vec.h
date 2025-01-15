@@ -26,6 +26,9 @@ namespace hxm
     class vec5f;
     class vec5i;
 
+    typedef vec3f colorRGB;
+    typedef vec4f colorRGBA;
+
     // VEC2F ------------------------------------------------------------------
     class vec2f {
         // Members
