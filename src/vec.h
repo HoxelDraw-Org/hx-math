@@ -32,9 +32,12 @@ namespace hxm
     private:
     protected:
     public:
-        // TODO: make this a Union of an array and three separate floats
-        union { float x, u; };
-        union { float y, v; };
+        union
+        {
+            float _v[2];
+            struct { float x, y; };
+            struct { float u, v; };
+        };
 
         // Functions
     private:
@@ -47,6 +50,7 @@ namespace hxm
         vec2f& operator/=(const vec2f& rhs);
         vec2f& operator/=(float rhs);
         float& operator[](uint32_t idx);
+        float operator[](uint32_t idx) const;
         vec2f operator-() const;
 
         uint32_t minCompIdx() const;    // the index of the smallest component of this vector
@@ -112,8 +116,11 @@ namespace hxm
     private:
     protected:
     public:
-        int32_t x;
-        int32_t y;
+        union
+        {
+            int32_t _v[2];
+            struct { int32_t x, y; };
+        };
 
         // Functions
     private:
@@ -121,6 +128,7 @@ namespace hxm
     public:
         // TODO: more operators
         int32_t& operator[](uint32_t idx);
+        int32_t operator[](uint32_t idx) const;
         vec2i& operator+=(const vec2i& rhs);
         vec2i& operator-=(const vec2i& rhs);
         bool operator==(const vec2i& other);
@@ -166,8 +174,11 @@ namespace hxm
     private:
     protected:
     public:
-        uint32_t x;
-        uint32_t y;
+        union
+        {
+            uint32_t _v[2];
+            struct { uint32_t x, y; };
+        };
 
         // Functions
     private:
@@ -212,10 +223,13 @@ namespace hxm
     private:
     protected:
     public:
-        // TODO: can we make this a Union of an array and three separate floats?
-        union { float x, r, u; };
-        union { float y, g, v; };
-        union { float z, b, w; };
+        union
+        {
+            float _v[3];
+            struct { float x, y, z; };
+            struct { float r, g, b; };
+            struct { float u, v, w; };
+        };
 
         // Functions
     private:
@@ -329,9 +343,12 @@ namespace hxm
     private:
     protected:
     public:
-        union { uint32_t x, r; };
-        union { uint32_t y, g; };
-        union { uint32_t z, b; };
+        union
+        {
+            uint32_t _v[3];
+            struct { uint32_t x, y, z; };
+            struct { uint32_t r, g, b; };
+        };
 
         // Functions
     private:
@@ -339,6 +356,7 @@ namespace hxm
     public:
         // TODO: more operators
         uint32_t& operator[](uint32_t idx);
+        uint32_t operator[](uint32_t idx) const;
         bool operator==(const vec3u& rhs);
         bool operator==(const vec3u& rhs) const;
         bool operator!=(const vec3u& rhs);
@@ -356,10 +374,12 @@ namespace hxm
     private:
     protected:
     public:
-        union { float x, r; };
-        union { float y, g; };
-        union { float z, b; };
-        union { float w, a; };
+        union
+        {
+            float _v[4];
+            struct { float x, y, z, w; };
+            struct { float r, g, b, a; };
+        };
 
         // Functions
     private:
@@ -492,10 +512,12 @@ namespace hxm
     private:
     protected:
     public:
-        union { int32_t x, r; };
-        union { int32_t y, g; };
-        union { int32_t z, b; };
-        union { int32_t w, a; };
+        union
+        {
+            int32_t _v[4];
+            struct { int32_t x, y, z, w; };
+            struct { int32_t r, g, b, a; };
+        };
 
         // Functions
     private:
@@ -587,10 +609,12 @@ namespace hxm
     private:
     protected:
     public:
-        union { uint32_t x, r; };
-        union { uint32_t y, g; };
-        union { uint32_t z, b; };
-        union { uint32_t w, a; };
+        union
+        {
+            uint32_t _v[4];
+            struct { uint32_t x, y, z, w; };
+            struct { uint32_t r, g, b, a; };
+        };
 
         // Functions
     private:
@@ -700,11 +724,11 @@ namespace hxm
     private:
     protected:
     public:
-        union { float x; };
-        union { float y; };
-        union { float z; };
-        union { float w; };
-        union { float v; };
+        union
+        {
+            float _v[5];
+            struct { float x, y, z, w, v; };
+        };
 
         // Functions
     private:
@@ -796,11 +820,11 @@ namespace hxm
     private:
     protected:
     public:
-        int32_t x;
-        int32_t y;
-        int32_t z;
-        int32_t w;
-        int32_t r;
+        union
+        {
+            int32_t _v[5];
+            struct { int32_t x, y, z, w, v; };
+        };
 
         // Functions
     private:
@@ -816,7 +840,7 @@ namespace hxm
 
         vec5i();
         vec5i(int32_t v);
-        vec5i(int32_t x, int32_t y, int32_t z, int32_t w, int32_t r);
+        vec5i(int32_t x, int32_t y, int32_t z, int32_t w, int32_t v);
         ~vec5i();
     };    
 
@@ -844,7 +868,7 @@ namespace hxm
         v.y = std::max(std::min(v.y, vMax.y), vMin.y);
         v.z = std::max(std::min(v.z, vMax.z), vMin.z);
         v.w = std::max(std::min(v.w, vMax.w), vMin.w);
-        v.r = std::max(std::min(v.r, vMax.r), vMin.r);
+        v.v = std::max(std::min(v.v, vMax.v), vMin.v);
         return v;
     }
 
@@ -854,7 +878,7 @@ namespace hxm
         v.y = std::abs(v.y);
         v.z = std::abs(v.z);
         v.w = std::abs(v.w);
-        v.r = std::abs(v.r);
+        v.v = std::abs(v.v);
         return v;
     }
 
@@ -880,7 +904,7 @@ namespace hxm
         result.y = (a.y + ((abs(a.y / b.y) + 1) * b.y)) % b.y;
         result.z = (a.z + ((abs(a.z / b.z) + 1) * b.z)) % b.z;
         result.w = (a.w + ((abs(a.w / b.w) + 1) * b.w)) % b.w;
-        result.r = (a.r + ((abs(a.r / b.r) + 1) * b.r)) % b.r;
+        result.v = (a.v + ((abs(a.v / b.v) + 1) * b.v)) % b.v;
         return result;
     }
 }
