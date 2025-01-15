@@ -245,6 +245,7 @@ namespace hxm
         float& operator[](uint32_t idx);
         float  operator[](uint32_t idx) const;
         bool   operator==(const vec3f& rhs) const;
+        bool   operator!=(const vec3f& rhs) const;
 
         uint32_t minCompIdx() const;    // the index of the smallest component of this vector
         float dot(const vec3f& rhs) const;

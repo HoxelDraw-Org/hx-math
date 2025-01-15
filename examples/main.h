@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include "vec.h"
+#include "aabb.h"
 //#include "mat.h"
 //#include "hxMath.h"
 
@@ -137,7 +138,42 @@ bool testMatrix()
 
 bool testAABB()
 {
-	return false;
+	bool success = true;
+
+	aabb3 b1 = aabb3(vec3f(0, 1, 2), vec3f(1, 3, 5));
+	aabb3 b2 = { vec3f(2, 4, 6), vec3f(3, 5, 7) };
+	aabb3 b3 = b1;
+	aabb3 b4 = b2;
+
+	// [] access
+	vec3f min1 = b1.min;
+	vec3f min2 = b2[0];
+	vec3f max2 = { b2._v[3], b2._v[4], b2._v[5] };
+
+	// [] modifying
+	b1[0] = { 7, 8, 9 };
+	if (b1[0] != vec3f(7, 8, 9))
+	{
+		std::printf("AABB3 [] operator failed\n");
+		success = false;
+	}
+
+	// centroid
+	vec3f centroid3 = b3.centroid();
+	if (centroid3 != vec3f(0.5f, 2.0f, 3.5f))
+	{
+		std::printf("AABB3 centroid failed\n");
+		success = false;
+	}
+
+	float centroid4axis0 = b4.centroid(0);
+	if (centroid4axis0 != 2.5f)
+	{
+		std::printf("AABB3 centroid axis failed\n");
+		success = false;
+	}
+
+	return success;
 }
 
 bool testRay()
