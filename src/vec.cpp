@@ -59,6 +59,11 @@ namespace hxm
         }
     }
 
+    float vec2f::operator[](uint32_t idx) const
+    {
+        return _v[idx];
+    }
+
     vec2f vec2f::operator-() const {
         return vec2f(-x, -y);
     }
@@ -121,15 +126,12 @@ namespace hxm
     }
 
     int32_t& vec2i::operator[](uint32_t idx) {
-        switch (idx)
-        {
-        case 0:
-            return x;
-        case 1:
-            return y;
-        default:
-            throw "index out of bounds";
-        }
+        return _v[idx];
+    }
+
+    int32_t vec2i::operator[](uint32_t idx) const
+    {
+        return _v[idx];
     }
 
     vec2i::vec2i() : x(0), y(0) {}
@@ -142,28 +144,12 @@ namespace hxm
 
     // VEC2U ----------------------------------------------------------------------
     uint32_t& vec2u::operator[](uint32_t idx) {
-        switch (idx)
-        {
-        case 0:
-            return x;
-        case 1:
-            return y;
-        default:
-            throw "index out of bounds";
-        }
+        return _v[idx];
     }
 
     uint32_t vec2u::operator[](uint32_t idx) const
     {
-        switch (idx)
-        {
-        case 0:
-            return x;
-        case 1:
-            return y;
-        default:
-            throw "index out of bounds";
-        }
+        return _v[idx];
     }
 
     vec2u& vec2u::operator+=(const vec2u& rhs)
@@ -245,32 +231,12 @@ namespace hxm
     }
 
     float& vec3f::operator[](uint32_t idx) {
-        switch (idx)
-        {
-        case 0:
-            return x;
-        case 1:
-            return y;
-        case 2:
-            return z;
-        default:
-            throw "index out of bounds";
-        }
+        return _v[idx];
     }
 
     float vec3f::operator[](uint32_t idx) const
     {
-        switch (idx)
-        {
-        case 0:
-            return x;
-        case 1:
-            return y;
-        case 2:
-            return z;
-        default:
-            throw "index out of bounds";
-        }
+        return _v[idx];
     }
 
     bool vec3f::operator==(const vec3f& rhs) const
@@ -319,18 +285,14 @@ namespace hxm
 
 
     // VEC3U ----------------------------------------------------------------------
-    uint32_t& vec3u::operator[](uint32_t idx) {
-        switch (idx)
-        {
-        case 0:
-            return x;
-        case 1:
-            return y;
-        case 2:
-            return z;
-        default:
-            throw "index out of bounds";
-        }
+    uint32_t& vec3u::operator[](uint32_t idx)
+    {
+        return _v[idx];
+    }
+
+    uint32_t vec3u::operator[](uint32_t idx) const
+    {
+        return _v[idx];
     }
 
     bool vec3u::operator==(const vec3u& rhs)
@@ -414,36 +376,12 @@ namespace hxm
     }
 
     float& vec4f::operator[](uint32_t idx) {
-        switch (idx)
-        {
-        case 0:
-            return x;
-        case 1:
-            return y;
-        case 2:
-            return z;
-        case 3:
-            return w;
-        default:
-            throw "index out of bounds";
-        }
+        return _v[idx];
     }
 
     float vec4f::operator[](uint32_t idx) const
     {
-        switch (idx)
-        {
-        case 0:
-            return x;
-        case 1:
-            return y;
-        case 2:
-            return z;
-        case 3:
-            return w;
-        default:
-            throw "index out of bounds";
-        }
+        return _v[idx];
     }
 
     vec4f vec4f::operator-() const {
@@ -551,36 +489,12 @@ namespace hxm
     }
 
     int32_t& vec4i::operator[](uint32_t idx) {
-        switch (idx)
-        {
-        case 0:
-            return x;
-        case 1:
-            return y;
-        case 2:
-            return z;
-        case 3:
-            return w;
-        default:
-            throw "index out of bounds";
-        }
+        return _v[idx];
     }
 
     int32_t vec4i::operator[](uint32_t idx) const
     {
-        switch (idx)
-        {
-        case 0:
-            return x;
-        case 1:
-            return y;
-        case 2:
-            return z;
-        case 3:
-            return w;
-        default:
-            throw "index out of bounds";
-        }
+        return _v[idx];
     }
 
     bool vec4i::operator==(const vec4i& other) {
@@ -615,50 +529,14 @@ namespace hxm
     }
     vec4i::~vec4i() {}
 
-    //vec4i operator+(vec4i lhs, const vec4i& rhs) {
-    //    lhs += rhs;
-    //    return lhs;
-    //}
-    //
-    //vec4i operator-(vec4i lhs, const vec4i& rhs)
-    //{
-    //    lhs -= rhs;
-    //    return lhs;
-    //}
-
-
     // VEC4U ----------------------------------------------------------------------
     uint32_t& vec4u::operator[](uint32_t idx) {
-        switch (idx)
-        {
-        case 0:
-            return x;
-        case 1:
-            return y;
-        case 2:
-            return z;
-        case 3:
-            return w;
-        default:
-            throw "index out of bounds";
-        }
+        return _v[idx];
     }
 
     uint32_t vec4u::operator[](uint32_t idx) const
     {
-        switch (idx)
-        {
-        case 0:
-            return x;
-        case 1:
-            return y;
-        case 2:
-            return z;
-        case 3:
-            return w;
-        default:
-            throw "index out of bounds";
-        }
+        return _v[idx];
     }
 
     bool vec4u::operator==(const vec4u& other) {
@@ -741,18 +619,6 @@ namespace hxm
         w = std::max(0, v.w);
     }
     vec4u::~vec4u() {}
-
-    //vec4u operator/(vec4u lhs, size_t rhs)
-    //{
-    //    lhs /= rhs;
-    //    return lhs;
-    //}
-    //
-    //vec4u operator%(vec4u lhs, size_t rhs)
-    //{
-    //    lhs %= rhs;
-    //    return lhs;
-    //}
 
     // VEC5F ----------------------------------------------------------------------
     vec5f& vec5f::operator+=(const vec5f& rhs) {
@@ -840,40 +706,12 @@ namespace hxm
     }
 
     float& vec5f::operator[](uint32_t idx) {
-        switch (idx)
-        {
-        case 0:
-            return x;
-        case 1:
-            return y;
-        case 2:
-            return z;
-        case 3:
-            return w;
-        case 4:
-            return v;
-        default:
-            throw "index out of bounds";
-        }
+        return _v[idx];
     }
 
     float vec5f::operator[](uint32_t idx) const
     {
-        switch (idx)
-        {
-        case 0:
-            return x;
-        case 1:
-            return y;
-        case 2:
-            return z;
-        case 3:
-            return w;
-        case 4:
-            return v;
-        default:
-            throw "index out of bounds";
-        }
+        return _v[idx];
     }
 
     vec5f vec5f::operator-() const {
@@ -956,7 +794,7 @@ namespace hxm
     vec5f::vec5f(const vec4f& vec, float v) : x(vec.x), y(vec.y), z(vec.z), w(vec.w), v(v) {}
     vec5f::vec5f(const vec4u& vec) : x(vec.x), y(vec.y), z(vec.z), w(vec.w), v(0) {}
     vec5f::vec5f(const vec4i& vec) : x(vec.x), y(vec.y), z(vec.z), w(vec.w), v(0) {}
-    vec5f::vec5f(const vec5i& vec) : x(vec.x), y(vec.y), z(vec.z), w(vec.w), v(vec.r) {}
+    vec5f::vec5f(const vec5i& vec) : x(vec.x), y(vec.y), z(vec.z), w(vec.w), v(vec.v) {}
     vec5f::~vec5f() {}
 
 
@@ -967,7 +805,7 @@ namespace hxm
         y += rhs.y;
         z += rhs.z;
         w += rhs.w;
-        r += rhs.r;
+        v += rhs.v;
         return *this;
     }
 
@@ -977,7 +815,7 @@ namespace hxm
         y -= rhs.y;
         z -= rhs.z;
         w -= rhs.w;
-        r -= rhs.r;
+        v -= rhs.v;
         return *this;
     }
 
@@ -987,57 +825,30 @@ namespace hxm
         y += value;
         z += value;
         w += value;
-        r += value;
+        v += value;
         return *this;
     }
 
-    int32_t& vec5i::operator[](uint32_t idx) {
-        switch (idx)
-        {
-        case 0:
-            return x;
-        case 1:
-            return y;
-        case 2:
-            return z;
-        case 3:
-            return w;
-        case 4:
-            return r;
-        default:
-            throw "index out of bounds";
-        }
+    int32_t& vec5i::operator[](uint32_t idx)
+    {
+        return _v[idx];
     }
 
     int32_t vec5i::operator[](uint32_t idx) const
     {
-        switch (idx)
-        {
-        case 0:
-            return x;
-        case 1:
-            return y;
-        case 2:
-            return z;
-        case 3:
-            return w;
-        case 4:
-            return r;
-        default:
-            throw "index out of bounds";
-        }
+        return _v[idx];
     }
 
     bool vec5i::operator==(const vec5i& other) {
-        return x == other.x && y == other.y && z == other.z && w == other.w && r == other.r;
+        return x == other.x && y == other.y && z == other.z && w == other.w && v == other.v;
     }
 
     bool vec5i::operator!=(const vec5i& other) {
-        return x != other.x || y != other.y || z != other.z || w != other.w || r != other.r;
+        return x != other.x || y != other.y || z != other.z || w != other.w || v != other.v;
     }
 
-    vec5i::vec5i() : x(0), y(0), z(0), w(0), r(0) {}
-    vec5i::vec5i(int32_t v) : x(v), y(v), z(v), w(v), r(v) {}
-    vec5i::vec5i(int32_t x, int32_t y, int32_t z, int32_t w, int32_t r) : x(x), y(y), z(z), w(w), r(r) {}
+    vec5i::vec5i() : x(0), y(0), z(0), w(0), v(0) {}
+    vec5i::vec5i(int32_t v) : x(v), y(v), z(v), w(v), v(v) {}
+    vec5i::vec5i(int32_t x, int32_t y, int32_t z, int32_t w, int32_t v) : x(x), y(y), z(z), w(w), v(v) {}
     vec5i::~vec5i() {}
 }
