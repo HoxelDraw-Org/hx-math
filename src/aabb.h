@@ -25,8 +25,12 @@ namespace hxm
     private:
     protected:
     public:
-        vec3f min;
-        vec3f max;
+        union
+        {
+            float _v[6];                // { min_x, min_y, min_z, max_x, max_y, max_z }
+            struct { vec3f _b[2]; };    // { min, max }
+            struct { vec3f min, max; }; // min, max
+        };
 
         // Functions
     private:
@@ -46,8 +50,14 @@ namespace hxm
         float volume() const;
 
         vec3f centroid() const;
+        float centroid(uint32_t axis) const;    // the centroid of a single axis
 
-        void padToMin();
+        void padToMin(float pad = AABB_MIN);
+
+        vec3f& operator[](uint32_t idx);        // 0: min, 1: max
+        vec3f operator[](uint32_t idx) const;
+        aabb3& operator+=(const aabb3& other);
+        aabb3& operator+=(const vec3f& v);
 
         void reset();
 
@@ -69,8 +79,12 @@ namespace hxm
     private:
     protected:
     public:
-        vec4i min;
-        vec4i max;
+        union
+        {
+            int32_t _v[8];              // { min_x, min_y, min_z, min_w, max_x, max_y, max_z, max_w }
+            struct { vec4i _b[2]; };    // { min, max }
+            struct { vec4i min, max; }; // min, max
+        };
 
         // Functions
     private:
@@ -92,6 +106,10 @@ namespace hxm
         int bulk(bool halfOpenInterval = true) const;
 
         void reset();
+
+        vec4i& operator[](uint32_t idx);        // 0: min, 1: max
+        vec4i operator[](uint32_t idx) const;
+        aabb4i& operator+=(const aabb4i& other);
     
         aabb4i();
         aabb4i(const vec4i& min, const vec4i& max);
@@ -112,8 +130,12 @@ namespace hxm
     private:
     protected:
     public:
-        vec4f min;
-        vec4f max;
+        union
+        {
+            float _v[8];              // { min_x, min_y, min_z, min_w, max_x, max_y, max_z, max_w }
+            struct { vec4f _b[2]; };    // { min, max }
+            struct { vec4f min, max; }; // min, max
+        };
 
         // Functions
     private:
@@ -133,10 +155,16 @@ namespace hxm
         float bulk() const;
 
         vec4f centroid() const;
+        float centroid(uint32_t axis) const;    // the centroid of a single axis
 
-        void padToMin();
+        void padToMin(float pad = AABB_MIN);
 
         void reset();
+
+        vec4f& operator[](uint32_t idx);        // 0: min, 1: max
+        vec4f operator[](uint32_t idx) const;
+        aabb4& operator+=(const aabb4& other);
+        aabb4& operator+=(const vec4f& v);
 
         aabb4();
         aabb4(const vec4f& min, const vec4f& max);

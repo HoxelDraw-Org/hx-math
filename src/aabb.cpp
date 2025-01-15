@@ -77,10 +77,15 @@ namespace hxm
         return (min + max) * 0.5f;
     }
 
-    void aabb3::padToMin()
+    float aabb3::centroid(uint32_t axis) const
+    {
+        return (min[axis] + max[axis]) * 0.5f;
+    }
+
+    void aabb3::padToMin(float pad)
     {
         // adjust the AABB so that no side is narrower than some delta
-        const float halfDelta = AABB_MIN * 0.5f;
+        const float halfDelta = pad * 0.5f;
         const size_t nDimensions = 3;
         for (size_t axIdx = 0; axIdx < nDimensions; axIdx++)
         {
@@ -90,6 +95,42 @@ namespace hxm
                 max[axIdx] += halfDelta;
             }
         }
+    }
+
+    vec3f& aabb3::operator[](uint32_t idx)
+    {
+        return _b[idx];
+    }
+
+    vec3f aabb3::operator[](uint32_t idx) const
+    {
+        return _b[idx];
+    }
+
+    aabb3& aabb3::operator+=(const aabb3& other)
+    {
+        min.x = std::min(other.min.x, min.x);
+        min.y = std::min(other.min.y, min.y);
+        min.z = std::min(other.min.z, min.z);
+
+        max.x = std::max(other.max.x, max.x);
+        max.y = std::max(other.max.y, max.y);
+        max.z = std::max(other.max.z, max.z);
+
+        return *this;
+    }
+
+    aabb3& aabb3::operator+=(const vec3f& v)
+    {
+        min.x = std::min(v.x, min.x);
+        min.y = std::min(v.y, min.y);
+        min.z = std::min(v.z, min.z);
+
+        max.x = std::max(v.x, max.x);
+        max.y = std::max(v.y, max.y);
+        max.z = std::max(v.z, max.z);
+
+        return *this;
     }
 
     void aabb3::reset()
@@ -223,6 +264,31 @@ namespace hxm
         max = vec4i(INT_MIN);
     }
 
+    vec4i& aabb4i::operator[](uint32_t idx)
+    {
+        return _b[idx];
+    }
+
+    vec4i aabb4i::operator[](uint32_t idx) const
+    {
+        return _b[idx];
+    }
+
+    aabb4i& aabb4i::operator+=(const aabb4i& other)
+    {
+        min.x = std::min(other.min.x, min.x);
+        min.y = std::min(other.min.y, min.y);
+        min.z = std::min(other.min.z, min.z);
+        min.w = std::min(other.min.w, min.w);
+
+        max.x = std::max(other.max.x, max.x);
+        max.y = std::max(other.max.y, max.y);
+        max.z = std::max(other.max.z, max.z);
+        max.w = std::max(other.max.w, max.w);
+
+        return *this;
+    }
+
     aabb4i::aabb4i()
     {
         reset();
@@ -245,7 +311,6 @@ namespace hxm
         max.y = std::max(pt.y, max.y);
         max.z = std::max(pt.z, max.z);
         max.w = std::max(pt.w, max.w);
-        
     }
 
     vec4f aabb4::dim() const
@@ -308,10 +373,15 @@ namespace hxm
         return (min + max) * 0.5f;
     }
 
-    void aabb4::padToMin()
+    float aabb4::centroid(uint32_t axis) const
+    {
+        return (min[axis] + max[axis]) * 0.5f;
+    }
+
+    void aabb4::padToMin(float pad)
     {
         // adjust the AABB so that no side is narrower than some delta
-        const float halfDelta = AABB_MIN * 0.5f;
+        const float halfDelta = pad * 0.5f;
         const size_t nDimensions = 4;
         for (size_t axIdx = 0; axIdx < nDimensions; axIdx++)
         {
@@ -327,6 +397,46 @@ namespace hxm
     {
         min = vec4f(FLT_MAX);
         max = vec4f(-FLT_MAX);
+    }
+
+    vec4f& aabb4::operator[](uint32_t idx)
+    {
+        return _b[idx];
+    }
+
+    vec4f aabb4::operator[](uint32_t idx) const
+    {
+        return _b[idx];
+    }
+
+    aabb4& aabb4::operator+=(const aabb4& other)
+    {
+        min.x = std::min(other.min.x, min.x);
+        min.y = std::min(other.min.y, min.y);
+        min.z = std::min(other.min.z, min.z);
+        min.w = std::min(other.min.w, min.w);
+
+        max.x = std::max(other.max.x, max.x);
+        max.y = std::max(other.max.y, max.y);
+        max.z = std::max(other.max.z, max.z);
+        max.w = std::max(other.max.w, max.w);
+
+        return *this;
+    }
+
+    aabb4& aabb4::operator+=(const vec4f& v)
+    {
+        min.x = std::min(v.x, min.x);
+        min.y = std::min(v.y, min.y);
+        min.z = std::min(v.z, min.z);
+        min.w = std::min(v.w, min.w);
+
+        max.x = std::max(v.x, max.x);
+        max.y = std::max(v.y, max.y);
+        max.z = std::max(v.z, max.z);
+        max.w = std::max(v.w, max.w);
+
+        return *this;
     }
 
     aabb4::aabb4()

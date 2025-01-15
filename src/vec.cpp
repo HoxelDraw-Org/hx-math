@@ -244,6 +244,11 @@ namespace hxm
         return x == rhs.x && y == rhs.y && z == rhs.z;
     }
 
+    bool vec3f::operator!=(const vec3f& rhs) const
+    {
+        return x != rhs.x || y != rhs.y || z != rhs.z;
+    }
+
     uint32_t vec3f::minCompIdx() const {
         uint32_t minIdx = 0;
         float minVal = x;
