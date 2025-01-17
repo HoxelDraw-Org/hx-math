@@ -509,6 +509,13 @@ namespace hxm
         return v;
     }
 
+    inline vec4f normalize(const vec4f& v)
+    {
+        vec4f result = v;
+        result /= v.length();
+        return result;
+    }
+
 
     // VEC4I ------------------------------------------------------------------
     class vec4i {

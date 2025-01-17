@@ -128,6 +128,15 @@ bool testVector()
 		success = false;
 	}
 
+	// test the inline normalize function
+	vec4f nonNormalVec2 = { 2, 3, 4, 5 };
+	vec4f normalVec2 = normalize(nonNormalVec2);
+	if (!isNear(normalVec2.length(), 1.0f) || normalVec2 == nonNormalVec2)
+	{
+		std::printf("Vec4f inline normalize failed!\n");
+		success = false;
+	}
+
 	return success;
 }
 
