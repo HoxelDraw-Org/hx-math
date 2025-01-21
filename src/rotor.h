@@ -20,11 +20,19 @@ namespace hxm
     public:
         float scalar;
         float xy;
-        float xz;
+        float zx;
         float xw;
         float yz;
-        float yw;
+        float wy;
         float zw;
+        // TODO: do we need the trivector parts?
+        // and there might also be a quadvector part?
+        float xyz;
+        float xyw;
+        float xzw;
+        float yzw;
+
+        // float xyzw is always 0
 
     // Functions
     private:
@@ -37,20 +45,18 @@ namespace hxm
         vec4f transform(const vec4f& v) const;
 
         rotor4& fromTo(const vec4f& fromDir, const vec4f& toDir);
-        rotor4& fromToTrig(const vec4f& fromDir, const vec4f& toDir);
+        rotor4& fromToTrig(const vec4f& fromDirNorm, const vec4f& toDirNorm);
 
         Mat5 matrix() const;
 
         rotor4();
-        rotor4(float scalar, float xy, float xz, float xw, float yz, float yw, float zw);
+        rotor4(float scalar, float xy, float zx, float xw, float yz, float wy, float zw);
         rotor4(const vec4f& fromDir, const vec4f& toDir);
         ~rotor4();
     };
 
-    /*
-    inline rotor4 reversed(const rotor4& r)
-    {
-        // TODO
-    }
-    */
+    // TODO:
+    // inline reverse
+    // lerp between two rotors
+    // append/combine/multiply two rotors
 }

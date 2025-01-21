@@ -199,3 +199,8 @@ bool testMath()
 {
 	return false;
 }
+
+bool testRotor()
+{
+	return false;
+}

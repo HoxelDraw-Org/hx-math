@@ -27,5 +27,10 @@ int main()
 		std::printf("Math tests failed!--------------------------\n\n");
 	}
 
+	if (!testRotor())
+	{
+		std::printf("Rotor tests failed!-------------------------\n\n");
+	}
+
 	return 0;
 }
