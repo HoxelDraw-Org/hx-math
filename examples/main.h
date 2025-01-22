@@ -3,8 +3,9 @@
 #include <iostream>
 #include "vec.h"
 #include "aabb.h"
-//#include "mat.h"
-//#include "hxMath.h"
+#include "rotor.h"
+#include "mat.h"
+#include "hxMath.h"
 
 #define MAX_ERROR 1e-5f
 using namespace hxm;
@@ -202,5 +203,206 @@ bool testMath()
 
 bool testRotor()
 {
-	return false;
+	bool success = true;
+
+	// basic principal planes
+	{
+		vec4f fromVec = { 1, 0, 0, 0 };
+		vec4f toVec = { 0, 1, 0, 0 };
+		rotor4 rotor;
+		rotor.fromTo(fromVec, toVec);
+
+		vec4f testPt = { 2, 0, 0, 0 };
+		const vec4f expectedResult = { 0, 2, 0, 0 };
+		vec4f rotoredPt = rotor.transform(testPt);
+
+		if (!isNearVec4f(rotoredPt, expectedResult))
+		{
+			success = false;
+			std::printf("XY rotor rotation failed\n");
+		}
+
+		Mat5 mRotor = rotor.matrix();
+		vec4f matrixedPt = mRotor * vec5f(testPt, 1.0f);
+		if (!isNearVec4f(matrixedPt, expectedResult))
+		{
+			success = false;
+			std::printf("XY rotor matrix rotation failed\n");
+		}
+	}
+
+	// all principal planes, 45 and 90 degrees
+	{
+		const size_t NUM_DIMENSIONS = 4;
+		const size_t NUM_ANGLES = 2;
+		const size_t NUM_SCALES = 3;
+		for (size_t j = 0; j < NUM_DIMENSIONS; j++)
+		{
+			for (size_t i = 0; i < NUM_DIMENSIONS; i++)
+			{
+				if (i == j) continue;
+				for (size_t a = 0; a < NUM_ANGLES; a++)
+				{
+					for (size_t s = 0; s < NUM_SCALES; s++)
+					{
+						float scale = (s * 0.25f) + 0.75f;	// 0.75, 1.0, 1.25
+						float angle = toRad((a + 1) * 45.0f);
+
+						vec4f fromVec = 0;
+						fromVec[i] = 1.0f;
+
+						float sinj = std::sinf(angle);
+						float cosj = std::cosf(angle);
+						vec4f toVec = 0;
+						toVec[i] = cosj;
+						toVec[j] = sinj;
+
+						const vec4f testPt = fromVec * scale;
+						const vec4f expectedResult = toVec * scale;
+
+						// regular fromTo
+						rotor4 rotor = rotor4(fromVec, toVec);
+						vec4f resultPt = rotor.transform(testPt);
+						if (!isNearVec4f(resultPt, expectedResult))
+						{
+							success = false;
+							std::printf("Principal plane (%i, %i) at angle %i and scale %f failed\n", int(i), int(j), int(a), scale);
+						}
+
+						// trig fromTo
+						rotor4 rotorTrig;
+						rotorTrig.fromToTrig(fromVec, toVec);
+						resultPt = rotorTrig.transform(testPt);
+						if (!isNearVec4f(resultPt, expectedResult))
+						{
+							success = false;
+							std::printf("Principal plane (%i, %i) at angle %i and scale % f using trig failed\n", int(i), int(j), int(a), scale);
+						}
+
+						// matrix
+						Mat5 mRotor = rotor.matrix();
+						const vec4f matrixedPt = mRotor * vec5f(testPt, 1.0f);
+						if (!isNearVec4f(matrixedPt, expectedResult))
+						{
+							success = false;
+							std::printf("Principal plane (%i, %i) at angle %i and scale %f using matrix rotation failed\n", int(i), int(j), int(a), scale);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// test trig version
+	{
+		vec4f fromVec = { 0, 0, 1, 0 };
+		vec4f toVec = { 0, 0, 0, -1 };
+		rotor4 rotor;
+		rotor.fromToTrig(fromVec, toVec);
+
+		vec4f testPt = { 0, 0, 1, 0 };
+		const vec4f expectedResult = { 0, 0, 0, -1 };
+		vec4f rotoredPt = rotor.transform(testPt);
+
+		if (!isNearVec4f(rotoredPt, expectedResult))
+		{
+			success = false;
+			std::printf("Trig fromTo rotation failed\n");
+		}
+
+		Mat5 mRotor = rotor.matrix();
+		vec4f matrixedPt = mRotor * vec5f(testPt, 1.0f);
+		if (!isNearVec4f(matrixedPt, expectedResult))
+		{
+			success = false;
+			std::printf("Trig fromTo matix rotation failed\n");
+		}
+	}
+
+	// test combining rotors
+	{
+		vec4f fromVec1 = { 1, 0, 0, 0 };
+		vec4f toVec1 = { 0, 1, 0, 0 };
+		vec4f fromVec2 = { 0, 1, 0, 0 };
+		vec4f toVec2 = { 0, 0, 1, 0 };
+
+		rotor4 rotor1;
+		rotor1.fromTo(fromVec1, toVec1);
+
+		rotor4 rotor2;
+		rotor2.fromTo(fromVec2, toVec2);
+
+		// NOTE: combination order is similar to column-major matrix multiplication, right to left
+		// i.e. "rotor2 * rotor1 * pt"  means rotate pt by rotor1 first, then by rotor2 second
+		rotor4 rCombined = rotor2;
+		rCombined.add(rotor1);
+
+		// this would be the combination of these rotors in reverse order
+		//rotor4 rCombined2 = rotor1;
+		//rCombined2.add(rotor2);
+
+		// expected result: x -> y -> z
+		const vec4f testPt = { 1, 0, 0, 0 };
+
+		vec4f ptRotoredSequential = rotor2.transform(rotor1.transform(testPt));
+		vec4f ptRotoredCombined = rCombined.transform(testPt);
+
+		if (!isNearVec4f(ptRotoredSequential, ptRotoredCombined))
+		{
+			success = false;
+			std::printf("Rotor combining failed\n");
+		}
+	}
+
+	// test reverse directions
+	{
+		vec4f fromVec = { 1, 0, 0, 0 };
+		vec4f toVec = { 0, 1, 0, 0 };
+		rotor4 rotorForward;
+		rotorForward.fromTo(fromVec, toVec);
+
+		rotor4 rotorReverse = rotorForward;
+		rotorReverse.reverse();
+
+		vec4f testPt = { 1, 0, 0, 0 };
+		const vec4f expectedPt = { 0, -1, 0, 0 };
+		vec4f reverseRotoredPt = rotorReverse.transform(testPt);
+
+		if (!isNearVec4f(reverseRotoredPt, expectedPt))
+		{
+			success = false;
+			std::printf("Reverse rotor transform failed\n");
+		}
+	}
+
+	// test non-principal planes
+	{
+		vec4f fromVec = { 1, 2, 3, 4 };
+		vec4f toVec = { 4, 3, 2, 1 };
+
+		vec4f fromVecNorm = normalize(fromVec);
+		vec4f toVecNorm = normalize(toVec);
+
+		// for this test, test point should be colinear with fromVec
+		vec4f testPt = fromVec * 2.0f;
+		float testPtLen = testPt.length();
+
+		// the result will be colinear with toVec, but should retain its length
+		const vec4f expectedResult = toVecNorm * testPtLen;
+
+		rotor4 rotor = rotor4(fromVec, toVec);
+
+		vec4f resultPt = rotor.transform(testPt);
+
+		float resultPtLen = resultPt.length();
+		
+
+		if (!isNearVec4f(resultPt, expectedResult))
+		{
+			success = false;
+			std::printf("Non-principal plane rotation failed\n");
+		}
+	}
+
+	return success;
 }

@@ -25,13 +25,14 @@ namespace hxm
         float yz;
         float wy;
         float zw;
-        // TODO: do we need the trivector parts?
-        // and there might also be a quadvector part?
-        float xyz;
-        float xyw;
-        float xzw;
-        float yzw;
 
+        // TODO: do we need the trivector parts for anything at all?
+        //float xyz;
+        //float xyw;
+        //float xzw;
+        //float yzw;
+
+        // and there might also be a quadvector part?
         // float xyzw is always 0
 
     // Functions
@@ -45,7 +46,10 @@ namespace hxm
         vec4f transform(const vec4f& v) const;
 
         rotor4& fromTo(const vec4f& fromDir, const vec4f& toDir);
-        rotor4& fromToTrig(const vec4f& fromDirNorm, const vec4f& toDirNorm);
+        rotor4& fromToTrig(const vec4f& fromDir, const vec4f& toDir);
+
+        // append/combine/multiply two rotors
+        rotor4& add(const rotor4& rotor);
 
         Mat5 matrix() const;
 
@@ -55,8 +59,11 @@ namespace hxm
         ~rotor4();
     };
 
+    inline rotor4 reverse(const rotor4& r)
+    {
+        return -r;
+    }
+
     // TODO:
-    // inline reverse
     // lerp between two rotors
-    // append/combine/multiply two rotors
 }
