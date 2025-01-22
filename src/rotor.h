@@ -12,6 +12,14 @@ Justin Jensen
 
 namespace hxm
 {
+    // ROTOR3 -----------------------------------------------------------------
+    class rotor3
+    {
+        // BIG TODO
+    };
+
+
+    // ROTOR4 -----------------------------------------------------------------
     class rotor4
     {
     // Members
@@ -48,8 +56,12 @@ namespace hxm
         rotor4& fromTo(const vec4f& fromDir, const vec4f& toDir);
         rotor4& fromToTrig(const vec4f& fromDir, const vec4f& toDir);
 
+        // NOTE: rotor multiplying works the same way as column-major matrix multiplication, from right to left
+        // i.e. "rotor2 * rotor1 * pt"  means rotate pt by rotor1 first, then by rotor2 second
         // append/combine/multiply two rotors
         rotor4& add(const rotor4& rotor);
+
+        // TODO: use operator*() syntax for both combining rotors and transforming vectors
 
         Mat5 matrix() const;
 
@@ -65,5 +77,7 @@ namespace hxm
     }
 
     // TODO:
-    // lerp between two rotors
+    // lerp between two rotor4s
+    // convert Euler6 to Rotor4
+    // convert Rotor4 to Euler6?
 }
