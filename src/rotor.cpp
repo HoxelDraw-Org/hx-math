@@ -10,6 +10,22 @@ Justin Jensen
 namespace hxm
 {
     // rotor4 -------------------------------------------------------------------
+    bool rotor4::operator==(const rotor4& other) const
+    {
+        return scalar == other.scalar
+            && xy == other.xy
+            && zx == other.zx
+            && xw == other.xw
+            && yz == other.yz
+            && wy == other.wy
+            && zw == other.zw;
+    }
+
+    bool rotor4::operator!=(const rotor4& other) const
+    {
+        return !(*this == other);
+    }
+
     rotor4 rotor4::operator-() const
     {
         return { scalar, -xy, -zx, -xw, -yz, -wy, -zw };
@@ -29,42 +45,7 @@ namespace hxm
 
     vec4f rotor4::transform(const vec4f& v) const
     {
-        // perform the 4D rotor sandwich operation
-        /*
-        r0: rotor.scalar
-        r12: rotor.XY
-        v1: vector.x
-
-        s1 =	(r0v1 + r12v2 - r31v3 + r14v4)
-        s2 =	(r0v2 - r12v1 + r23v3 - r42v4)
-        s3 =	(r0v3 + r31v1 - r23v2 + r34v4)
-        s4 =	(r0v4 - r14v1 + r42v2 - r34v3)
-        s123 =	(r12v3 + r31v2 + r23v1)
-        s124 =	(r12v4 - r14v2 - r42v1)
-        s134 =	(-r31v4 - r14v3 + r34v1)
-        s234 =	(r23v4 + r42v3 + r34v2)
-        */
-        float s1 = (scalar * v.x) + (xy * v.y) - (zx * v.z) + (xw * v.w);
-        float s2 = (scalar * v.y) - (xy * v.x) + (yz * v.z) - (wy * v.w);
-        float s3 = (scalar * v.z) + (zx * v.x) - (yz * v.y) + (zw * v.w);
-        float s4 = (scalar * v.w) - (xw * v.x) + (wy * v.y) - (zw * v.z);
-        float s123 = (xy * v.z) + (zx * v.y) + (yz * v.x);
-        float s124 = (xy * v.w) - (xw * v.y) - (wy * v.x);
-        float s134 = -(zx * v.w) - (xw * v.z) + (zw * v.x);
-        float s234 = (yz * v.w) + (wy * v.z) + (zw * v.y);
-
-        /*
-        v'.x =  s1r0 + s2r12 - s3r31 + s4r14 + s123r23 - s124r42 + s134r34
-        v'.y = -s1r12 + s2r0 + s3r23 - s4r42 + s123r31 - s124r14 + s234r34
-        v'.z =  s1r31 - s2r23 + s3r0 + s4r34 + s123r12 - s134r14 + s234r42
-        v'.w = -s1r14 + s2r42 - s3r34 + s4r0 + s124r12 - s134r31 + s234r23
-        */
-        vec4f result;
-        result.x =  (s1 * scalar) + (s2 * xy) - (s3 * zx) + (s4 * xw) + (s123 * yz) - (s124 * wy) + (s134 * zw);
-        result.y = -(s1 * xy) + (s2 * scalar) + (s3 * yz) - (s4 * wy) + (s123 * zx) - (s124 * xw) + (s234 * zw);
-        result.z =  (s1 * zx) - (s2 * yz) + (s3 * scalar) + (s4 * zw) + (s123 * xy) - (s134 * xw) + (s234 * wy);
-        result.w = -(s1 * xw) + (s2 * wy) - (s3 * zw) + (s4 * scalar) + (s124 * xy) - (s134 * zx) + (s234 * yz);
-        return result;
+        return *this * v;
     }
 
     rotor4& rotor4::fromTo(const vec4f& fromDir, const vec4f& toDir)
@@ -168,6 +149,71 @@ namespace hxm
         //xyzw = e1234;
 
         return *this;
+    }
+
+    rotor4 rotor4::operator*(const rotor4& other) const
+    {
+        /*
+        = (s0t0 - s12t12 - s31t31 - s14t14 - s23t23 - s42t42 - s34t34)
+        + (s0t12 + s12t0 + s31t23 + s14t42 - s23t31 - s42t14)e12
+        + (s0t31 - s12t23 + s31t0 + s14t34 + s23t12 - s34t14)e31
+        + (s0t14 - s12t42 - s31t34 + s14t0 + s42t12 + s34t31)e14
+        + (s0t23 + s12t31 - s31t12 + s23t0 + s42t34 - s34t42)e23
+        + (s0t42 + s12t14 - s14t12 - s23t34 + s42t0 + s34t23)e42
+        + (s0t34 + s31t14 - s14t31 + s23t42 - s42t23 + s34t0)e34
+        + (s12t34 - s31t42 + s14t23 + s23t14 - s42t31 + s34t12)e1234
+        */
+        const float s = (scalar * other.scalar) - (xy * other.xy) - (zx * other.zx) - (xw * other.xw) - (yz * other.yz) - (wy * other.wy) - (zw * other.zw);
+        const float e12 = (scalar * other.xy) + (xy * other.scalar) + (zx * other.yz) + (xw * other.wy) - (yz * other.zx) - (wy * other.xw);
+        const float e31 = (scalar * other.zx) - (xy * other.yz) + (zx * other.scalar) + (xw * other.zw) + (yz * other.xy) - (zw * other.xw);
+        const float e14 = (scalar * other.xw) - (xy * other.wy) - (zx * other.zw) + (xw * other.scalar) + (wy * other.xy) + (zw * other.zx);
+        const float e23 = (scalar * other.yz) + (xy * other.zx) - (zx * other.xy) + (yz * other.scalar) + (wy * other.zw) - (zw * other.wy);
+        const float e42 = (scalar * other.wy) + (xy * other.xw) - (xw * other.xy) - (yz * other.zw) + (wy * other.scalar) + (zw * other.yz);
+        const float e34 = (scalar * other.zw) + (zx * other.xw) - (xw * other.zx) + (yz * other.wy) - (wy * other.yz) + (zw * other.scalar);
+        // e1234 cancels out to zero
+        //const float e1234 = (xy * other.zw) - (zx * other.wy) + (xw * other.yz) + (yz * other.xw) - (wy * other.zx) + (zw * other.xy);
+
+        return rotor4(s, e12, e31, e14, e23, e42, e34);
+    }
+
+    vec4f rotor4::operator*(const vec4f& v) const
+    {
+        // perform the 4D rotor sandwich operation
+        /*
+        r0: rotor.scalar
+        r12: rotor.XY
+        v1: vector.x
+
+        s1 =	(r0v1 + r12v2 - r31v3 + r14v4)
+        s2 =	(r0v2 - r12v1 + r23v3 - r42v4)
+        s3 =	(r0v3 + r31v1 - r23v2 + r34v4)
+        s4 =	(r0v4 - r14v1 + r42v2 - r34v3)
+        s123 =	(r12v3 + r31v2 + r23v1)
+        s124 =	(r12v4 - r14v2 - r42v1)
+        s134 =	(-r31v4 - r14v3 + r34v1)
+        s234 =	(r23v4 + r42v3 + r34v2)
+        */
+        float s1 = (scalar * v.x) + (xy * v.y) - (zx * v.z) + (xw * v.w);
+        float s2 = (scalar * v.y) - (xy * v.x) + (yz * v.z) - (wy * v.w);
+        float s3 = (scalar * v.z) + (zx * v.x) - (yz * v.y) + (zw * v.w);
+        float s4 = (scalar * v.w) - (xw * v.x) + (wy * v.y) - (zw * v.z);
+        float s123 = (xy * v.z) + (zx * v.y) + (yz * v.x);
+        float s124 = (xy * v.w) - (xw * v.y) - (wy * v.x);
+        float s134 = -(zx * v.w) - (xw * v.z) + (zw * v.x);
+        float s234 = (yz * v.w) + (wy * v.z) + (zw * v.y);
+
+        /*
+        v'.x =  s1r0 + s2r12 - s3r31 + s4r14 + s123r23 - s124r42 + s134r34
+        v'.y = -s1r12 + s2r0 + s3r23 - s4r42 + s123r31 - s124r14 + s234r34
+        v'.z =  s1r31 - s2r23 + s3r0 + s4r34 + s123r12 - s134r14 + s234r42
+        v'.w = -s1r14 + s2r42 - s3r34 + s4r0 + s124r12 - s134r31 + s234r23
+        */
+        vec4f result;
+        result.x = (s1 * scalar) + (s2 * xy) - (s3 * zx) + (s4 * xw) + (s123 * yz) - (s124 * wy) + (s134 * zw);
+        result.y = -(s1 * xy) + (s2 * scalar) + (s3 * yz) - (s4 * wy) + (s123 * zx) - (s124 * xw) + (s234 * zw);
+        result.z = (s1 * zx) - (s2 * yz) + (s3 * scalar) + (s4 * zw) + (s123 * xy) - (s134 * xw) + (s234 * wy);
+        result.w = -(s1 * xw) + (s2 * wy) - (s3 * zw) + (s4 * scalar) + (s124 * xy) - (s134 * zx) + (s234 * yz);
+        return result;
     }
 
     Mat5 rotor4::matrix() const

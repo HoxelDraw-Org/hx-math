@@ -47,8 +47,9 @@ namespace hxm
     private:
     protected:
     public:
+        bool operator==(const rotor4& other) const;
+        bool operator!=(const rotor4& other) const;
         rotor4 operator-() const;
-
         rotor4& reverse();
 
         vec4f transform(const vec4f& v) const;
@@ -60,8 +61,8 @@ namespace hxm
         // i.e. "rotor2 * rotor1 * pt"  means rotate pt by rotor1 first, then by rotor2 second
         // append/combine/multiply two rotors
         rotor4& add(const rotor4& rotor);
-
-        // TODO: use operator*() syntax for both combining rotors and transforming vectors
+        rotor4 operator*(const rotor4& other) const;
+        vec4f operator*(const vec4f& v) const;
 
         Mat5 matrix() const;
 

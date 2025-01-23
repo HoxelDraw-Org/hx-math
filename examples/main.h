@@ -234,7 +234,7 @@ bool testRotor()
 	// all principal planes, 45 and 90 degrees
 	{
 		const size_t NUM_DIMENSIONS = 4;
-		const size_t NUM_ANGLES = 2;
+		const size_t NUM_ANGLES = 10;
 		const size_t NUM_SCALES = 3;
 		for (size_t j = 0; j < NUM_DIMENSIONS; j++)
 		{
@@ -246,7 +246,8 @@ bool testRotor()
 					for (size_t s = 0; s < NUM_SCALES; s++)
 					{
 						float scale = (s * 0.25f) + 0.75f;	// 0.75, 1.0, 1.25
-						float angle = toRad((a + 1) * 45.0f);
+						float angleDegrees = (a * 15.0f) + 30.0f;
+						float angle = toRad(angleDegrees);	// 30, 45, 60, 75, 90, 105, 120, 135, 150, 165
 
 						vec4f fromVec = 0;
 						fromVec[i] = 1.0f;
@@ -266,7 +267,7 @@ bool testRotor()
 						if (!isNearVec4f(resultPt, expectedResult))
 						{
 							success = false;
-							std::printf("Principal plane (%i, %i) at angle %i and scale %f failed\n", int(i), int(j), int(a), scale);
+							std::printf("Principal plane (%i, %i) at angle %f and scale %f failed\n", int(i), int(j), angleDegrees, scale);
 						}
 
 						// trig fromTo
@@ -276,7 +277,7 @@ bool testRotor()
 						if (!isNearVec4f(resultPt, expectedResult))
 						{
 							success = false;
-							std::printf("Principal plane (%i, %i) at angle %i and scale % f using trig failed\n", int(i), int(j), int(a), scale);
+							std::printf("Principal plane (%i, %i) at angle %f and scale % f using trig failed\n", int(i), int(j), angleDegrees, scale);
 						}
 
 						// matrix
@@ -285,7 +286,7 @@ bool testRotor()
 						if (!isNearVec4f(matrixedPt, expectedResult))
 						{
 							success = false;
-							std::printf("Principal plane (%i, %i) at angle %i and scale %f using matrix rotation failed\n", int(i), int(j), int(a), scale);
+							std::printf("Principal plane (%i, %i) at angle %f and scale %f using matrix rotation failed\n", int(i), int(j), angleDegrees, scale);
 						}
 					}
 				}
@@ -334,12 +335,10 @@ bool testRotor()
 
 		// NOTE: combination order is similar to column-major matrix multiplication, right to left
 		// i.e. "rotor2 * rotor1 * pt"  means rotate pt by rotor1 first, then by rotor2 second
-		rotor4 rCombined = rotor2;
-		rCombined.add(rotor1);
+		rotor4 rCombined = rotor2 * rotor1;
 
 		// this would be the combination of these rotors in reverse order
-		//rotor4 rCombined2 = rotor1;
-		//rCombined2.add(rotor2);
+		//rotor4 rCombined2 = rotor1 * rotor2;
 
 		// expected result: x -> y -> z
 		const vec4f testPt = { 1, 0, 0, 0 };
@@ -351,6 +350,16 @@ bool testRotor()
 		{
 			success = false;
 			std::printf("Rotor combining failed\n");
+		}
+
+		// test the operator*() also
+		ptRotoredSequential = rotor2 * (rotor1 * testPt);
+		ptRotoredCombined = rCombined * testPt;
+
+		if (!isNearVec4f(ptRotoredSequential, ptRotoredCombined))
+		{
+			success = false;
+			std::printf("Rotor combining operator*() failed\n");
 		}
 	}
 
@@ -401,6 +410,43 @@ bool testRotor()
 		{
 			success = false;
 			std::printf("Non-principal plane rotation failed\n");
+		}
+	}
+
+	// test 180 and 360 degree rotation
+	{
+		vec4f fromVec = { 1, 0, 0, 0 };
+		vec4f toVec45 = { 1.0f / std::sqrt(2.0f), 1.0f / std::sqrt(2.0f), 0, 0 };
+		vec4f toVec90 = { 0, 1, 0, 0 };
+
+		rotor4 rotor45xy = rotor4(fromVec, toVec45);
+		rotor4 rotor4545xy = rotor45xy * rotor45xy;
+		rotor4 rotor90xy = rotor4(fromVec, toVec90);
+		rotor4 rotor9090xy = rotor90xy * rotor90xy;
+
+		vec4f testPt = { 1, 0, 0, 0 };
+		vec4f resultPt45 = rotor45xy * testPt;
+		vec4f resultPt4545 = rotor4545xy * testPt;
+		vec4f resultPt90 = rotor90xy * testPt;
+		vec4f resultPt9090 = rotor9090xy * testPt;
+		vec4f resultPt360 = rotor9090xy * rotor9090xy * testPt;
+
+		if (!isNearVec4f(resultPt4545, resultPt90))
+		{
+			success = false;
+			std::printf("Double 45 not equal to 90\n");
+		}
+
+		if (!isNearVec4f(resultPt9090, -fromVec))
+		{
+			success = false;
+			std::printf("Double 90 not equal to 180\n");
+		}
+
+		if (!isNearVec4f(resultPt360, testPt))
+		{
+			success = false;
+			std::printf("Quadruple 90 not equal to original point\n");
 		}
 	}
 

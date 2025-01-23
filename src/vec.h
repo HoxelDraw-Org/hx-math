@@ -54,7 +54,6 @@ namespace hxm
         vec2f& operator/=(float rhs);
         float& operator[](uint32_t idx);
         float operator[](uint32_t idx) const;
-        vec2f operator-() const;
 
         uint32_t minCompIdx() const;    // the index of the smallest component of this vector
         float dot(const vec2f& rhs) const;
@@ -78,6 +77,10 @@ namespace hxm
     inline vec2f operator-(vec2f lhs, const vec2f& rhs) {
         lhs -= rhs;
         return lhs;
+    }
+
+    inline vec2f operator-(const vec2f& rhs) {
+        return vec2f(-rhs.x, -rhs.y);
     }
 
     inline vec2f operator*(vec2f lhs, const vec2f& rhs) {
@@ -244,7 +247,6 @@ namespace hxm
         vec3f& operator*=(float rhs);
         vec3f& operator/=(const vec3f& rhs);
         vec3f& operator/=(float rhs);
-        vec3f operator-() const;
         float& operator[](uint32_t idx);
         float  operator[](uint32_t idx) const;
         bool   operator==(const vec3f& rhs) const;
@@ -273,6 +275,10 @@ namespace hxm
     inline vec3f operator-(vec3f lhs, const vec3f& rhs) {
         lhs -= rhs;
         return lhs;
+    }
+
+    inline vec3f operator-(const vec3f& rhs) {
+        return vec3f(-rhs.x, -rhs.y, -rhs.z);
     }
 
     inline vec3f operator*(vec3f lhs, const vec3f& rhs) {
@@ -399,7 +405,6 @@ namespace hxm
         bool operator!=(const vec4f& other);
         float& operator[](uint32_t idx);
         float operator[](uint32_t idx) const;
-        vec4f operator-() const;
 
         vec4f& copy(const vec4f& v);
         vec4f& set(float x, float y, float z, float w);
@@ -434,7 +439,7 @@ namespace hxm
         return lhs;
     }
 
-    inline vec4f operator-(vec4f lhs)
+    inline vec4f operator-(const vec4f& lhs)
     {
         return vec4f(-lhs.x, -lhs.y, -lhs.z, -lhs.w);
     }
@@ -757,7 +762,6 @@ namespace hxm
         bool operator!=(const vec5f& other);
         float& operator[](uint32_t idx);
         float operator[](uint32_t idx) const;
-        vec5f operator-() const;
 
         vec5f& copy(const vec5f& v);
         vec5f& set(float x, float y, float z, float w, float v);
@@ -793,7 +797,7 @@ namespace hxm
         return lhs;
     }
 
-    inline vec5f operator-(vec5f lhs)
+    inline vec5f operator-(const vec5f& lhs)
     {
         return vec5f(-lhs.x, -lhs.y, -lhs.z, -lhs.w, -lhs.v);
     }
