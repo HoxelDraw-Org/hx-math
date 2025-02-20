@@ -139,12 +139,14 @@ namespace hxm
 			0,   0,   1);
 	}
 
+	// transforms (+1,0) to (0,+1) using a +90 degree rotation
+	// transforms (0,+1) to (-1,0) using a +90 degree rotation
 	void Mat3::makeRotation(float theta)
 	{
 		float c = cosf(theta);
 		float s = sinf(theta);
-		set( c, s, 0,
-			-s, c, 0,
+		set( c,-s, 0,
+			 s, c, 0,
 			 0, 0, 1);
 	}
 
@@ -326,8 +328,8 @@ namespace hxm
 	{
 		float c = cosf(theta);
 		float s = sinf(theta);
-		set( c, s, 0, 0,
-			-s, c, 0, 0,
+		set( c,-s, 0, 0,
+			 s, c, 0, 0,
 			 0, 0, 1, 0,
 			 0, 0, 0, 1);
 	}
@@ -465,6 +467,20 @@ namespace hxm
 		return mat;
 	}
 
+	Mat4 Mat4::MakeRotationZX(float theta)
+	{
+		Mat4 mat = Mat4();
+		mat.makeRotationZX(theta);
+		return mat;
+	}
+
+	Mat4 Mat4::MakeRotationYZ(float theta)
+	{
+		Mat4 mat = Mat4();
+		mat.makeRotationYZ(theta);
+		return mat;
+	}
+
 	// https://github.com/g-truc/glm/blob/b3f87720261d623986f164b2a7f6a0a938430271/glm/ext/matrix_transform.inl#L18
 	Mat4 Mat4::Rotate(const Mat4& m, float theta, const vec3f& axis)
 	{
@@ -536,6 +552,15 @@ namespace hxm
 	Mat4::Mat4()
 	{
 		set(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+	}
+
+	Mat4::Mat4(const Mat3& m3)
+	{
+		const float* m = m3.data();
+		set(m[0], m[3], 0, m[6],
+			m[1], m[4], 0, m[7],
+			0,    0,    1, 0,
+			m[2], m[5], 0, m[8]);	// TODO: what do we do with this last row?
 	}
 
 	Mat4::~Mat4()
@@ -939,6 +964,16 @@ namespace hxm
 	Mat5::Mat5()
 	{
 		set(1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1);
+	}
+
+	Mat5::Mat5(const Mat4& m4)
+	{
+		const float* m = m4.data();
+		set(m[0], m[4], m[8],  0, m[12],
+			m[1], m[5], m[9],  0, m[13],
+			m[2], m[6], m[10], 0, m[14],
+			0,    0,    0,     1, 0,
+			m[3], m[7], m[11], 0, m[15]);	// TODO: is this the proper way to handle the last row?
 	}
 
 	Mat5::~Mat5()
