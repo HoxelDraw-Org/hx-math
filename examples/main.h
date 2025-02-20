@@ -3,8 +3,8 @@
 #include <iostream>
 #include "vec.h"
 #include "aabb.h"
-//#include "mat.h"
-//#include "hxMath.h"
+#include "mat.h"
+#include "hxMath.h"
 
 #define MAX_ERROR 1e-5f
 using namespace hxm;
@@ -14,12 +14,28 @@ bool isNear(float a, float b, float error = MAX_ERROR)
 	return std::abs(a - b) <= error;
 }
 
+bool isNearVec3f(const vec3f& a, const vec3f& b, float error = MAX_ERROR)
+{
+	return std::abs(a.x - b.x) <= error &&
+		std::abs(a.y - b.y) <= error &&
+		std::abs(a.z - b.z) <= error;
+}
+
 bool isNearVec4f(const vec4f& a, const vec4f& b, float error = MAX_ERROR)
 {
 	return std::abs(a.x - b.x) <= error && 
 		   std::abs(a.y - b.y) <= error &&
 		   std::abs(a.z - b.z) <= error &&
 		   std::abs(a.w - b.w) <= error;
+}
+
+bool isNearVec5f(const vec5f& a, const vec5f& b, float error = MAX_ERROR)
+{
+	return std::abs(a.x - b.x) <= error &&
+		std::abs(a.y - b.y) <= error &&
+		std::abs(a.z - b.z) <= error &&
+		std::abs(a.w - b.w) <= error &&
+		std::abs(a.v - b.v) <= error;
 }
 
 bool testVector()
@@ -142,7 +158,209 @@ bool testVector()
 
 bool testMatrix()
 {
-	return false;
+	bool success = true;
+
+	float rad90 = toRad(90.0f);
+
+	// Mat3 rotation tests
+	{
+		vec3f ptX = { 1, 0, 1 };
+		vec3f ptY = { 0, 1, 1 };
+
+		Mat3 rot = Mat3::MakeRotation(rad90);
+		vec3f ptRot = rot * ptX;
+		if (!isNearVec3f(ptRot, vec3f(0, 1, 1)))
+		{
+			success = false;
+			std::printf("Mat3::Rot X failed\n");
+		}
+
+		ptRot = rot * ptY;
+		if (!isNearVec3f(ptRot, vec3f(-1, 0, 1)))
+		{
+			success = false;
+			std::printf("Mat3::Rot Y failed\n");
+		}
+	}
+
+	// Mat4 rotation tests
+	{
+		vec4f ptX = { 1, 0, 0, 1 };
+		vec4f ptY = { 0, 1, 0, 1 };
+		vec4f ptZ = { 0, 0, 1, 1 };
+
+		// XY
+		Mat4 rotXY = Mat4::MakeRotationXY(rad90);
+		vec4f ptRotXY = rotXY * ptX;
+		if (!isNearVec4f(ptRotXY, vec4f(0, 1, 0, 1)))
+		{
+			success = false;
+			std::printf("Mat4::RotXY X failed\n");
+		}
+
+		ptRotXY = rotXY * ptY;
+		if (!isNearVec4f(ptRotXY, vec4f(-1, 0, 0, 1)))
+		{
+			success = false;
+			std::printf("Mat4::RotXY Y failed\n");
+		}
+
+		// ZX
+		Mat4 rotZX = Mat4::MakeRotationZX(rad90);
+		vec4f ptRotZX = rotZX * ptZ;
+		if (!isNearVec4f(ptRotZX, vec4f(1, 0, 0, 1)))
+		{
+			success = false;
+			std::printf("Mat4::RotZX Z failed\n");
+		}
+
+		ptRotZX = rotZX * ptX;
+		if (!isNearVec4f(ptRotZX, vec4f(0, 0, -1, 1)))
+		{
+			success = false;
+			std::printf("Mat4::RotZX X failed\n");
+		}
+
+		// YZ
+		Mat4 rotYZ = Mat4::MakeRotationYZ(rad90);
+		vec4f ptRotYZ = rotYZ * ptY;
+		if (!isNearVec4f(ptRotYZ, vec4f(0, 0, 1, 1)))
+		{
+			success = false;
+			std::printf("Mat4::RotYZ Y failed\n");
+		}
+
+		ptRotYZ = rotYZ * ptZ;
+		if (!isNearVec4f(ptRotYZ, vec4f(0, -1, 0, 1)))
+		{
+			success = false;
+			std::printf("Mat4::RotYZ Z failed\n");
+		}
+	}
+
+
+	// Mat5 rotation tests
+	{
+		vec5f ptX = { 1, 0, 0, 0, 1 };
+		vec5f ptY = { 0, 1, 0, 0, 1 };
+		vec5f ptZ = { 0, 0, 1, 0, 1 };
+		vec5f ptW = { 0, 0, 0, 1, 1 };
+
+		// XY
+		Mat5 rotXY = Mat5::MakeRotationXY(rad90);
+		vec5f ptRotXY = rotXY * ptX;
+		if (!isNearVec5f(ptRotXY, vec5f(0, 1, 0, 0, 1)))
+		{
+			success = false;
+			std::printf("Mat5::RotXY X failed\n");
+		}
+
+		ptRotXY = rotXY * ptY;
+		if (!isNearVec5f(ptRotXY, vec5f(-1, 0, 0, 0, 1)))
+		{
+			success = false;
+			std::printf("Mat5::RotXY Y failed\n");
+		}
+
+		// ZX
+		Mat5 rotZX = Mat5::MakeRotationZX(rad90);
+		vec5f ptRotZX = rotZX * ptZ;
+		if (!isNearVec5f(ptRotZX, vec5f(1, 0, 0, 0, 1)))
+		{
+			success = false;
+			std::printf("Mat5::RotZX Z failed\n");
+		}
+
+		ptRotZX = rotZX * ptX;
+		if (!isNearVec5f(ptRotZX, vec5f(0, 0, -1, 0, 1)))
+		{
+			success = false;
+			std::printf("Mat5::RotZX X failed\n");
+		}
+
+		// XW
+		Mat5 rotXW = Mat5::MakeRotationXW(rad90);
+		vec5f ptRotXW = rotXW * ptX;
+		if (!isNearVec5f(ptRotXW, vec5f(0, 0, 0, 1, 1)))
+		{
+			success = false;
+			std::printf("Mat5::RotXW X failed\n");
+		}
+
+		ptRotXW = rotXW * ptW;
+		if (!isNearVec5f(ptRotXW, vec5f(-1, 0, 0, 0, 1)))
+		{
+			success = false;
+			std::printf("Mat5::RotXW W failed\n");
+		}
+
+		// YZ
+		Mat5 rotYZ = Mat5::MakeRotationYZ(rad90);
+		vec5f ptRotYZ = rotYZ * ptY;
+		if (!isNearVec5f(ptRotYZ, vec5f(0, 0, 1, 0, 1)))
+		{
+			success = false;
+			std::printf("Mat5::RotYZ Y failed\n");
+		}
+
+		ptRotYZ = rotYZ * ptZ;
+		if (!isNearVec5f(ptRotYZ, vec5f(0, -1, 0, 0, 1)))
+		{
+			success = false;
+			std::printf("Mat5::RotXY Z failed\n");
+		}
+
+		// WY
+		Mat5 rotWY = Mat5::MakeRotationWY(rad90);
+		vec5f ptRotWY = rotWY * ptW;
+		if (!isNearVec5f(ptRotWY, vec5f(0, 1, 0, 0, 1)))
+		{
+			success = false;
+			std::printf("Mat5::RotWY W failed\n");
+		}
+
+		ptRotWY = rotWY * ptY;
+		if (!isNearVec5f(ptRotWY, vec5f(0, 0, 0, -1, 1)))
+		{
+			success = false;
+			std::printf("Mat5::RotWY Y failed\n");
+		}
+
+		// ZW
+		Mat5 rotZW = Mat5::MakeRotationZW(rad90);
+		vec5f ptRotZW = rotZW * ptZ;
+		if (!isNearVec5f(ptRotZW, vec5f(0, 0, 0, 1, 1)))
+		{
+			success = false;
+			std::printf("Mat5::RotZW Z failed\n");
+		}
+
+		ptRotZW = rotZW * ptW;
+		if (!isNearVec5f(ptRotZW, vec5f(0, 0, -1, 0, 1)))
+		{
+			success = false;
+			std::printf("Mat5::RotZW W failed\n");
+		}
+	}
+
+	// Test Mat4->Mat5 conversion
+	{
+		Mat4 mat4x4 = Mat4::MakeTranslation(vec3f(1, 2, 3)) * Mat4::MakeRotationYZ(rad90);
+		Mat5 mat5x5 = Mat5(mat4x4);
+		
+		vec5f ptY = vec5f(0, 1, 0, 0, 1);
+		const vec5f expectedPt = vec5f(1, 2, 4, 0, 1);	// should rotate +Y to +Z, then translate by (1,2,3)
+
+		vec5f transPtY = mat5x5 * ptY;
+
+		if (!isNearVec5f(transPtY, expectedPt))
+		{
+			success = false;
+			std::printf("Mat5 from Mat4 failed\n");
+		}
+	}
+
+	return success;
 }
 
 bool testAABB()

@@ -124,6 +124,8 @@ namespace hxm
         static Mat4 MakeTranslation(float x, float y, float z);
         static Mat4 MakeTranslation(const vec3f& v);
         static Mat4 MakeRotationXY(float theta);    // radians
+        static Mat4 MakeRotationZX(float theta);    // radians
+        static Mat4 MakeRotationYZ(float theta);    // radians
         static Mat4 Rotate(const Mat4& m, float theta, const vec3f& axis);  // radians
         static Mat4 MakeScale(float x, float y, float z);
         static Mat4 MakeScale(const vec3f& v);
@@ -131,6 +133,7 @@ namespace hxm
         static Mat4 MakePerspective(float fovy, float aspect, float near, float far);   // fovy in radians
 
         Mat4();
+        Mat4(const Mat3& m);
         ~Mat4();
     };
 
@@ -207,6 +210,7 @@ namespace hxm
         static Mat5 MakeParallelProjection();
 
         Mat5();
+        Mat5(const Mat4& m4);
         ~Mat5();
     };
 }
