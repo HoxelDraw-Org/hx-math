@@ -103,6 +103,41 @@ namespace hxm
 		tmp = el[5]; el[5] = el[7]; el[7] = tmp;  // 5-7
 	}
 
+	// https://github.com/willnode/N-Matrix-Programmer/blob/master/Info/Matrix_3x3.txt
+	bool Mat3::invert()
+	{
+		float det =	  m00 * (m11 * m22 - m12 * m21)
+					- m01 * (m10 * m22 - m12 * m20)
+					+ m02 * (m10 * m21 - m11 * m20);
+		
+		// check for 0 or nan
+		if (det == 0 || det != det)
+		{
+			return false;
+		}
+
+		det = 1.0f / det;
+
+		float inv[9];
+
+		inv[0] =  (m11 * m22 - m12 * m21);
+		inv[1] = -(m10 * m22 - m12 * m20);
+		inv[2] =  (m10 * m21 - m11 * m20);
+		inv[3] = -(m01 * m22 - m02 * m21);
+		inv[4] =  (m00 * m22 - m02 * m20);
+		inv[5] = -(m00 * m21 - m01 * m20);
+		inv[6] =  (m01 * m12 - m02 * m11);
+		inv[7] = -(m00 * m12 - m02 * m10);
+		inv[8] =  (m00 * m11 - m01 * m10);
+
+		for (uint32_t idx = 0; idx < 9; idx++)
+		{
+			el[idx] = inv[idx] * det;
+		}
+
+		return true;
+	}
+
 	// nAB: the value at row A, column B
 	void Mat3::set(float n11, float n12, float n13, float n21, float n22, float n23, float n31, float n32, float n33)
 	{
@@ -137,6 +172,13 @@ namespace hxm
 		set(v.x, 0,   0,
 			0,   v.y, 0,
 			0,   0,   1);
+	}
+
+	void Mat3::makeScale(const float& v)
+	{
+		set(v, 0, 0,
+			0, v, 0,
+			0, 0, 1);
 	}
 
 	// transforms (+1,0) to (0,+1) using a +90 degree rotation
@@ -192,6 +234,27 @@ namespace hxm
 	{
 		Mat3 mat;
 		mat.makeScale(v);
+		return mat;
+	}
+
+	Mat3 Mat3::MakeScale(const float& v)
+	{
+		Mat3 mat;
+		mat.makeScale(v);
+		return mat;
+	}
+
+	Mat3 Mat3::Transpose(const Mat3& m)
+	{
+		Mat3 mat = m;
+		mat.transpose();
+		return mat;
+	}
+
+	Mat3 Mat3::Invert(const Mat3& m)
+	{
+		Mat3 mat = m;
+		mat.invert();
 		return mat;
 	}
 
@@ -295,6 +358,67 @@ namespace hxm
 		tmp = el[3]; el[3] = el[12]; el[12] = tmp;  // 3-12
 		tmp = el[7]; el[7] = el[13]; el[13] = tmp;  // 7-13
 		tmp = el[11]; el[11] = el[14]; el[14] = tmp;  // 11-14
+	}
+
+	// https://github.com/willnode/N-Matrix-Programmer/blob/master/Info/Matrix_4x4.txt
+	bool Mat4::invert()
+	{
+		float A2323 = m22 * m33 - m23 * m32;
+		float A1323 = m21 * m33 - m23 * m31;
+		float A1223 = m21 * m32 - m22 * m31;
+		float A0323 = m20 * m33 - m23 * m30;
+		float A0223 = m20 * m32 - m22 * m30;
+		float A0123 = m20 * m31 - m21 * m30;
+		float A2313 = m12 * m33 - m13 * m32;
+		float A1313 = m11 * m33 - m13 * m31;
+		float A1213 = m11 * m32 - m12 * m31;
+		float A2312 = m12 * m23 - m13 * m22;
+		float A1312 = m11 * m23 - m13 * m21;
+		float A1212 = m11 * m22 - m12 * m21;
+		float A0313 = m10 * m33 - m13 * m30;
+		float A0213 = m10 * m32 - m12 * m30;
+		float A0312 = m10 * m23 - m13 * m20;
+		float A0212 = m10 * m22 - m12 * m20;
+		float A0113 = m10 * m31 - m11 * m30;
+		float A0112 = m10 * m21 - m11 * m20;
+
+		float det =   m00 * (m11 * A2323 - m12 * A1323 + m13 * A1223)
+					- m01 * (m10 * A2323 - m12 * A0323 + m13 * A0223)
+					+ m02 * (m10 * A1323 - m11 * A0323 + m13 * A0123)
+					- m03 * (m10 * A1223 - m11 * A0223 + m12 * A0123);
+
+		if (det == 0.0f || det != det)
+		{
+			return false;
+		}
+
+		det = 1.0f / det;
+
+		float inv[16];
+
+		inv[0] =   (m11 * A2323 - m12 * A1323 + m13 * A1223);
+		inv[1] =  -(m10 * A2323 - m12 * A0323 + m13 * A0223);
+		inv[2] =   (m10 * A1323 - m11 * A0323 + m13 * A0123);
+		inv[3] =  -(m10 * A1223 - m11 * A0223 + m12 * A0123);
+		inv[4] =  -(m01 * A2323 - m02 * A1323 + m03 * A1223);
+		inv[5] =   (m00 * A2323 - m02 * A0323 + m03 * A0223);
+		inv[6] =  -(m00 * A1323 - m01 * A0323 + m03 * A0123);
+		inv[7] =   (m00 * A1223 - m01 * A0223 + m02 * A0123);
+		inv[8] =   (m01 * A2313 - m02 * A1313 + m03 * A1213);
+		inv[9] =  -(m00 * A2313 - m02 * A0313 + m03 * A0213);
+		inv[10] =  (m00 * A1313 - m01 * A0313 + m03 * A0113);
+		inv[11] = -(m00 * A1213 - m01 * A0213 + m02 * A0113);
+		inv[12] = -(m01 * A2312 - m02 * A1312 + m03 * A1212);
+		inv[13] =  (m00 * A2312 - m02 * A0312 + m03 * A0212);
+		inv[14] = -(m00 * A1312 - m01 * A0312 + m03 * A0112);
+		inv[15] =  (m00 * A1212 - m01 * A0212 + m02 * A0112);
+
+		for (uint32_t idx = 0; idx < 16; idx++)
+		{
+			el[idx] = inv[idx] * det;
+		}
+
+		return true;
 	}
 
 	// nAB: the value at row A, column B
@@ -549,6 +673,20 @@ namespace hxm
 		return r;
 	}
 
+	Mat4 Mat4::Transpose(const Mat4& m)
+	{
+		Mat4 mat = m;
+		mat.transpose();
+		return mat;
+	}
+
+	Mat4 Mat4::Invert(const Mat4& m)
+	{
+		Mat4 mat = m;
+		mat.invert();
+		return mat;
+	}
+
 	Mat4::Mat4()
 	{
 		set(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
@@ -672,6 +810,130 @@ namespace hxm
 		tmp = el[13]; el[13] = el[17]; el[17] = tmp;  // 13-17
 		tmp = el[14]; el[14] = el[22]; el[22] = tmp;  // 14-22
 		tmp = el[19]; el[19] = el[23]; el[23] = tmp;  // 19-23
+	}
+
+	// https://github.com/willnode/N-Matrix-Programmer/blob/master/Info/Matrix_5x5.txt
+	bool Mat5::invert()
+	{
+		float A3434 = m33 * m44 - m34 * m43;
+		float A2434 = m32 * m44 - m34 * m42;
+		float A2334 = m32 * m43 - m33 * m42;
+		float A1434 = m31 * m44 - m34 * m41;
+		float A1334 = m31 * m43 - m33 * m41;
+		float A1234 = m31 * m42 - m32 * m41;
+		float A0434 = m30 * m44 - m34 * m40;
+		float A0334 = m30 * m43 - m33 * m40;
+		float A0234 = m30 * m42 - m32 * m40;
+		float A0134 = m30 * m41 - m31 * m40;
+		float A3424 = m23 * m44 - m24 * m43;
+		float A2424 = m22 * m44 - m24 * m42;
+		float A2324 = m22 * m43 - m23 * m42;
+		float A1424 = m21 * m44 - m24 * m41;
+		float A1324 = m21 * m43 - m23 * m41;
+		float A1224 = m21 * m42 - m22 * m41;
+		float A3423 = m23 * m34 - m24 * m33;
+		float A2423 = m22 * m34 - m24 * m32;
+		float A2323 = m22 * m33 - m23 * m32;
+		float A1423 = m21 * m34 - m24 * m31;
+		float A1323 = m21 * m33 - m23 * m31;
+		float A1223 = m21 * m32 - m22 * m31;
+		float A0424 = m20 * m44 - m24 * m40;
+		float A0324 = m20 * m43 - m23 * m40;
+		float A0224 = m20 * m42 - m22 * m40;
+		float A0423 = m20 * m34 - m24 * m30;
+		float A0323 = m20 * m33 - m23 * m30;
+		float A0223 = m20 * m32 - m22 * m30;
+		float A0124 = m20 * m41 - m21 * m40;
+		float A0123 = m20 * m31 - m21 * m30;
+
+		float B234234 = m22 * A3434 - m23 * A2434 + m24 * A2334;
+		float B134234 = m21 * A3434 - m23 * A1434 + m24 * A1334;
+		float B124234 = m21 * A2434 - m22 * A1434 + m24 * A1234;
+		float B123234 = m21 * A2334 - m22 * A1334 + m23 * A1234;
+		float B034234 = m20 * A3434 - m23 * A0434 + m24 * A0334;
+		float B024234 = m20 * A2434 - m22 * A0434 + m24 * A0234;
+		float B023234 = m20 * A2334 - m22 * A0334 + m23 * A0234;
+		float B014234 = m20 * A1434 - m21 * A0434 + m24 * A0134;
+		float B013234 = m20 * A1334 - m21 * A0334 + m23 * A0134;
+		float B012234 = m20 * A1234 - m21 * A0234 + m22 * A0134;
+		float B234134 = m12 * A3434 - m13 * A2434 + m14 * A2334;
+		float B134134 = m11 * A3434 - m13 * A1434 + m14 * A1334;
+		float B124134 = m11 * A2434 - m12 * A1434 + m14 * A1234;
+		float B123134 = m11 * A2334 - m12 * A1334 + m13 * A1234;
+		float B234124 = m12 * A3424 - m13 * A2424 + m14 * A2324;
+		float B134124 = m11 * A3424 - m13 * A1424 + m14 * A1324;
+		float B124124 = m11 * A2424 - m12 * A1424 + m14 * A1224;
+		float B123124 = m11 * A2324 - m12 * A1324 + m13 * A1224;
+		float B234123 = m12 * A3423 - m13 * A2423 + m14 * A2323;
+		float B134123 = m11 * A3423 - m13 * A1423 + m14 * A1323;
+		float B124123 = m11 * A2423 - m12 * A1423 + m14 * A1223;
+		float B123123 = m11 * A2323 - m12 * A1323 + m13 * A1223;
+		float B034134 = m10 * A3434 - m13 * A0434 + m14 * A0334;
+		float B024134 = m10 * A2434 - m12 * A0434 + m14 * A0234;
+		float B023134 = m10 * A2334 - m12 * A0334 + m13 * A0234;
+		float B034124 = m10 * A3424 - m13 * A0424 + m14 * A0324;
+		float B024124 = m10 * A2424 - m12 * A0424 + m14 * A0224;
+		float B023124 = m10 * A2324 - m12 * A0324 + m13 * A0224;
+		float B034123 = m10 * A3423 - m13 * A0423 + m14 * A0323;
+		float B024123 = m10 * A2423 - m12 * A0423 + m14 * A0223;
+		float B023123 = m10 * A2323 - m12 * A0323 + m13 * A0223;
+		float B014134 = m10 * A1434 - m11 * A0434 + m14 * A0134;
+		float B013134 = m10 * A1334 - m11 * A0334 + m13 * A0134;
+		float B014124 = m10 * A1424 - m11 * A0424 + m14 * A0124;
+		float B013124 = m10 * A1324 - m11 * A0324 + m13 * A0124;
+		float B014123 = m10 * A1423 - m11 * A0423 + m14 * A0123;
+		float B013123 = m10 * A1323 - m11 * A0323 + m13 * A0123;
+		float B012134 = m10 * A1234 - m11 * A0234 + m12 * A0134;
+		float B012124 = m10 * A1224 - m11 * A0224 + m12 * A0124;
+		float B012123 = m10 * A1223 - m11 * A0223 + m12 * A0123;
+
+		float det =	  m00 * (m11 * B234234 - m12 * B134234 + m13 * B124234 - m14 * B123234)
+					- m01 * (m10 * B234234 - m12 * B034234 + m13 * B024234 - m14 * B023234)
+					+ m02 * (m10 * B134234 - m11 * B034234 + m13 * B014234 - m14 * B013234)
+					- m03 * (m10 * B124234 - m11 * B024234 + m12 * B014234 - m14 * B012234)
+					+ m04 * (m10 * B123234 - m11 * B023234 + m12 * B013234 - m13 * B012234);
+
+		if (det == 0 || det != det)
+		{
+			return false;
+		}
+
+		det = 1.0f / det;
+
+		float inv[25];
+
+		inv[0] =   (m11 * B234234 - m12 * B134234 + m13 * B124234 - m14 * B123234);
+		inv[1] =  -(m10 * B234234 - m12 * B034234 + m13 * B024234 - m14 * B023234);
+		inv[2] =   (m10 * B134234 - m11 * B034234 + m13 * B014234 - m14 * B013234);
+		inv[3] =  -(m10 * B124234 - m11 * B024234 + m12 * B014234 - m14 * B012234);
+		inv[4] =   (m10 * B123234 - m11 * B023234 + m12 * B013234 - m13 * B012234);
+		inv[5] =  -(m01 * B234234 - m02 * B134234 + m03 * B124234 - m04 * B123234);
+		inv[6] =   (m00 * B234234 - m02 * B034234 + m03 * B024234 - m04 * B023234);
+		inv[7] =  -(m00 * B134234 - m01 * B034234 + m03 * B014234 - m04 * B013234);
+		inv[8] =   (m00 * B124234 - m01 * B024234 + m02 * B014234 - m04 * B012234);
+		inv[9] =  -(m00 * B123234 - m01 * B023234 + m02 * B013234 - m03 * B012234);
+		inv[10] =  (m01 * B234134 - m02 * B134134 + m03 * B124134 - m04 * B123134);
+		inv[11] = -(m00 * B234134 - m02 * B034134 + m03 * B024134 - m04 * B023134);
+		inv[12] =  (m00 * B134134 - m01 * B034134 + m03 * B014134 - m04 * B013134);
+		inv[13] = -(m00 * B124134 - m01 * B024134 + m02 * B014134 - m04 * B012134);
+		inv[14] =  (m00 * B123134 - m01 * B023134 + m02 * B013134 - m03 * B012134);
+		inv[15] = -(m01 * B234124 - m02 * B134124 + m03 * B124124 - m04 * B123124);
+		inv[16] =  (m00 * B234124 - m02 * B034124 + m03 * B024124 - m04 * B023124);
+		inv[17] = -(m00 * B134124 - m01 * B034124 + m03 * B014124 - m04 * B013124);
+		inv[18] =  (m00 * B124124 - m01 * B024124 + m02 * B014124 - m04 * B012124);
+		inv[19] = -(m00 * B123124 - m01 * B023124 + m02 * B013124 - m03 * B012124);
+		inv[20] =  (m01 * B234123 - m02 * B134123 + m03 * B124123 - m04 * B123123);
+		inv[21] = -(m00 * B234123 - m02 * B034123 + m03 * B024123 - m04 * B023123);
+		inv[22] =  (m00 * B134123 - m01 * B034123 + m03 * B014123 - m04 * B013123);
+		inv[23] = -(m00 * B124123 - m01 * B024123 + m02 * B014123 - m04 * B012123);
+		inv[24] =  (m00 * B123123 - m01 * B023123 + m02 * B013123 - m03 * B012123);
+
+		for (uint32_t idx = 0; idx < 25; idx++)
+		{
+			el[idx] = inv[idx] * det;
+		}
+
+		return true;
 	}
 
 	// nAB: value at row A, column B
@@ -961,9 +1223,33 @@ namespace hxm
 		return mat;
 	}
 
+	Mat5 Mat5::Transpose(const Mat5& m)
+	{
+		Mat5 mat = m;
+		mat.transpose();
+		return mat;
+	}
+
+	Mat5 Mat5::Invert(const Mat5& m)
+	{
+		Mat5 mat = m;
+		mat.invert();
+		return mat;
+	}
+
 	Mat5::Mat5()
 	{
 		set(1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1);
+	}
+
+	Mat5::Mat5(const Mat3& m4)
+	{
+		const float* m = m4.data();
+		set(m[0], m[3], 0, 0, m[6],
+			m[1], m[4], 0, 0, m[7],
+			0,    0,    1, 0, 0,
+			0,    0,    0, 1, 0,
+			m[2], m[5], 0, 0, m[8]);	// TODO: is this the proper way to handle the last row?
 	}
 
 	Mat5::Mat5(const Mat4& m4)

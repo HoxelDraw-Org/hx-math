@@ -360,6 +360,65 @@ bool testMatrix()
 		}
 	}
 
+	// Matrix inversion
+	{
+		// Mat3
+		{
+			Mat3 mTrans = Mat3::MakeTranslation({ 1, -2 }) * Mat3::MakeRotation(0.5f) * Mat3::MakeScale(1.5f, 0.75f);
+			Mat3 mTransInv = Mat3::Invert(mTrans);
+
+			const vec3f pt = { 1.1f, 1.2f, 1.0f };
+			const vec3f transInvPt = mTransInv * mTrans * pt;
+
+			if (!isNearVec3f(transInvPt, pt))
+			{
+				success = false;
+				std::printf("Mat3 invert failed\n");
+			}
+		}
+
+		// Mat4
+		{
+			Mat4 mTrans = Mat4::MakeTranslation({ -1, 2, -3 }) *
+				Mat4::MakeRotationXY(0.1f) *
+				Mat4::MakeRotationZX(0.2f) *
+				Mat4::MakeRotationYZ(0.3f) *
+				Mat4::MakeScale({ 1.1f, 0.9f, 1.2f });
+			Mat4 mTransInv = Mat4::Invert(mTrans);
+
+			const vec4f pt = { 1.1f, 1.2f, 1.3f, 1.0f };
+			const vec4f transInvPt = mTransInv * mTrans * pt;
+
+			if (!isNearVec4f(transInvPt, pt))
+			{
+				success = false;
+				std::printf("Mat4 invert failed\n");
+			}
+		}
+
+		// Mat5
+		{
+			Mat5 mTrans = Mat5::MakeTranslation({ 1, -2, 3, -4 }) *
+				Mat5::MakeRotationXY(0.1f) *
+				Mat5::MakeRotationZX(0.2f) *
+				Mat5::MakeRotationXW(0.3f) *
+				Mat5::MakeRotationYZ(0.4f) *
+				Mat5::MakeRotationWY(0.5f) *
+				Mat5::MakeRotationZW(0.6f) *
+				Mat5::MakeScale({ 1.1f, 0.9f, 1.2f, 0.8f });
+			Mat5 mTransInv = Mat5::Invert(mTrans);
+
+			const vec5f pt = { 1.1f, 1.2f, 1.3f, 1.4f, 1.0f };
+			const vec5f transInvPt = mTransInv * mTrans * pt;
+
+			if (!isNearVec5f(transInvPt, pt))
+			{
+				success = false;
+				std::printf("Mat5 invert failed\n");
+			}
+		}
+	}
+
 	return success;
 }
 

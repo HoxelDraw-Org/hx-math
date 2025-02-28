@@ -33,7 +33,15 @@ namespace hxm
         // Members
     private:
     protected:
-        float el[9];
+        union
+        {
+            float el[9];
+            struct {
+                float   m00, m10, m20, // column 0
+                        m01, m11, m21, // column 1
+                        m02, m12, m22; // column 2
+            };
+        };
     public:
 
         // Functions
@@ -50,6 +58,7 @@ namespace hxm
         const float* data() const;
 
         void transpose();
+        bool invert();
 
         // n[row][column]
         //  n23 == second row, third column
@@ -59,6 +68,7 @@ namespace hxm
         void makeTranslation(const vec2f& v);
         void makeScale(float x, float y);
         void makeScale(const vec2f& v);
+        void makeScale(const float& v);
         void makeRotation(float theta);    // angle in radians
 
         vec2f right() const;
@@ -69,6 +79,9 @@ namespace hxm
         static Mat3 MakeRotation(float theta);  // radians
         static Mat3 MakeScale(float x, float y);
         static Mat3 MakeScale(const vec2f& v);
+        static Mat3 MakeScale(const float& v);
+        static Mat3 Transpose(const Mat3& m);
+        static Mat3 Invert(const Mat3& m);
 
         Mat3();
         ~Mat3();
@@ -84,7 +97,16 @@ namespace hxm
         // Members
     private:
     protected:
-        float el[16];
+        union
+        {
+            float el[16];
+            struct {
+                float   m00, m10, m20, m30, // column 0
+                        m01, m11, m21, m31, // column 1
+                        m02, m12, m22, m32, // column 2
+                        m03, m13, m23, m33; // column 3
+            };
+        };
     public:
 
         // Functions
@@ -100,6 +122,7 @@ namespace hxm
         const float* data() const;
 
         void transpose();
+        bool invert();
 
         // n[row][column]
         //  n23 == second row, third column
@@ -131,6 +154,8 @@ namespace hxm
         static Mat4 MakeScale(const vec3f& v);
         static Mat4 MakeScale(float v);
         static Mat4 MakePerspective(float fovy, float aspect, float near, float far);   // fovy in radians
+        static Mat4 Transpose(const Mat4& m);
+        static Mat4 Invert(const Mat4& m);
 
         Mat4();
         Mat4(const Mat3& m);
@@ -148,7 +173,17 @@ namespace hxm
         // Members
     private:
     protected:
-        float el[25];
+        union
+        {
+            float el[25];
+            struct {
+                float   m00, m10, m20, m30, m40, // column 0
+                        m01, m11, m21, m31, m41, // column 1
+                        m02, m12, m22, m32, m42, // column 2
+                        m03, m13, m23, m33, m43, // column 3
+                        m04, m14, m24, m34, m44; // column 4
+            };
+        };
     public:
 
         // Functions
@@ -165,6 +200,7 @@ namespace hxm
         const float* data() const;
 
         void transpose();
+        bool invert();
 
         // n[row][column]
         //  n23 == second row, third column
@@ -208,8 +244,11 @@ namespace hxm
         static Mat5 MakeInvRotationEuler(euler6 theta); // TODO
         static Mat5 MakePerspectiveProjection(float dist);
         static Mat5 MakeParallelProjection();
+        static Mat5 Transpose(const Mat5& m);
+        static Mat5 Invert(const Mat5& m);
 
         Mat5();
+        Mat5(const Mat3& m4);
         Mat5(const Mat4& m4);
         ~Mat5();
     };
