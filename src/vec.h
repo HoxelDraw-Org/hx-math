@@ -19,6 +19,7 @@ namespace hxm
     class vec2i;
     class vec2u;
     class vec3f;
+    class vec3i;
     class vec3u;
     class vec4f;
     class vec4i;
@@ -28,6 +29,10 @@ namespace hxm
 
     typedef vec3f colorRGB;
     typedef vec4f colorRGBA;
+    typedef vec2f vec2;
+    typedef vec3f vec3;
+    typedef vec4f vec4;
+    typedef vec5f vec5;
 
     // VEC2F ------------------------------------------------------------------
     class vec2f {
@@ -65,8 +70,8 @@ namespace hxm
         vec2f(float v);
         vec2f(float x, float y);
         vec2f(const vec3f& v);
+        vec2f(const vec2i& v);
         vec2f(const vec2u& v);
-        //vec2f(const vec2i& v);
         ~vec2f();
     };
 
@@ -199,6 +204,7 @@ namespace hxm
         vec2u(uint32_t v);
         vec2u(uint32_t x, uint32_t y);
         vec2u(const vec2i& v);
+        vec2u(const vec2f& v);
         ~vec2u();
     };
 
@@ -260,6 +266,7 @@ namespace hxm
         vec3f(float x, float y, float z);
         vec3f(const vec2f&, float z);
         vec3f(const vec3u& v);
+        vec3f(const vec3i& v);
         vec3f(const vec4f& v);
         vec3f(const vec4u& v);
         ~vec3f();
@@ -341,6 +348,66 @@ namespace hxm
     }
 
 
+    // VEC3I ------------------------------------------------------------------
+    class vec3i {
+        // Members
+    private:
+    protected:
+    public:
+        union
+        {
+            int32_t _v[3];
+            struct { int32_t x, y, z; };
+        };
+
+        // Functions
+    private:
+    protected:
+    public:
+        // TODO: more operators
+        int32_t& operator[](uint32_t idx);
+        int32_t operator[](uint32_t idx) const;
+        vec3i& operator+=(const vec3i& rhs);
+        vec3i& operator-=(const vec3i& rhs);
+        bool operator==(const vec3i& other);
+        bool operator!=(const vec3i& rhs);
+
+        vec3i();
+        vec3i(int32_t v);
+        vec3i(int32_t x, int32_t y, int32_t z);
+        vec3i(const vec3f& fvec);
+        vec3i(const vec3u& uvec);
+        ~vec3i();
+    };
+
+    inline vec3i operator+(vec3i lhs, const vec3i& rhs) {
+        lhs += rhs;
+        return lhs;
+    }
+
+    inline vec3i operator-(vec3i lhs, const vec3i& rhs)
+    {
+        lhs -= rhs;
+        return lhs;
+    }
+
+    inline vec3i clamp(vec3i v, int32_t min, int32_t max)
+    {
+        v.x = std::max(std::min(v.x, max), min);
+        v.y = std::max(std::min(v.y, max), min);
+        v.z = std::max(std::min(v.z, max), min);
+        return v;
+    }
+
+    inline vec3i clamp(vec3i v, const vec3i& vMin, const vec3i& vMax)
+    {
+        v.x = std::max(std::min(v.x, vMax.x), vMin.x);
+        v.y = std::max(std::min(v.y, vMax.y), vMin.y);
+        v.z = std::max(std::min(v.z, vMax.z), vMin.z);
+        return v;
+    }
+
+
     // VEC3U ------------------------------------------------------------------
     class vec3u {
         // Members
@@ -368,6 +435,8 @@ namespace hxm
         vec3u();
         vec3u(uint32_t v);
         vec3u(uint32_t x, uint32_t y, uint32_t z);
+        vec3u(const vec3f& v);
+        vec3u(const vec3i& v);
         ~vec3u();
     };
 
@@ -647,6 +716,7 @@ namespace hxm
         vec4u();
         vec4u(uint32_t v);
         vec4u(uint32_t x, uint32_t y, uint32_t z, uint32_t w);
+        vec4u(const vec4f& v);
         vec4u(const vec4i& v);
         ~vec4u();
     };
