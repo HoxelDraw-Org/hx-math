@@ -64,10 +64,6 @@ namespace hxm
         return _v[idx];
     }
 
-    vec2f vec2f::operator-() const {
-        return vec2f(-x, -y);
-    }
-
     uint32_t vec2f::minCompIdx() const {
         uint32_t minIdx = 0;
         float minVal = x;
@@ -233,10 +229,6 @@ namespace hxm
         y /= rhs;
         z /= rhs;
         return *this;
-    }
-
-    vec3f vec3f::operator-() const {
-        return vec3f(-x, -y, -z);
     }
 
     float& vec3f::operator[](uint32_t idx) {
@@ -451,10 +443,6 @@ namespace hxm
     float vec4f::operator[](uint32_t idx) const
     {
         return _v[idx];
-    }
-
-    vec4f vec4f::operator-() const {
-        return vec4f(-x, -y, -z, -w);
     }
 
     vec4f& vec4f::copy(const vec4f& v) {
@@ -788,10 +776,6 @@ namespace hxm
     float vec5f::operator[](uint32_t idx) const
     {
         return _v[idx];
-    }
-
-    vec5f vec5f::operator-() const {
-        return vec5f(-x, -y, -z, -w, -v);
     }
 
     vec5f& vec5f::copy(const vec5f& v) {

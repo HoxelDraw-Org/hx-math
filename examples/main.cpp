@@ -32,5 +32,10 @@ int main()
 		std::printf("Euler6 tests failed!------------------------\n\n");
 	}
 
+	if (!testRotor())
+	{
+		std::printf("Rotor tests failed!-------------------------\n\n");
+	}
+
 	return 0;
 }
