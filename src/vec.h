@@ -513,6 +513,11 @@ namespace hxm
         return vec4f(-lhs.x, -lhs.y, -lhs.z, -lhs.w);
     }
 
+    inline vec4f operator-(vec4f lhs, float rhs) {
+        lhs -= rhs;
+        return lhs;
+    }
+
     inline vec4f operator*(vec4f lhs, const vec4f& rhs) {
         lhs *= rhs;
         return lhs;
