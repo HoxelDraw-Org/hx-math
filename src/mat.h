@@ -154,6 +154,7 @@ namespace hxm
         static Mat4 MakeScale(const vec3f& v);
         static Mat4 MakeScale(float v);
         static Mat4 MakePerspective(float fovy, float aspect, float near, float far);   // fovy in radians
+        static Mat4 MakeBasis(const vec4f& i, const vec4f& j, const vec4f& k, const vec4f& l);
         static Mat4 Transpose(const Mat4& m);
         static Mat4 Invert(const Mat4& m);
 

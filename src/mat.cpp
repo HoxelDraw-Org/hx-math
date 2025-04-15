@@ -673,6 +673,17 @@ namespace hxm
 		return r;
 	}
 
+	// place vectors i, j, k, and l in the columns of the matrix
+	Mat4 Mat4::MakeBasis(const vec4f& i, const vec4f& j, const vec4f& k, const vec4f& l)
+	{
+		hxm::Mat4 basis = hxm::Mat4();
+		basis.set(i.x, j.x, k.x, l.x,
+				  i.y, j.y, k.y, l.y,
+				  i.z, j.z, k.z, l.z,
+				  i.w, j.w, k.w, l.w);
+		return basis;
+	}
+
 	Mat4 Mat4::Transpose(const Mat4& m)
 	{
 		Mat4 mat = m;
