@@ -92,7 +92,7 @@ namespace hxm
     vec2f::vec2f(float v) : x(v), y(v) {}
     vec2f::vec2f(float x, float y) : x(x), y(y) {}
     vec2f::vec2f(const vec3f& v) : x(v.x), y(v.y) {}
-
+    vec2f::vec2f(const vec2i& v) : x(v.x), y(v.y) {}
     vec2f::vec2f(const vec2u& v) : x(float(v.x)), y(float(v.y)) {}
 
     vec2f::~vec2f() {}
@@ -175,7 +175,16 @@ namespace hxm
     vec2u::vec2u() : x(0), y(0) {}
     vec2u::vec2u(uint32_t v) : x(v), y(v) {}
     vec2u::vec2u(uint32_t x, uint32_t y) : x(x), y(y) {}
-    vec2u::vec2u(const vec2i& v) : x(v.x), y(v.y) {}
+    vec2u::vec2u(const vec2f& v)
+    {
+        x = uint32_t(std::max(0.0f, v.x));
+        y = uint32_t(std::max(0.0f, v.y));
+    }
+    vec2u::vec2u(const vec2i& v)
+    {
+        x = std::max(0, v.x);
+        y = std::max(0, v.y);
+    }
     vec2u::~vec2u() {}
 
 
@@ -275,10 +284,53 @@ namespace hxm
     vec3f::vec3f(float v) : x(v), y(v), z(v) {}
     vec3f::vec3f(float x, float y, float z) : x(x), y(y), z(z) {}
     vec3f::vec3f(const vec2f& v, float z) : x(v.x), y(v.y), z(z) {}
-    vec3f::vec3f(const vec4f& v) : x(v.x), y(v.y), z(v.z) {}
     vec3f::vec3f(const vec3u& v) : x(float(v.x)), y(float(v.y)), z(float(v.z)) {}
+    vec3f::vec3f(const vec3i& v) : x(float(v.x)), y(float(v.y)), z(float(v.z)) {}
+    vec3f::vec3f(const vec4f& v) : x(v.x), y(v.y), z(v.z) {}
     vec3f::vec3f(const vec4u& v) : x(float(v.x)), y(float(v.y)), z(float(v.z)) {}
     vec3f::~vec3f() {}
+
+
+    // VEC3I ----------------------------------------------------------------------
+    vec3i& vec3i::operator+=(const vec3i& rhs) {
+        x += rhs.x;
+        y += rhs.y;
+        z += rhs.z;
+        return *this;
+    }
+
+    vec3i& vec3i::operator-=(const vec3i& rhs) {
+        x -= rhs.x;
+        y -= rhs.y;
+        z -= rhs.z;
+        return *this;
+    }
+
+    bool vec3i::operator==(const vec3i& other)
+    {
+        return x == other.x && y == other.y && z == other.z;
+    }
+
+    bool vec3i::operator!=(const vec3i& rhs)
+    {
+        return x != rhs.x || y != rhs.y || z != rhs.z;
+    }
+
+    int32_t& vec3i::operator[](uint32_t idx) {
+        return _v[idx];
+    }
+
+    int32_t vec3i::operator[](uint32_t idx) const
+    {
+        return _v[idx];
+    }
+
+    vec3i::vec3i() : x(0), y(0), z(0) {}
+    vec3i::vec3i(int32_t v) : x(v), y(v), z(v) {}
+    vec3i::vec3i(int32_t x, int32_t y, int32_t z) : x(x), y(y), z(z) {}
+    vec3i::vec3i(const vec3f& fvec) : x(int32_t(fvec.x)), y(int32_t(fvec.y)), z(int32_t(fvec.z)) {}
+    vec3i::vec3i(const vec3u& v) : x(int32_t(v.x)), y(int32_t(v.y)), z(int32_t(v.z)) {}
+    vec3i::~vec3i() {}
 
 
     // VEC3U ----------------------------------------------------------------------
@@ -310,6 +362,18 @@ namespace hxm
     vec3u::vec3u() : x(0), y(0), z(0) {}
     vec3u::vec3u(uint32_t v) : x(v), y(v), z(v) {}
     vec3u::vec3u(uint32_t x, uint32_t y, uint32_t z) : x(x), y(y), z(z) {}
+    vec3u::vec3u(const vec3f& v)
+    {
+        x = uint32_t(std::max(0.0f, v.x));
+        y = uint32_t(std::max(0.0f, v.y));
+        z = uint32_t(std::max(0.0f, v.z));
+    }
+    vec3u::vec3u(const vec3i& v)
+    {
+        x = std::max(0, v.x);
+        y = std::max(0, v.y);
+        z = std::max(0, v.z);
+    }
     vec3u::~vec3u() {}
 
 
@@ -604,6 +668,13 @@ namespace hxm
     vec4u::vec4u() : x(0), y(0), z(0), w(0) {}
     vec4u::vec4u(uint32_t v) : x(v), y(v), z(v), w(v) {}
     vec4u::vec4u(uint32_t x, uint32_t y, uint32_t z, uint32_t w) : x(x), y(y), z(z), w(w) {}
+    vec4u::vec4u(const vec4f& v)
+    {
+        x = uint32_t(std::max(0.0f, v.x));
+        y = uint32_t(std::max(0.0f, v.y));
+        z = uint32_t(std::max(0.0f, v.z));
+        w = uint32_t(std::max(0.0f, v.w));
+    }
     vec4u::vec4u(const vec4i& v)
     {
         x = std::max(0, v.x);
