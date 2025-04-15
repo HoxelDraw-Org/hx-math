@@ -27,6 +27,11 @@ int main()
 		std::printf("Math tests failed!--------------------------\n\n");
 	}
 
+	if (!testEuler6())
+	{
+		std::printf("Euler6 tests failed!------------------------\n\n");
+	}
+
 	if (!testRotor())
 	{
 		std::printf("Rotor tests failed!-------------------------\n\n");
