@@ -666,6 +666,13 @@ namespace hxm
 		return r;
 	}
 
+	Mat4 Mat4::LookAt(const vec3f& eye, const vec3f& center, const vec3f& up)
+	{
+		Mat4 mat = Mat4();
+		mat.lookAt(eye, center, up);
+		return mat;
+	}
+
 	Mat4 Mat4::MakePerspective(float fovy, float aspect, float near, float far)
 	{
 		Mat4 r;
@@ -1106,21 +1113,26 @@ namespace hxm
 		vec4f fN = normalize(center - eye);
 
 		// calculate rightNorm (cross4(up, over, forward))
-		vec4f rN = normalize(cross4(up, over, fN));
+		vec4f rN = normalize(cross4(fN, up, over));
 
 		// calculate upNorm (cross4(over, forward, right))
-		vec4f uN = normalize(cross4(over, fN, rN));
+		//vec4f uN = normalize(cross4(over, fN, rN));
+		vec4f uN = normalize(cross4(fN, over, rN));
 
 		// calculate overNorm (cross4(forward, right, upNorm))
 		vec4f oN = cross4(fN, rN, uN);
 
-		// TODO: make sure the basis vectors are pointed the right way
-		// TODO: add the translation but pre-rotate it (see Mat4::lookAt)
-		set(rN.x, rN.y, rN.z, rN.w, 0,
-			uN.x, uN.y, uN.z, uN.w, 0,
-			fN.x, fN.y, fN.z, fN.w, 0,
-			oN.x, oN.y, oN.z, oN.w, 0,
-			0,    0,    0,    0,    1);
+		// add the translation but pre-rotate it (see Mat4::lookAt)
+		float transX = -dot(rN, eye);
+		float transY = -dot(uN, eye);
+		float transZ =  dot(fN, eye);
+		float transW = -dot(oN, eye);
+
+		set( rN.x,  rN.y,  rN.z,  rN.w, transX,
+			 uN.x,  uN.y,  uN.z,  uN.w, transY,
+			-fN.x, -fN.y, -fN.z, -fN.w, transZ,
+			 oN.x,  oN.y,  oN.z,  oN.w, transW,
+			 0,     0,     0,     0,    1);
 	}
 
 	vec4f Mat5::right() const
@@ -1175,6 +1187,13 @@ namespace hxm
 	{
 		Mat5 mat;
 		mat.makeScale(v);
+		return mat;
+	}
+
+	Mat5 Mat5::LookAt(const vec4f& eye, const vec4f& center, const vec4f& up, const vec4f& over)
+	{
+		Mat5 mat = Mat5();
+		mat.lookAt(eye, center, up, over);
 		return mat;
 	}
 

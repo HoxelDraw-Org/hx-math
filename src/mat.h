@@ -153,6 +153,7 @@ namespace hxm
         static Mat4 MakeScale(float x, float y, float z);
         static Mat4 MakeScale(const vec3f& v);
         static Mat4 MakeScale(float v);
+        static Mat4 LookAt(const vec3f& eye, const vec3f& center, const vec3f& up);
         static Mat4 MakePerspective(float fovy, float aspect, float near, float far);   // fovy in radians
         static Mat4 MakeBasis(const vec4f& i, const vec4f& j, const vec4f& k, const vec4f& l);
         static Mat4 Transpose(const Mat4& m);
@@ -235,6 +236,7 @@ namespace hxm
         static Mat5 MakeScale(float x, float y, float z, float w);
         static Mat5 MakeScale(const vec4f& v);
         static Mat5 MakeScale(float v);
+        static Mat5 LookAt(const vec4f& eye, const vec4f& center, const vec4f& up, const vec4f& over);
         static Mat5 MakeRotationXY(float theta);    // radians
         static Mat5 MakeRotationZX(float theta);    // radians
         static Mat5 MakeRotationXW(float theta);    // radians

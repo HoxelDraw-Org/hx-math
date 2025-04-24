@@ -37,5 +37,10 @@ int main()
 		std::printf("Rotor tests failed!-------------------------\n\n");
 	}
 
+	//TODO
+	// Orthonormal basis
+	// Spherical-to-Cartesian conversion
+	// Cartesian-to-Spherical conversion
+
 	return 0;
 }

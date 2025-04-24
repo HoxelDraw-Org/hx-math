@@ -420,6 +420,95 @@ bool testMatrix()
 		}
 	}
 
+	// Matrix LookAt
+	{
+		// standard 3D coordinate frame, no rotation
+		{
+			vec3f to = { 0,0,-1 };
+			vec3f from = { 0,0,0 };
+			vec3f sceneUp = { 0,1,0 };
+
+			Mat4 lookedAt = Mat4::LookAt(from, to, sceneUp);
+
+			vec4f inFront = { 0,0,-2,1 };
+			
+			// I expect this to be (0,0,-2,1)
+			vec4f transInFront = lookedAt * inFront;
+
+			if (!isNearVec4f(inFront, transInFront))
+			{
+				success = false;
+				std::printf("Mat4 LookAt failed\n");
+			}
+		}
+
+		// looking toward +X
+		{
+			const vec3f to = { 1,0,0 };
+			const vec3f from = { 0,0,0 };
+			const vec3f sceneUp = { 0,1,0 };
+
+			const vec4f forwardPt = { 2, 0, 0, 1 };
+			const vec4f backwardPt = { -3, 0, 0, 1 };
+			const vec4f rightPt = { 0,0,4,1 };
+			const vec4f leftPt = { 0,0,-5,1 };
+			const vec4f upPt = { 0,6,0,1 };
+			const vec4f downPt = { 0,-7,0,1 };
+
+			const Mat4 lookedAt = Mat4::LookAt(from, to, sceneUp);
+
+			vec4f transForward = lookedAt * forwardPt;	// expect -Z
+			vec4f transBackward = lookedAt * backwardPt;	// expect +Z
+			vec4f transRight = lookedAt * rightPt;	// expect +X
+			vec4f transLeft = lookedAt * leftPt;	// expect -X
+			vec4f transUp = lookedAt * upPt;	// expect +Y
+			vec4f transDown = lookedAt * downPt;	// expect -Y
+
+			int todoremove = 2;
+		}
+
+		// standard 4D coordinate frame, no rotation
+		{
+			vec4f to = { 0,0,-1,0 };
+			vec4f from = { 0,0,0,0 };
+			vec4f sceneUp = { 0,1,0,0 };
+			vec4f sceneOver = { 0,0,0,1 };
+
+			const vec4f expectedRight = { 1,0,0,0 };
+			const vec4f expectedUp = { 0,1,0,0 };
+			const vec4f expectedForward = { 0,0,-1,0 };
+			const vec4f expectedOver = { 0,0,0,1 };
+
+			Mat5 lookedAt = Mat5::LookAt(from, to, sceneUp, sceneOver);
+
+			if (!isNearVec4f(expectedRight, lookedAt.right()))
+			{
+				success = false;
+				std::printf("Mat5 lookAt failed right\n");
+			}
+
+			if (!isNearVec4f(expectedUp, lookedAt.up()))
+			{
+				success = false;
+				std::printf("Mat5 lookAt failed up\n");
+			}
+
+			if (!isNearVec4f(expectedForward, lookedAt.forward()))
+			{
+				success = false;
+				std::printf("Mat5 lookAt failed forward\n");
+			}
+
+			if (!isNearVec4f(expectedOver, lookedAt.over()))
+			{
+				success = false;
+				std::printf("Mat5 lookAt failed over\n");
+			}
+
+
+		}
+	}
+
 	return success;
 }
 
