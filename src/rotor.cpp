@@ -218,11 +218,38 @@ namespace hxm
 
     Mat5 rotor4::matrix() const
     {
-        // TODO: optimize this transform section since most values are 0?
-        const vec4f newX = transform(vec4f(1, 0, 0, 0));
-        const vec4f newY = transform(vec4f(0, 1, 0, 0));
-        const vec4f newZ = transform(vec4f(0, 0, 1, 0));
-        const vec4f newW = transform(vec4f(0, 0, 0, 1));
+        vec4f newX, newY, newZ, newW;
+
+        // x-column: v=(1,0,0,0)
+        newX.x = (scalar * scalar) + ((-xy) * xy) - (zx * zx) + ((-xw) * xw) + (yz * yz) - ((-wy) * wy) + (zw * zw);
+        newX.y = -(scalar * xy) + ((-xy) * scalar) + (zx * yz) - ((-xw) * wy) + (yz * zx) - ((-wy) * xw);
+        newX.z = (scalar * zx) - ((-xy) * yz) + (zx * scalar) + ((-xw) * zw) + (yz * xy) - (zw * xw);
+        newX.w = -(scalar * xw) + ((-xy) * wy) - (zx * zw) + ((-xw) * scalar) + ((-wy) * xy) - (zw * zx);
+
+        // y-column: v=(0,1,0,0)
+        newY.x = (xy * scalar) + (scalar * xy) - ((-yz) * zx) + (wy * xw) + (zx* yz) - ((-xw) * wy);
+        newY.y = -(xy * xy) + (scalar * scalar) + ((-yz) * yz) - (wy * wy) + (zx* zx) - ((-xw) * xw) + (zw * zw);
+        newY.z = (xy * zx) - (scalar * yz) + ((-yz) * scalar) + (wy * zw) + (zx* xy) + (zw * wy);
+        newY.w = -(xy * xw) + (scalar * wy) - ((-yz) * zw) + (wy * scalar) + ((-xw) * xy) + (zw * yz);
+
+        // z-column: v=(0,0,1,0)
+        newZ.x = ((-zx) * scalar) + (yz * xy) - (scalar * zx) + ((-zw) * xw) + (xy * yz) + ((-xw) * zw);
+        newZ.y = -((-zx) * xy) + (yz * scalar) + (scalar * yz) - ((-zw) * wy) + (xy * zx) + (wy * zw);
+        newZ.z = ((-zx) * zx) - (yz * yz) + (scalar * scalar) + ((-zw) * zw) + (xy * xy) - ((-xw) * xw) + (wy * wy);
+        newZ.w = -((-zx) * xw) + (yz * wy) - (scalar * zw) + ((-zw) * scalar) - ((-xw) * zx) + (wy * yz);
+
+        // w-column: v=(0,0,0,1)
+        newW.x = (xw * scalar) + ((-wy) * xy) - (zw * zx) + (scalar * xw) - (xy * wy) + ((-zx) * zw);
+        newW.y = -(xw * xy) + ((-wy) * scalar) + (zw * yz) - (scalar * wy) - (xy * xw) + (yz * zw);
+        newW.z = (xw * zx) - ((-wy) * yz) + (zw * scalar) + (scalar * zw) - ((-zx) * xw) + (yz * wy);
+        newW.w = -(xw * xw) + ((-wy) * wy) - (zw * zw) + (scalar * scalar) + (xy * xy) - ((-zx) * zx) + (yz * yz);
+
+        // The above code is equivalent to:
+        //      vec4f newX = transform(vec4f(1, 0, 0, 0));
+        //      vec4f newY = transform(vec4f(0, 1, 0, 0));
+        //      vec4f newZ = transform(vec4f(0, 0, 1, 0));
+        //      vec4f newW = transform(vec4f(0, 0, 0, 1));
+        //  but is optimized since most of the values are zeros
 
         Mat5 result;
         result.set( newX[0], newY[0], newZ[0], newW[0], 0,
