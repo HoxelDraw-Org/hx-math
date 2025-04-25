@@ -13,8 +13,16 @@ Justin Jensen
 
 namespace hxm
 {
-    // AABB3 (float) ------------------------------------------------------------
-    class aabb3
+    // Forward declarations of classes here
+    class aabb3f;
+    class aabb4f;
+    class aabb4i;
+
+    typedef aabb3f aabb3;
+    typedef aabb4f aabb4;
+
+    // AABB3F -------------------------------------------------------------------
+    class aabb3f
     {
         // Defines
     private:
@@ -43,9 +51,9 @@ namespace hxm
         bool empty() const;
         bool isValid() const;
 
-        void addAABB(const aabb3& other);
+        void addAABB(const aabb3f& other);
 
-        aabb3 intersect(const aabb3& other) const;
+        aabb3f intersect(const aabb3f& other) const;
 
         float volume() const;
 
@@ -56,14 +64,14 @@ namespace hxm
 
         vec3f& operator[](uint32_t idx);        // 0: min, 1: max
         vec3f operator[](uint32_t idx) const;
-        aabb3& operator+=(const aabb3& other);
-        aabb3& operator+=(const vec3f& v);
+        aabb3f& operator+=(const aabb3f& other);
+        aabb3f& operator+=(const vec3f& v);
 
         void reset();
 
-        aabb3();
-        aabb3(const vec3f& min, const vec3f& max);
-        ~aabb3() {}
+        aabb3f();
+        aabb3f(const vec3f& min, const vec3f& max);
+        ~aabb3f() {}
     };
     // END AABB3 ----------------------------------------------------------------
 
@@ -118,8 +126,8 @@ namespace hxm
     // END AABBI ---------------------------------------------------------------
 
 
-    // AABB4 (float) ------------------------------------------------------------
-    class aabb4
+    // AABB4F -------------------------------------------------------------------
+    class aabb4f
     {
         // Defines
     private:
@@ -148,9 +156,9 @@ namespace hxm
         bool empty() const;
         bool isValid() const;
 
-        void addAABB(const aabb4& other);
+        void addAABB(const aabb4f& other);
 
-        aabb4 intersect(const aabb4& other) const;
+        aabb4f intersect(const aabb4f& other) const;
         
         float bulk() const;
 
@@ -163,13 +171,13 @@ namespace hxm
 
         vec4f& operator[](uint32_t idx);        // 0: min, 1: max
         vec4f operator[](uint32_t idx) const;
-        aabb4& operator+=(const aabb4& other);
-        aabb4& operator+=(const vec4f& v);
+        aabb4f& operator+=(const aabb4f& other);
+        aabb4f& operator+=(const vec4f& v);
 
-        aabb4();
-        aabb4(const vec4f& min, const vec4f& max);
-        aabb4(const aabb4i& otheri);
-        ~aabb4() {}
+        aabb4f();
+        aabb4f(const vec4f& min, const vec4f& max);
+        aabb4f(const aabb4i& otheri);
+        ~aabb4f() {}
     };
     // END AABB4 ----------------------------------------------------------------
 

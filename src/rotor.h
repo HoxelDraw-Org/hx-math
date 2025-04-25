@@ -64,7 +64,7 @@ namespace hxm
         rotor4 operator*(const rotor4& other) const;
         vec4f operator*(const vec4f& v) const;
 
-        Mat5 matrix() const;
+        mat5 matrix() const;
 
         rotor4();
         rotor4(float scalar, float xy, float zx, float xw, float yz, float wy, float zw);

@@ -216,7 +216,7 @@ namespace hxm
         return result;
     }
 
-    Mat5 rotor4::matrix() const
+    mat5 rotor4::matrix() const
     {
         vec4f newX, newY, newZ, newW;
 
@@ -251,7 +251,7 @@ namespace hxm
         //      vec4f newW = transform(vec4f(0, 0, 0, 1));
         //  but is optimized since most of the values are zeros
 
-        Mat5 result;
+        mat5 result;
         result.set( newX[0], newY[0], newZ[0], newW[0], 0,
                     newX[1], newY[1], newZ[1], newW[1], 0,
                     newX[2], newY[2], newZ[2], newW[2], 0,

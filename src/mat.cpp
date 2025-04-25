@@ -22,9 +22,9 @@ namespace hxm
 {
 
 	// MAT3 -----------------------------------------------------------------------
-	Mat3 Mat3::operator*(const Mat3& b) const
+	mat3 mat3::operator*(const mat3& b) const
 	{
-		Mat3 r = Mat3();
+		mat3 r = mat3();
 
 		// a[row][column]
 		float a11 = el[0], a12 = el[3], a13 = el[6];
@@ -51,7 +51,7 @@ namespace hxm
 		return r;
 	}
 
-	vec3f Mat3::operator*(const vec3f& rhs) const
+	vec3f mat3::operator*(const vec3f& rhs) const
 	{
 		vec3f result;
 		/*
@@ -66,17 +66,17 @@ namespace hxm
 		return result;
 	}
 
-	float& Mat3::operator[](uint32_t idx)
+	float& mat3::operator[](uint32_t idx)
 	{
 		return el[idx];
 	}
 
-	float Mat3::operator[](uint32_t idx) const
+	float mat3::operator[](uint32_t idx) const
 	{
 		return el[idx];
 	}
 
-	bool Mat3::operator==(const Mat3& b) const
+	bool mat3::operator==(const mat3& b) const
 	{
 		const size_t N_ELEMS = 9;
 		for (size_t idx = 0; idx < N_ELEMS; idx++)
@@ -90,12 +90,12 @@ namespace hxm
 		return true;
 	}
 
-	const float* Mat3::data() const
+	const float* mat3::data() const
 	{
 		return el;
 	}
 
-	void Mat3::transpose()
+	void mat3::transpose()
 	{
 		float tmp;
 		tmp = el[1]; el[1] = el[3]; el[3] = tmp;  // 1-3
@@ -104,7 +104,7 @@ namespace hxm
 	}
 
 	// https://github.com/willnode/N-Matrix-Programmer/blob/master/Info/Matrix_3x3.txt
-	bool Mat3::invert()
+	bool mat3::invert()
 	{
 		float det =	  m00 * (m11 * m22 - m12 * m21)
 					- m01 * (m10 * m22 - m12 * m20)
@@ -139,42 +139,42 @@ namespace hxm
 	}
 
 	// nAB: the value at row A, column B
-	void Mat3::set(float n11, float n12, float n13, float n21, float n22, float n23, float n31, float n32, float n33)
+	void mat3::set(float n11, float n12, float n13, float n21, float n22, float n23, float n31, float n32, float n33)
 	{
 		el[0] = n11; el[3] = n12; el[6] = n13;	// row 0
 		el[1] = n21; el[4] = n22; el[7] = n23;	// row 1
 		el[2] = n31; el[5] = n32; el[8] = n33;	// row 2
 	}
 
-	void Mat3::makeTranslation(float x, float y)
+	void mat3::makeTranslation(float x, float y)
 	{
 		set(1, 0, x,
 			0, 1, y,
 			0, 0, 1);
 	}
 
-	void Mat3::makeTranslation(const vec2f& v)
+	void mat3::makeTranslation(const vec2f& v)
 	{
 		set(1, 0, v.x,
 			0, 1, v.y,
 			0, 0, 1);
 	}
 
-	void Mat3::makeScale(float x, float y)
+	void mat3::makeScale(float x, float y)
 	{
 		set(x, 0, 0,
 			0, y, 0,
 			0, 0, 1);
 	}
 
-	void Mat3::makeScale(const vec2f& v)
+	void mat3::makeScale(const vec2f& v)
 	{
 		set(v.x, 0,   0,
 			0,   v.y, 0,
 			0,   0,   1);
 	}
 
-	void Mat3::makeScale(const float& v)
+	void mat3::makeScale(const float& v)
 	{
 		set(v, 0, 0,
 			0, v, 0,
@@ -183,7 +183,7 @@ namespace hxm
 
 	// transforms (+1,0) to (0,+1) using a +90 degree rotation
 	// transforms (0,+1) to (-1,0) using a +90 degree rotation
-	void Mat3::makeRotation(float theta)
+	void mat3::makeRotation(float theta)
 	{
 		float c = cosf(theta);
 		float s = sinf(theta);
@@ -192,85 +192,85 @@ namespace hxm
 			 0, 0, 1);
 	}
 
-	vec2f Mat3::right() const
+	vec2f mat3::right() const
 	{
 		return vec2f(el[0], el[3]);
 	}
 
-	vec2f Mat3::up() const
+	vec2f mat3::up() const
 	{
 		return vec2f(el[1], el[4]);
 	}
 
-	Mat3 Mat3::MakeTranslation(float x, float y)
+	mat3 mat3::MakeTranslation(float x, float y)
 	{
-		Mat3 mat = Mat3();
+		mat3 mat = mat3();
 		mat.makeTranslation(x, y);
 		return mat;
 	}
 
-	Mat3 Mat3::MakeTranslation(const vec2f& v)
+	mat3 mat3::MakeTranslation(const vec2f& v)
 	{
-		Mat3 mat = Mat3();
+		mat3 mat = mat3();
 		mat.makeTranslation(v);
 		return mat;
 	}
 
-	Mat3 Mat3::MakeRotation(float theta)
+	mat3 mat3::MakeRotation(float theta)
 	{
-		Mat3 mat = Mat3();
+		mat3 mat = mat3();
 		mat.makeRotation(theta);
 		return mat;
 	}
 
-	Mat3 Mat3::MakeScale(float x, float y)
+	mat3 mat3::MakeScale(float x, float y)
 	{
-		Mat3 mat;
+		mat3 mat;
 		mat.makeScale(x, y);
 		return mat;
 	}
 
-	Mat3 Mat3::MakeScale(const vec2f& v)
+	mat3 mat3::MakeScale(const vec2f& v)
 	{
-		Mat3 mat;
+		mat3 mat;
 		mat.makeScale(v);
 		return mat;
 	}
 
-	Mat3 Mat3::MakeScale(const float& v)
+	mat3 mat3::MakeScale(const float& v)
 	{
-		Mat3 mat;
+		mat3 mat;
 		mat.makeScale(v);
 		return mat;
 	}
 
-	Mat3 Mat3::Transpose(const Mat3& m)
+	mat3 mat3::Transpose(const mat3& m)
 	{
-		Mat3 mat = m;
+		mat3 mat = m;
 		mat.transpose();
 		return mat;
 	}
 
-	Mat3 Mat3::Invert(const Mat3& m)
+	mat3 mat3::Invert(const mat3& m)
 	{
-		Mat3 mat = m;
+		mat3 mat = m;
 		mat.invert();
 		return mat;
 	}
 
-	Mat3::Mat3()
+	mat3::mat3()
 	{
 		set(1, 0, 0, 0, 1, 0, 0, 0, 1);
 	}
 
-	Mat3::~Mat3()
+	mat3::~mat3()
 	{
 	}
 
 	// MAT4 -----------------------------------------------------------------------
-	Mat4 Mat4::operator*(const Mat4& b) const
+	mat4 mat4::operator*(const mat4& b) const
 	{
-		Mat4 r = Mat4();
+		mat4 r = mat4();
 
 		float a11 = el[0], a12 = el[4], a13 = el[8], a14 = el[12];
 		float a21 = el[1], a22 = el[5], a23 = el[9], a24 = el[13];
@@ -306,7 +306,7 @@ namespace hxm
 	}
 
 	// TODO: check calling code
-	vec4f Mat4::operator*(const vec4f& rhs) const
+	vec4f mat4::operator*(const vec4f& rhs) const
 	{
 		vec4f result;
 		/*result[0] = rhs[0] * el[0] + rhs[1] * el[1] + rhs[2] * el[2] + rhs[3] * el[3];
@@ -320,17 +320,17 @@ namespace hxm
 		return result;
 	}
 
-	float& Mat4::operator[](uint32_t idx)
+	float& mat4::operator[](uint32_t idx)
 	{
 		return el[idx];
 	}
 
-	float Mat4::operator[](uint32_t idx) const
+	float mat4::operator[](uint32_t idx) const
 	{
 		return el[idx];
 	}
 
-	bool Mat4::operator==(const Mat4& b) const
+	bool mat4::operator==(const mat4& b) const
 	{
 		const size_t N_ELEMS = 16;
 		for (size_t idx = 0; idx < N_ELEMS; idx++)
@@ -344,12 +344,12 @@ namespace hxm
 		return true;
 	}
 
-	const float* Mat4::data() const
+	const float* mat4::data() const
 	{
 		return el;
 	}
 
-	void Mat4::transpose()
+	void mat4::transpose()
 	{
 		float tmp;
 		tmp = el[1]; el[1] = el[4]; el[4] = tmp;  // 1-4
@@ -361,7 +361,7 @@ namespace hxm
 	}
 
 	// https://github.com/willnode/N-Matrix-Programmer/blob/master/Info/Matrix_4x4.txt
-	bool Mat4::invert()
+	bool mat4::invert()
 	{
 		float A2323 = m22 * m33 - m23 * m32;
 		float A1323 = m21 * m33 - m23 * m31;
@@ -422,7 +422,7 @@ namespace hxm
 	}
 
 	// nAB: the value at row A, column B
-	void Mat4::set(float n11, float n12, float n13, float n14, float n21, float n22, float n23, float n24, float n31, float n32, float n33, float n34, float n41, float n42, float n43, float n44)
+	void mat4::set(float n11, float n12, float n13, float n14, float n21, float n22, float n23, float n24, float n31, float n32, float n33, float n34, float n41, float n42, float n43, float n44)
 	{
 		el[0] = n11; el[4] = n12; el[8] = n13; el[12] = n14;	// row 0
 		el[1] = n21; el[5] = n22; el[9] = n23; el[13] = n24;	// row 1
@@ -430,7 +430,7 @@ namespace hxm
 		el[3] = n41; el[7] = n42; el[11] = n43; el[15] = n44;	// row 3
 	}
 
-	void Mat4::makeTranslation(float x, float y, float z)
+	void mat4::makeTranslation(float x, float y, float z)
 	{
 		set(1, 0, 0, x,
 			0, 1, 0, y,
@@ -438,7 +438,7 @@ namespace hxm
 			0, 0, 0, 1);
 	}
 
-	void Mat4::makeTranslation(const vec3f& v)
+	void mat4::makeTranslation(const vec3f& v)
 	{
 		set(1, 0, 0, v.x,
 			0, 1, 0, v.y,
@@ -448,7 +448,7 @@ namespace hxm
 
 	// transforms (+1,0,0) to (0,+1,0) using a +90 degree rotation
 	// transforms (0,+1,0) to (-1,0,0) using a +90 degree rotation
-	void Mat4::makeRotationXY(float theta)
+	void mat4::makeRotationXY(float theta)
 	{
 		float c = cosf(theta);
 		float s = sinf(theta);
@@ -460,7 +460,7 @@ namespace hxm
 
 	// transforms (0,0,+1) to (+1,0,0) using a +90 degree rotation
 	// transforms (+1,0,0) to (0,0,-1) using a +90 degree rotation
-	void Mat4::makeRotationZX(float theta)
+	void mat4::makeRotationZX(float theta)
 	{
 		float c = cosf(theta);
 		float s = sinf(theta);
@@ -472,7 +472,7 @@ namespace hxm
 
 	// transforms (0,+1,0) to (0,0,+1) using a +90 degree rotation
 	// transforms (0,0,+1) to (0,-1,0) using a +90 degree rotation
-	void Mat4::makeRotationYZ(float theta)
+	void mat4::makeRotationYZ(float theta)
 	{
 		float c = cosf(theta);
 		float s = sinf(theta);
@@ -482,7 +482,7 @@ namespace hxm
 			0, 0,  0, 1);
 	}
 
-	void Mat4::makeScale(float x, float y, float z)
+	void mat4::makeScale(float x, float y, float z)
 	{
 		set(x, 0, 0, 0,
 			0, y, 0, 0,
@@ -490,7 +490,7 @@ namespace hxm
 			0, 0, 0, 1);
 	}
 
-	void Mat4::makeScale(const vec3f& s)
+	void mat4::makeScale(const vec3f& s)
 	{
 		set(s.x, 0,   0,   0,
 			0,   s.y, 0,   0,
@@ -498,7 +498,7 @@ namespace hxm
 			0,   0,   0,   1);
 	}
 
-	void Mat4::makeScale(const float& s)
+	void mat4::makeScale(const float& s)
 	{
 		set(s, 0, 0, 0,
 			0, s, 0, 0,
@@ -506,7 +506,8 @@ namespace hxm
 			0, 0, 0, 1);
 	}
 
-	void Mat4::lookAt(const vec3f& eye, const vec3f& center, const vec3f& up)
+	// transforms points into camera space
+	void mat4::lookAt(const vec3f& eye, const vec3f& center, const vec3f& up)
 	{
 		// calculate forward
 		vec3f fN = normalize(center - eye);
@@ -529,7 +530,7 @@ namespace hxm
 			 0,     0,     0,    1);
 	}
 
-	void Mat4::makePerspective(float fovy, float aspect, float near, float far)
+	void mat4::makePerspective(float fovy, float aspect, float near, float far)
 	{
 		// calculate top, bottom, left and right
 		// top = tan(fov/2) * near
@@ -555,58 +556,58 @@ namespace hxm
 			0,         0,         -1,                     0);
 	}
 
-	vec3f Mat4::right() const
+	vec3f mat4::right() const
 	{
 		return vec3f(el[0], el[4], el[8]);
 	}
 
-	vec3f Mat4::up() const
+	vec3f mat4::up() const
 	{
 		return vec3f(el[1], el[5], el[9]);
 	}
 
-	vec3f Mat4::forward() const
+	vec3f mat4::forward() const
 	{
 		return vec3f(el[2], el[6], el[10]);
 	}
 
-	Mat4 Mat4::MakeTranslation(float x, float y, float z)
+	mat4 mat4::MakeTranslation(float x, float y, float z)
 	{
-		Mat4 mat = Mat4();
+		mat4 mat = mat4();
 		mat.makeTranslation(x, y, z);
 		return mat;
 	}
 
-	Mat4 Mat4::MakeTranslation(const vec3f& v)
+	mat4 mat4::MakeTranslation(const vec3f& v)
 	{
-		Mat4 mat = Mat4();
+		mat4 mat = mat4();
 		mat.makeTranslation(v);
 		return mat;
 	}
 
-	Mat4 Mat4::MakeRotationXY(float theta)
+	mat4 mat4::MakeRotationXY(float theta)
 	{
-		Mat4 mat = Mat4();
+		mat4 mat = mat4();
 		mat.makeRotationXY(theta);
 		return mat;
 	}
 
-	Mat4 Mat4::MakeRotationZX(float theta)
+	mat4 mat4::MakeRotationZX(float theta)
 	{
-		Mat4 mat = Mat4();
+		mat4 mat = mat4();
 		mat.makeRotationZX(theta);
 		return mat;
 	}
 
-	Mat4 Mat4::MakeRotationYZ(float theta)
+	mat4 mat4::MakeRotationYZ(float theta)
 	{
-		Mat4 mat = Mat4();
+		mat4 mat = mat4();
 		mat.makeRotationYZ(theta);
 		return mat;
 	}
 
 	// https://github.com/g-truc/glm/blob/b3f87720261d623986f164b2a7f6a0a938430271/glm/ext/matrix_transform.inl#L18
-	Mat4 Mat4::Rotate(const Mat4& m, float theta, const vec3f& axis)
+	mat4 mat4::Rotate(const mat4& m, float theta, const vec3f& axis)
 	{
 		const float a = theta;
 		const float c = cosf(a);
@@ -619,7 +620,7 @@ namespace hxm
 		vec3f temp = (1.0f - c) * axisNorm;
 
 		// create a rotation matrix
-		Mat4 rotate;
+		mat4 rotate;
 
 		// first row
 		rotate[0] = c + temp[0] * axisNorm[0];
@@ -637,7 +638,7 @@ namespace hxm
 		rotate[10] = c + temp[2] * axisNorm[2];
 
 		// create a result matrix
-		Mat4 result;
+		mat4 result;
 
 		// multiply m by the rotation matrix, store in result
 		result = m * rotate;
@@ -645,38 +646,46 @@ namespace hxm
 		return result;
 	}
 
-	Mat4 Mat4::MakeScale(float x, float y, float z)
+	mat4 mat4::MakeScale(float x, float y, float z)
 	{
-		Mat4 r;
+		mat4 r;
 		r.makeScale(x, y, z);
 		return r;
 	}
 
-	Mat4 Mat4::MakeScale(const vec3f& v)
+	mat4 mat4::MakeScale(const vec3f& v)
 	{
-		Mat4 r;
+		mat4 r;
 		r.makeScale(v);
 		return r;
 	}
 
-	Mat4 Mat4::MakeScale(float v)
+	mat4 mat4::MakeScale(float v)
 	{
-		Mat4 r;
+		mat4 r;
 		r.makeScale(v);
 		return r;
 	}
 
-	Mat4 Mat4::MakePerspective(float fovy, float aspect, float near, float far)
+	// transforms points into camera space
+	mat4 mat4::LookAt(const vec3f& eye, const vec3f& center, const vec3f& up)
 	{
-		Mat4 r;
+		mat4 mat = mat4();
+		mat.lookAt(eye, center, up);
+		return mat;
+	}
+
+	mat4 mat4::MakePerspective(float fovy, float aspect, float near, float far)
+	{
+		mat4 r;
 		r.makePerspective(fovy, aspect, near, far);
 		return r;
 	}
 
 	// place vectors i, j, k, and l in the columns of the matrix
-	Mat4 Mat4::MakeBasis(const vec4f& i, const vec4f& j, const vec4f& k, const vec4f& l)
+	mat4 mat4::MakeBasis(const vec4f& i, const vec4f& j, const vec4f& k, const vec4f& l)
 	{
-		hxm::Mat4 basis = hxm::Mat4();
+		hxm::mat4 basis = hxm::mat4();
 		basis.set(i.x, j.x, k.x, l.x,
 				  i.y, j.y, k.y, l.y,
 				  i.z, j.z, k.z, l.z,
@@ -684,26 +693,26 @@ namespace hxm
 		return basis;
 	}
 
-	Mat4 Mat4::Transpose(const Mat4& m)
+	mat4 mat4::Transpose(const mat4& m)
 	{
-		Mat4 mat = m;
+		mat4 mat = m;
 		mat.transpose();
 		return mat;
 	}
 
-	Mat4 Mat4::Invert(const Mat4& m)
+	mat4 mat4::Invert(const mat4& m)
 	{
-		Mat4 mat = m;
+		mat4 mat = m;
 		mat.invert();
 		return mat;
 	}
 
-	Mat4::Mat4()
+	mat4::mat4()
 	{
 		set(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 	}
 
-	Mat4::Mat4(const Mat3& m3)
+	mat4::mat4(const mat3& m3)
 	{
 		const float* m = m3.data();
 		set(m[0], m[3], 0, m[6],
@@ -712,15 +721,15 @@ namespace hxm
 			m[2], m[5], 0, m[8]);	// TODO: what do we do with this last row?
 	}
 
-	Mat4::~Mat4()
+	mat4::~mat4()
 	{
 	}
 
 
 	// MAT5 -----------------------------------------------------------------------
-	Mat5 Mat5::operator*(const Mat5& b) const
+	mat5 mat5::operator*(const mat5& b) const
 	{
-		Mat5 r = Mat5();
+		mat5 r = mat5();
 
 		float a11 = el[0], a12 = el[5], a13 = el[10], a14 = el[15], a15 = el[20];
 		float a21 = el[1], a22 = el[6], a23 = el[11], a24 = el[16], a25 = el[21];
@@ -767,7 +776,7 @@ namespace hxm
 		return r;
 	}
 
-	vec5f Mat5::operator*(const vec5f v) const
+	vec5f mat5::operator*(const vec5f v) const
 	{
 		vec5f r;
 		r.x = (el[0] * v.x) + (el[5] * v.y) + (el[10] * v.z) + (el[15] * v.w) + (el[20] * v.v);
@@ -779,17 +788,17 @@ namespace hxm
 		return r;
 	}
 
-	float& Mat5::operator[](uint32_t idx)
+	float& mat5::operator[](uint32_t idx)
 	{
 		return el[idx];
 	}
 
-	float Mat5::operator[](uint32_t idx) const
+	float mat5::operator[](uint32_t idx) const
 	{
 		return el[idx];
 	}
 
-	bool Mat5::operator==(const Mat5& b) const
+	bool mat5::operator==(const mat5& b) const
 	{
 		const size_t N_ELEMS = 25;
 		for (size_t idx = 0; idx < N_ELEMS; idx++)
@@ -803,12 +812,12 @@ namespace hxm
 		return true;
 	}
 
-	const float* Mat5::data() const
+	const float* mat5::data() const
 	{
 		return el;
 	}
 
-	void Mat5::transpose()
+	void mat5::transpose()
 	{
 		float tmp;
 		tmp = el[1]; el[1] = el[5]; el[5] = tmp;  // 1-5
@@ -824,7 +833,7 @@ namespace hxm
 	}
 
 	// https://github.com/willnode/N-Matrix-Programmer/blob/master/Info/Matrix_5x5.txt
-	bool Mat5::invert()
+	bool mat5::invert()
 	{
 		float A3434 = m33 * m44 - m34 * m43;
 		float A2434 = m32 * m44 - m34 * m42;
@@ -948,7 +957,7 @@ namespace hxm
 	}
 
 	// nAB: value at row A, column B
-	void Mat5::set(float n11, float n12, float n13, float n14, float n15, float n21, float n22, float n23, float n24, float n25, float n31, float n32, float n33, float n34, float n35, float n41, float n42, float n43, float n44, float n45, float n51, float n52, float n53, float n54, float n55)
+	void mat5::set(float n11, float n12, float n13, float n14, float n15, float n21, float n22, float n23, float n24, float n25, float n31, float n32, float n33, float n34, float n35, float n41, float n42, float n43, float n44, float n45, float n51, float n52, float n53, float n54, float n55)
 	{
 		el[0] = n11; el[5] = n12; el[10] = n13; el[15] = n14; el[20] = n15;
 		el[1] = n21; el[6] = n22; el[11] = n23; el[16] = n24; el[21] = n25;
@@ -957,7 +966,7 @@ namespace hxm
 		el[4] = n51; el[9] = n52; el[14] = n53; el[19] = n54; el[24] = n55;
 	}
 
-	void Mat5::makeTranslation(float x, float y, float z, float w)
+	void mat5::makeTranslation(float x, float y, float z, float w)
 	{
 		set(1, 0, 0, 0, x,
 			0, 1, 0, 0, y,
@@ -966,7 +975,7 @@ namespace hxm
 			0, 0, 0, 0, 1);
 	}
 
-	void Mat5::makeTranslation(const vec4f& v)
+	void mat5::makeTranslation(const vec4f& v)
 	{
 		set(1, 0, 0, 0, v.x,
 			0, 1, 0, 0, v.y,
@@ -975,7 +984,7 @@ namespace hxm
 			0, 0, 0, 0, 1);
 	}
 
-	void Mat5::makeScale(float x, float y, float z, float w)
+	void mat5::makeScale(float x, float y, float z, float w)
 	{
 		set(x, 0, 0, 0, 0,
 			0, y, 0, 0, 0,
@@ -984,7 +993,7 @@ namespace hxm
 			0, 0, 0, 0, 1);
 	}
 
-	void Mat5::makeScale(const vec4f& s)
+	void mat5::makeScale(const vec4f& s)
 	{
 		set(s.x, 0,   0,   0,   0,
 			0,   s.y, 0,   0,   0,
@@ -993,7 +1002,7 @@ namespace hxm
 			0,   0,   0,   0,   1);
 	}
 
-	void Mat5::makeScale(const float& s)
+	void mat5::makeScale(const float& s)
 	{
 		set(s, 0, 0, 0, 0,
 			0, s, 0, 0, 0,
@@ -1004,7 +1013,7 @@ namespace hxm
 
 	// transforms (+1,0,0,0) to (0,+1,0,0) using a +90 degree rotation
 	// transforms (0,+1,0,0) to (-1,0,0,0) using a +90 degree rotation
-	void Mat5::makeRotationXY(float theta)
+	void mat5::makeRotationXY(float theta)
 	{
 		float c = cosf(theta);
 		float s = sinf(theta);
@@ -1017,7 +1026,7 @@ namespace hxm
 
 	// transforms (0,0,+1,0) to (+1,0,0,0) using a +90 degree rotation
 	// transforms (+1,0,0,0) to (0,0,-1,0) using a +90 degree rotation
-	void Mat5::makeRotationZX(float theta)
+	void mat5::makeRotationZX(float theta)
 	{
 		float c = cosf(theta);
 		float s = sinf(theta);
@@ -1030,7 +1039,7 @@ namespace hxm
 
 	// transforms (+1,0,0,0) to (0,0,0,+1) using a +90 degree rotation
 	// transforms (0,0,0,+1) to (-1,0,0,0) using a +90 degree rotation
-	void Mat5::makeRotationXW(float theta)
+	void mat5::makeRotationXW(float theta)
 	{
 		float c = cosf(theta);
 		float s = sinf(theta);
@@ -1043,7 +1052,7 @@ namespace hxm
 
 	// transforms (0,+1,0,0) to (0,0,+1,0) using a +90 degree rotation
 	// transforms (0,0,+1,0) to (0,-1,0,0) using a +90 degree rotation
-	void Mat5::makeRotationYZ(float theta)
+	void mat5::makeRotationYZ(float theta)
 	{
 		float c = cosf(theta);
 		float s = sinf(theta);
@@ -1056,7 +1065,7 @@ namespace hxm
 
 	// transforms (0,0,0,+1) to (0,+1,0,0) using a +90 degree rotation
 	// transforms (0,+1,0,0) to (0,0,0,-1) using a +90 degree rotation
-	void Mat5::makeRotationWY(float theta)
+	void mat5::makeRotationWY(float theta)
 	{
 		float c = cosf(theta);
 		float s = sinf(theta);
@@ -1069,7 +1078,7 @@ namespace hxm
 
 	// transforms (0,0,+1,0) to (0,0,0,+1) using a +90 degree rotation
 	// transforms (0,0,0,+1) to (0,0,-1,0) using a +90 degree rotation
-	void Mat5::makeRotationZW(float theta)
+	void mat5::makeRotationZW(float theta)
 	{
 		float c = cosf(theta);
 		float s = sinf(theta);
@@ -1080,7 +1089,7 @@ namespace hxm
 			0, 0, 0, 0, 1);
 	}
 
-	void Mat5::makePerspectiveProjectionSimple(float dist)
+	void mat5::makePerspectiveProjectionSimple(float dist)
 	{
 		float f = 1.0f / dist;
 		set(1, 0, 0, 0, 0,
@@ -1090,7 +1099,7 @@ namespace hxm
 			0, 0, 0, f, 1);
 	}
 
-	void Mat5::makeParallelProjectionSimple()
+	void mat5::makeParallelProjectionSimple()
 	{
 		// simply dropping the W-coordinate
 		set(1, 0, 0, 0, 0,
@@ -1100,160 +1109,174 @@ namespace hxm
 			0, 0, 0, 0, 1);
 	}
 
-	void Mat5::lookAt(const vec4f& eye, const vec4f& center, const vec4f& up, const vec4f& over)
+	// transforms points into camera space
+	void mat5::lookAt(const vec4f& eye, const vec4f& center, const vec4f& up, const vec4f& over)
 	{
 		// calculate forwardNorm
 		vec4f fN = normalize(center - eye);
 
 		// calculate rightNorm (cross4(up, over, forward))
-		vec4f rN = normalize(cross4(up, over, fN));
+		vec4f rN = normalize(cross4(fN, up, over));
 
 		// calculate upNorm (cross4(over, forward, right))
-		vec4f uN = normalize(cross4(over, fN, rN));
+		//vec4f uN = normalize(cross4(over, fN, rN));
+		vec4f uN = normalize(cross4(fN, over, rN));
 
 		// calculate overNorm (cross4(forward, right, upNorm))
 		vec4f oN = cross4(fN, rN, uN);
 
-		// TODO: make sure the basis vectors are pointed the right way
-		// TODO: add the translation but pre-rotate it (see Mat4::lookAt)
-		set(rN.x, rN.y, rN.z, rN.w, 0,
-			uN.x, uN.y, uN.z, uN.w, 0,
-			fN.x, fN.y, fN.z, fN.w, 0,
-			oN.x, oN.y, oN.z, oN.w, 0,
-			0,    0,    0,    0,    1);
+		// add the translation but pre-rotate it (see Mat4::lookAt)
+		float transX = -dot(rN, eye);
+		float transY = -dot(uN, eye);
+		float transZ =  dot(fN, eye);
+		float transW = -dot(oN, eye);
+
+		set( rN.x,  rN.y,  rN.z,  rN.w, transX,
+			 uN.x,  uN.y,  uN.z,  uN.w, transY,
+			-fN.x, -fN.y, -fN.z, -fN.w, transZ,
+			 oN.x,  oN.y,  oN.z,  oN.w, transW,
+			 0,     0,     0,     0,    1);
 	}
 
-	vec4f Mat5::right() const
+	vec4f mat5::right() const
 	{
 		return vec4f(el[0], el[5], el[10], el[15]);
 	}
 
-	vec4f Mat5::up() const
+	vec4f mat5::up() const
 	{
 		return vec4f(el[1], el[6], el[11], el[16]);
 	}
 
-	vec4f Mat5::forward() const
+	vec4f mat5::forward() const
 	{
 		return vec4f(el[2], el[7], el[12], el[17]);
 	}
 
-	vec4f Mat5::over() const
+	vec4f mat5::over() const
 	{
 		return vec4f(el[3], el[8], el[13], el[18]);
 	}
 
-	Mat5 Mat5::MakeTranslation(float x, float y, float z, float w)
+	mat5 mat5::MakeTranslation(float x, float y, float z, float w)
 	{
-		Mat5 mat = Mat5();
+		mat5 mat = mat5();
 		mat.makeTranslation(x, y, z, w);
 		return mat;
 	}
 
-	Mat5 Mat5::MakeTranslation(vec4f v)
+	mat5 mat5::MakeTranslation(vec4f v)
 	{
-		Mat5 mat = Mat5();
+		mat5 mat = mat5();
 		mat.makeTranslation(v.x, v.y, v.z, v.w);
 		return mat;
 	}
 
-	Mat5 Mat5::MakeScale(float x, float y, float z, float w)
+	mat5 mat5::MakeScale(float x, float y, float z, float w)
 	{
-		Mat5 mat;
+		mat5 mat;
 		mat.makeScale(x, y, z, w);
 		return mat;
 	}
 
-	Mat5 Mat5::MakeScale(const vec4f& v)
+	mat5 mat5::MakeScale(const vec4f& v)
 	{
-		Mat5 mat;
+		mat5 mat;
 		mat.makeScale(v);
 		return mat;
 	}
 
-	Mat5 Mat5::MakeScale(float v)
+	mat5 mat5::MakeScale(float v)
 	{
-		Mat5 mat;
+		mat5 mat;
 		mat.makeScale(v);
 		return mat;
 	}
 
-	Mat5 Mat5::MakeRotationXY(float theta)
+	// transforms points into camera space
+	mat5 mat5::LookAt(const vec4f& eye, const vec4f& center, const vec4f& up, const vec4f& over)
 	{
-		Mat5 mat = Mat5();
+		mat5 mat = mat5();
+		mat.lookAt(eye, center, up, over);
+		return mat;
+	}
+
+	mat5 mat5::MakeRotationXY(float theta)
+	{
+		mat5 mat = mat5();
 		mat.makeRotationXY(theta);
 		return mat;
 	}
 
-	Mat5 Mat5::MakeRotationZX(float theta)
+	mat5 mat5::MakeRotationZX(float theta)
 	{
-		Mat5 mat = Mat5();
+		mat5 mat = mat5();
 		mat.makeRotationZX(theta);
 		return mat;
 	}
 
-	Mat5 Mat5::MakeRotationXW(float theta)
+	mat5 mat5::MakeRotationXW(float theta)
 	{
-		Mat5 mat = Mat5();
+		mat5 mat = mat5();
 		mat.makeRotationXW(theta);
 		return mat;
 	}
 
-	Mat5 Mat5::MakeRotationYZ(float theta)
+	mat5 mat5::MakeRotationYZ(float theta)
 	{
-		Mat5 mat = Mat5();
+		mat5 mat = mat5();
 		mat.makeRotationYZ(theta);
 		return mat;
 	}
 
-	Mat5 Mat5::MakeRotationWY(float theta)
+	mat5 mat5::MakeRotationWY(float theta)
 	{
-		Mat5 mat = Mat5();
+		mat5 mat = mat5();
 		mat.makeRotationWY(theta);
 		return mat;
 	}
 
-	Mat5 Mat5::MakeRotationZW(float theta)
+	mat5 mat5::MakeRotationZW(float theta)
 	{
-		Mat5 mat = Mat5();
+		mat5 mat = mat5();
 		mat.makeRotationZW(theta);
 		return mat;
 	}
 
-	Mat5 Mat5::MakePerspectiveProjection(float dist)
+	mat5 mat5::MakePerspectiveProjection(float dist)
 	{
-		Mat5 mat;
+		mat5 mat;
 		mat.makePerspectiveProjectionSimple(dist);
 		return mat;
 	}
 
-	Mat5 Mat5::MakeParallelProjection()
+	mat5 mat5::MakeParallelProjection()
 	{
-		Mat5 mat;
+		mat5 mat;
 		mat.makeParallelProjectionSimple();
 		return mat;
 	}
 
-	Mat5 Mat5::Transpose(const Mat5& m)
+	mat5 mat5::Transpose(const mat5& m)
 	{
-		Mat5 mat = m;
+		mat5 mat = m;
 		mat.transpose();
 		return mat;
 	}
 
-	Mat5 Mat5::Invert(const Mat5& m)
+	mat5 mat5::Invert(const mat5& m)
 	{
-		Mat5 mat = m;
+		mat5 mat = m;
 		mat.invert();
 		return mat;
 	}
 
-	Mat5::Mat5()
+	mat5::mat5()
 	{
 		set(1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1);
 	}
 
-	Mat5::Mat5(const Mat3& m4)
+	mat5::mat5(const mat3& m4)
 	{
 		const float* m = m4.data();
 		set(m[0], m[3], 0, 0, m[6],
@@ -1263,7 +1286,7 @@ namespace hxm
 			m[2], m[5], 0, 0, m[8]);	// TODO: is this the proper way to handle the last row?
 	}
 
-	Mat5::Mat5(const Mat4& m4)
+	mat5::mat5(const mat4& m4)
 	{
 		const float* m = m4.data();
 		set(m[0], m[4], m[8],  0, m[12],
@@ -1273,7 +1296,7 @@ namespace hxm
 			m[3], m[7], m[11], 0, m[15]);	// TODO: is this the proper way to handle the last row?
 	}
 
-	Mat5::~Mat5()
+	mat5::~mat5()
 	{
 	}
 }
