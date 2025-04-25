@@ -168,7 +168,7 @@ bool testMatrix()
 		vec3f ptX = { 1, 0, 1 };
 		vec3f ptY = { 0, 1, 1 };
 
-		Mat3 rot = Mat3::MakeRotation(rad90);
+		mat3 rot = mat3::MakeRotation(rad90);
 		vec3f ptRot = rot * ptX;
 		if (!isNearVec3f(ptRot, vec3f(0, 1, 1)))
 		{
@@ -191,7 +191,7 @@ bool testMatrix()
 		vec4f ptZ = { 0, 0, 1, 1 };
 
 		// XY
-		Mat4 rotXY = Mat4::MakeRotationXY(rad90);
+		mat4 rotXY = mat4::MakeRotationXY(rad90);
 		vec4f ptRotXY = rotXY * ptX;
 		if (!isNearVec4f(ptRotXY, vec4f(0, 1, 0, 1)))
 		{
@@ -207,7 +207,7 @@ bool testMatrix()
 		}
 
 		// ZX
-		Mat4 rotZX = Mat4::MakeRotationZX(rad90);
+		mat4 rotZX = mat4::MakeRotationZX(rad90);
 		vec4f ptRotZX = rotZX * ptZ;
 		if (!isNearVec4f(ptRotZX, vec4f(1, 0, 0, 1)))
 		{
@@ -223,7 +223,7 @@ bool testMatrix()
 		}
 
 		// YZ
-		Mat4 rotYZ = Mat4::MakeRotationYZ(rad90);
+		mat4 rotYZ = mat4::MakeRotationYZ(rad90);
 		vec4f ptRotYZ = rotYZ * ptY;
 		if (!isNearVec4f(ptRotYZ, vec4f(0, 0, 1, 1)))
 		{
@@ -248,7 +248,7 @@ bool testMatrix()
 		vec5f ptW = { 0, 0, 0, 1, 1 };
 
 		// XY
-		Mat5 rotXY = Mat5::MakeRotationXY(rad90);
+		mat5 rotXY = mat5::MakeRotationXY(rad90);
 		vec5f ptRotXY = rotXY * ptX;
 		if (!isNearVec5f(ptRotXY, vec5f(0, 1, 0, 0, 1)))
 		{
@@ -264,7 +264,7 @@ bool testMatrix()
 		}
 
 		// ZX
-		Mat5 rotZX = Mat5::MakeRotationZX(rad90);
+		mat5 rotZX = mat5::MakeRotationZX(rad90);
 		vec5f ptRotZX = rotZX * ptZ;
 		if (!isNearVec5f(ptRotZX, vec5f(1, 0, 0, 0, 1)))
 		{
@@ -280,7 +280,7 @@ bool testMatrix()
 		}
 
 		// XW
-		Mat5 rotXW = Mat5::MakeRotationXW(rad90);
+		mat5 rotXW = mat5::MakeRotationXW(rad90);
 		vec5f ptRotXW = rotXW * ptX;
 		if (!isNearVec5f(ptRotXW, vec5f(0, 0, 0, 1, 1)))
 		{
@@ -296,7 +296,7 @@ bool testMatrix()
 		}
 
 		// YZ
-		Mat5 rotYZ = Mat5::MakeRotationYZ(rad90);
+		mat5 rotYZ = mat5::MakeRotationYZ(rad90);
 		vec5f ptRotYZ = rotYZ * ptY;
 		if (!isNearVec5f(ptRotYZ, vec5f(0, 0, 1, 0, 1)))
 		{
@@ -312,7 +312,7 @@ bool testMatrix()
 		}
 
 		// WY
-		Mat5 rotWY = Mat5::MakeRotationWY(rad90);
+		mat5 rotWY = mat5::MakeRotationWY(rad90);
 		vec5f ptRotWY = rotWY * ptW;
 		if (!isNearVec5f(ptRotWY, vec5f(0, 1, 0, 0, 1)))
 		{
@@ -328,7 +328,7 @@ bool testMatrix()
 		}
 
 		// ZW
-		Mat5 rotZW = Mat5::MakeRotationZW(rad90);
+		mat5 rotZW = mat5::MakeRotationZW(rad90);
 		vec5f ptRotZW = rotZW * ptZ;
 		if (!isNearVec5f(ptRotZW, vec5f(0, 0, 0, 1, 1)))
 		{
@@ -346,8 +346,8 @@ bool testMatrix()
 
 	// Test Mat4->Mat5 conversion
 	{
-		Mat4 mat4x4 = Mat4::MakeTranslation(vec3f(1, 2, 3)) * Mat4::MakeRotationYZ(rad90);
-		Mat5 mat5x5 = Mat5(mat4x4);
+		mat4 mat4x4 = mat4::MakeTranslation(vec3f(1, 2, 3)) * mat4::MakeRotationYZ(rad90);
+		mat5 mat5x5 = mat5(mat4x4);
 		
 		vec5f ptY = vec5f(0, 1, 0, 0, 1);
 		const vec5f expectedPt = vec5f(1, 2, 4, 0, 1);	// should rotate +Y to +Z, then translate by (1,2,3)
@@ -365,8 +365,8 @@ bool testMatrix()
 	{
 		// Mat3
 		{
-			Mat3 mTrans = Mat3::MakeTranslation({ 1, -2 }) * Mat3::MakeRotation(0.5f) * Mat3::MakeScale(1.5f, 0.75f);
-			Mat3 mTransInv = Mat3::Invert(mTrans);
+			mat3 mTrans = mat3::MakeTranslation({ 1, -2 }) * mat3::MakeRotation(0.5f) * mat3::MakeScale(1.5f, 0.75f);
+			mat3 mTransInv = mat3::Invert(mTrans);
 
 			const vec3f pt = { 1.1f, 1.2f, 1.0f };
 			const vec3f transInvPt = mTransInv * mTrans * pt;
@@ -380,12 +380,12 @@ bool testMatrix()
 
 		// Mat4
 		{
-			Mat4 mTrans = Mat4::MakeTranslation({ -1, 2, -3 }) *
-				Mat4::MakeRotationXY(0.1f) *
-				Mat4::MakeRotationZX(0.2f) *
-				Mat4::MakeRotationYZ(0.3f) *
-				Mat4::MakeScale({ 1.1f, 0.9f, 1.2f });
-			Mat4 mTransInv = Mat4::Invert(mTrans);
+			mat4 mTrans = mat4::MakeTranslation({ -1, 2, -3 }) *
+				mat4::MakeRotationXY(0.1f) *
+				mat4::MakeRotationZX(0.2f) *
+				mat4::MakeRotationYZ(0.3f) *
+				mat4::MakeScale({ 1.1f, 0.9f, 1.2f });
+			mat4 mTransInv = mat4::Invert(mTrans);
 
 			const vec4f pt = { 1.1f, 1.2f, 1.3f, 1.0f };
 			const vec4f transInvPt = mTransInv * mTrans * pt;
@@ -399,15 +399,15 @@ bool testMatrix()
 
 		// Mat5
 		{
-			Mat5 mTrans = Mat5::MakeTranslation({ 1, -2, 3, -4 }) *
-				Mat5::MakeRotationXY(0.1f) *
-				Mat5::MakeRotationZX(0.2f) *
-				Mat5::MakeRotationXW(0.3f) *
-				Mat5::MakeRotationYZ(0.4f) *
-				Mat5::MakeRotationWY(0.5f) *
-				Mat5::MakeRotationZW(0.6f) *
-				Mat5::MakeScale({ 1.1f, 0.9f, 1.2f, 0.8f });
-			Mat5 mTransInv = Mat5::Invert(mTrans);
+			mat5 mTrans = mat5::MakeTranslation({ 1, -2, 3, -4 }) *
+				mat5::MakeRotationXY(0.1f) *
+				mat5::MakeRotationZX(0.2f) *
+				mat5::MakeRotationXW(0.3f) *
+				mat5::MakeRotationYZ(0.4f) *
+				mat5::MakeRotationWY(0.5f) *
+				mat5::MakeRotationZW(0.6f) *
+				mat5::MakeScale({ 1.1f, 0.9f, 1.2f, 0.8f });
+			mat5 mTransInv = mat5::Invert(mTrans);
 
 			const vec5f pt = { 1.1f, 1.2f, 1.3f, 1.4f, 1.0f };
 			const vec5f transInvPt = mTransInv * mTrans * pt;
@@ -428,17 +428,56 @@ bool testMatrix()
 			vec3f from = { 0,0,0 };
 			vec3f sceneUp = { 0,1,0 };
 
-			Mat4 lookedAt = Mat4::LookAt(from, to, sceneUp);
+			const vec4f forwardPt = { 0, 0, -2, 1 };
+			const vec4f backwardPt = { 0, 0, 3, 1 };
+			const vec4f rightPt = { 4,0,0,1 };
+			const vec4f leftPt = { -5,0,0,1 };
+			const vec4f upPt = { 0,6,0,1 };
+			const vec4f downPt = { 0,-7,0,1 };
 
-			vec4f inFront = { 0,0,-2,1 };
-			
-			// I expect this to be (0,0,-2,1)
-			vec4f transInFront = lookedAt * inFront;
+			const mat4 lookedAt = mat4::LookAt(from, to, sceneUp);
 
-			if (!isNearVec4f(inFront, transInFront))
+			vec4f transForward = lookedAt * forwardPt;	// expect -Z
+			vec4f transBackward = lookedAt * backwardPt;	// expect +Z
+			vec4f transRight = lookedAt * rightPt;	// expect +X
+			vec4f transLeft = lookedAt * leftPt;	// expect -X
+			vec4f transUp = lookedAt * upPt;	// expect +Y
+			vec4f transDown = lookedAt * downPt;	// expect -Y
+
+			if (!isNearVec4f(transForward, vec4f(0, 0, -2, 1)))
 			{
 				success = false;
-				std::printf("Mat4 LookAt failed\n");
+				std::printf("Mat4 lookAt -Z forward failed\n");
+			}
+
+			if (!isNearVec4f(transBackward, vec4f(0, 0, 3, 1)))
+			{
+				success = false;
+				std::printf("Mat4 lookAt -Z backward failed\n");
+			}
+
+			if (!isNearVec4f(transRight, vec4f(4, 0, 0, 1)))
+			{
+				success = false;
+				std::printf("Mat4 lookAt -Z right failed\n");
+			}
+
+			if (!isNearVec4f(transLeft, vec4f(-5, 0, 0, 1)))
+			{
+				success = false;
+				std::printf("Mat4 lookAt -Z left failed\n");
+			}
+
+			if (!isNearVec4f(transUp, vec4f(0, 6, 0, 1)))
+			{
+				success = false;
+				std::printf("Mat4 lookAt -Z up failed\n");
+			}
+
+			if (!isNearVec4f(transDown, vec4f(0, -7, 0, 1)))
+			{
+				success = false;
+				std::printf("Mat4 lookAt -Z down failed\n");
 			}
 		}
 
@@ -455,7 +494,7 @@ bool testMatrix()
 			const vec4f upPt = { 0,6,0,1 };
 			const vec4f downPt = { 0,-7,0,1 };
 
-			const Mat4 lookedAt = Mat4::LookAt(from, to, sceneUp);
+			const mat4 lookedAt = mat4::LookAt(from, to, sceneUp);
 
 			vec4f transForward = lookedAt * forwardPt;	// expect -Z
 			vec4f transBackward = lookedAt * backwardPt;	// expect +Z
@@ -464,7 +503,41 @@ bool testMatrix()
 			vec4f transUp = lookedAt * upPt;	// expect +Y
 			vec4f transDown = lookedAt * downPt;	// expect -Y
 
-			int todoremove = 2;
+			if (!isNearVec4f(transForward, vec4f(0, 0, -2, 1)))
+			{
+				success = false;
+				std::printf("Mat4 lookAt +X forward failed\n");
+			}
+
+			if (!isNearVec4f(transBackward, vec4f(0, 0, 3, 1)))
+			{
+				success = false;
+				std::printf("Mat4 lookAt +X backward failed\n");
+			}
+
+			if (!isNearVec4f(transRight, vec4f(4, 0, 0, 1)))
+			{
+				success = false;
+				std::printf("Mat4 lookAt +X right failed\n");
+			}
+
+			if (!isNearVec4f(transLeft, vec4f(-5, 0, 0, 1)))
+			{
+				success = false;
+				std::printf("Mat4 lookAt +X left failed\n");
+			}
+
+			if (!isNearVec4f(transUp, vec4f(0, 6, 0, 1)))
+			{
+				success = false;
+				std::printf("Mat4 lookAt +X up failed\n");
+			}
+
+			if (!isNearVec4f(transDown, vec4f(0, -7, 0, 1)))
+			{
+				success = false;
+				std::printf("Mat4 lookAt +X down failed\n");
+			}
 		}
 
 		// standard 4D coordinate frame, no rotation
@@ -474,38 +547,225 @@ bool testMatrix()
 			vec4f sceneUp = { 0,1,0,0 };
 			vec4f sceneOver = { 0,0,0,1 };
 
-			const vec4f expectedRight = { 1,0,0,0 };
-			const vec4f expectedUp = { 0,1,0,0 };
-			const vec4f expectedForward = { 0,0,-1,0 };
-			const vec4f expectedOver = { 0,0,0,1 };
+			const vec5f forwardPt = { 0,0,-2,0,1 };
+			const vec5f backwardPt = { 0,0,3,0,1 };
+			const vec5f rightPt = { 4,0,0,0,1 };
+			const vec5f leftPt = { -5,0,0,0,1 };
+			const vec5f upPt = { 0,6,0,0,1 };
+			const vec5f downPt = { 0,-7,0,0,1 };
+			const vec5f anaPt = { 0,0,0,8,1 };
+			const vec5f kataPt = { 0,0,0,-9,1 };
 
-			Mat5 lookedAt = Mat5::LookAt(from, to, sceneUp, sceneOver);
+			mat5 lookedAt = mat5::LookAt(from, to, sceneUp, sceneOver);
 
-			if (!isNearVec4f(expectedRight, lookedAt.right()))
+			vec5f transForward = lookedAt * forwardPt;	// expect -Z
+			vec5f transBackward = lookedAt * backwardPt;	// expect +Z
+			vec5f transRight = lookedAt * rightPt;	// expect +X
+			vec5f transLeft = lookedAt * leftPt;	// expect -X
+			vec5f transUp = lookedAt * upPt;	// expect +Y
+			vec5f transDown = lookedAt * downPt;	// expect -Y
+			vec5f transAna = lookedAt * anaPt;	// expect +W
+			vec5f transKata = lookedAt * kataPt;	// expect -W
+
+			if (!isNearVec5f(transForward, vec5f(0, 0, -2, 0, 1)))
 			{
 				success = false;
-				std::printf("Mat5 lookAt failed right\n");
+				std::printf("Mat5 lookAt -Z forward failed\n");
 			}
 
-			if (!isNearVec4f(expectedUp, lookedAt.up()))
+			if (!isNearVec5f(transBackward, vec5f(0, 0, 3, 0, 1)))
 			{
 				success = false;
-				std::printf("Mat5 lookAt failed up\n");
+				std::printf("Mat5 lookAt -Z backward failed\n");
 			}
 
-			if (!isNearVec4f(expectedForward, lookedAt.forward()))
+			if (!isNearVec5f(transRight, vec5f(4, 0, 0, 0, 1)))
 			{
 				success = false;
-				std::printf("Mat5 lookAt failed forward\n");
+				std::printf("Mat5 lookAt -Z right failed\n");
 			}
 
-			if (!isNearVec4f(expectedOver, lookedAt.over()))
+			if (!isNearVec5f(transLeft, vec5f(-5, 0, 0, 0, 1)))
 			{
 				success = false;
-				std::printf("Mat5 lookAt failed over\n");
+				std::printf("Mat5 lookAt -Z left failed\n");
 			}
 
+			if (!isNearVec5f(transUp, vec5f(0, 6, 0, 0, 1)))
+			{
+				success = false;
+				std::printf("Mat5 lookAt -Z up failed\n");
+			}
 
+			if (!isNearVec5f(transDown, vec5f(0, -7, 0, 0, 1)))
+			{
+				success = false;
+				std::printf("Mat5 lookAt -Z down failed\n");
+			}
+
+			if (!isNearVec5f(transAna, vec5f(0, 0, 0, 8, 1)))
+			{
+				success = false;
+				std::printf("Mat5 lookAt -Z ana failed\n");
+			}
+
+			if (!isNearVec5f(transKata, vec5f(0, 0, 0, -9, 1)))
+			{
+				success = false;
+				std::printf("Mat5 lookAt -Z kata failed\n");
+			}
+		}
+
+		// 4D coordinate frame, looking along +X
+		{
+			vec4f to = { 1,0,0,0 };
+			vec4f from = { 0,0,0,0 };
+			vec4f sceneUp = { 0,1,0,0 };
+			vec4f sceneOver = { 0,0,0,1 };
+
+			const vec5f forwardPt = { 2,0,0,0,1 };
+			const vec5f backwardPt = { -3,0,0,0,1 };
+			const vec5f rightPt = { 0,0,4,0,1 };
+			const vec5f leftPt = { 0,0,-5,0,1 };
+			const vec5f upPt = { 0,6,0,0,1 };
+			const vec5f downPt = { 0,-7,0,0,1 };
+			const vec5f anaPt = { 0,0,0,8,1 };
+			const vec5f kataPt = { 0,0,0,-9,1 };
+
+			mat5 lookedAt = mat5::LookAt(from, to, sceneUp, sceneOver);
+
+			vec5f transForward = lookedAt * forwardPt;	// expect -Z
+			vec5f transBackward = lookedAt * backwardPt;	// expect +Z
+			vec5f transRight = lookedAt * rightPt;	// expect +X
+			vec5f transLeft = lookedAt * leftPt;	// expect -X
+			vec5f transUp = lookedAt * upPt;	// expect +Y
+			vec5f transDown = lookedAt * downPt;	// expect -Y
+			vec5f transAna = lookedAt * anaPt;	// expect +W
+			vec5f transKata = lookedAt * kataPt;	// expect -W
+
+			if (!isNearVec5f(transForward, vec5f(0, 0, -2, 0, 1)))
+			{
+				success = false;
+				std::printf("Mat5 lookAt +X forward failed\n");
+			}
+
+			if (!isNearVec5f(transBackward, vec5f(0, 0, 3, 0, 1)))
+			{
+				success = false;
+				std::printf("Mat5 lookAt +X backward failed\n");
+			}
+
+			if (!isNearVec5f(transRight, vec5f(4, 0, 0, 0, 1)))
+			{
+				success = false;
+				std::printf("Mat5 lookAt +X right failed\n");
+			}
+
+			if (!isNearVec5f(transLeft, vec5f(-5, 0, 0, 0, 1)))
+			{
+				success = false;
+				std::printf("Mat5 lookAt +X left failed\n");
+			}
+
+			if (!isNearVec5f(transUp, vec5f(0, 6, 0, 0, 1)))
+			{
+				success = false;
+				std::printf("Mat5 lookAt +X up failed\n");
+			}
+
+			if (!isNearVec5f(transDown, vec5f(0, -7, 0, 0, 1)))
+			{
+				success = false;
+				std::printf("Mat5 lookAt +X down failed\n");
+			}
+
+			if (!isNearVec5f(transAna, vec5f(0, 0, 0, 8, 1)))
+			{
+				success = false;
+				std::printf("Mat5 lookAt +X ana failed\n");
+			}
+
+			if (!isNearVec5f(transKata, vec5f(0, 0, 0, -9, 1)))
+			{
+				success = false;
+				std::printf("Mat5 lookAt +X kata failed\n");
+			}
+		}
+
+		// 4D coordinate frame, looking along -X, with some translation
+		{
+			vec4f to = { -1,0,0,0 };
+			vec4f from = { 1,0,0,0 };
+			vec4f sceneUp = { 0,1,0,0 };
+			vec4f sceneOver = { 0,0,0,1 };
+
+			const vec5f forwardPt = { -2.2f,0,0,0,1 };
+			const vec5f backwardPt = { 3.3f,0,0,0,1 };
+			const vec5f rightPt = { 0,0,-4,0,1 };
+			const vec5f leftPt = { 0,0,5,0,1 };
+			const vec5f upPt = { 0,6,0,0,1 };
+			const vec5f downPt = { 0,-7,0,0,1 };
+			const vec5f anaPt = { 0,0,0,8,1 };
+			const vec5f kataPt = { 0,0,0,-9,1 };
+
+			mat5 lookedAt = mat5::LookAt(from, to, sceneUp, sceneOver);
+
+			vec5f transForward = lookedAt * forwardPt;	// expect -Z
+			vec5f transBackward = lookedAt * backwardPt;	// expect +Z
+			vec5f transRight = lookedAt * rightPt;	// expect +X
+			vec5f transLeft = lookedAt * leftPt;	// expect -X
+			vec5f transUp = lookedAt * upPt;	// expect +Y
+			vec5f transDown = lookedAt * downPt;	// expect -Y
+			vec5f transAna = lookedAt * anaPt;	// expect +W
+			vec5f transKata = lookedAt * kataPt;	// expect -W
+
+			if (!isNearVec5f(transForward, vec5f(0, 0, -3.2f, 0, 1)))
+			{
+				success = false;
+				std::printf("Mat5 lookAt -X translated forward failed\n");
+			}
+
+			if (!isNearVec5f(transBackward, vec5f(0, 0, 2.3f, 0, 1)))
+			{
+				success = false;
+				std::printf("Mat5 lookAt -X translated backward failed\n");
+			}
+
+			if (!isNearVec5f(transRight, vec5f(4, 0, -1, 0, 1)))
+			{
+				success = false;
+				std::printf("Mat5 lookAt -X translated right failed\n");
+			}
+
+			if (!isNearVec5f(transLeft, vec5f(-5, 0, -1, 0, 1)))
+			{
+				success = false;
+				std::printf("Mat5 lookAt -X translated left failed\n");
+			}
+
+			if (!isNearVec5f(transUp, vec5f(0, 6, -1, 0, 1)))
+			{
+				success = false;
+				std::printf("Mat5 lookAt -X translated up failed\n");
+			}
+
+			if (!isNearVec5f(transDown, vec5f(0, -7, -1, 0, 1)))
+			{
+				success = false;
+				std::printf("Mat5 lookAt -X translated down failed\n");
+			}
+
+			if (!isNearVec5f(transAna, vec5f(0, 0, -1, 8, 1)))
+			{
+				success = false;
+				std::printf("Mat5 lookAt -X translated ana failed\n");
+			}
+
+			if (!isNearVec5f(transKata, vec5f(0, 0, -1, -9, 1)))
+			{
+				success = false;
+				std::printf("Mat5 lookAt -X translated kata failed\n");
+			}
 		}
 	}
 
@@ -516,10 +776,10 @@ bool testAABB()
 {
 	bool success = true;
 
-	aabb3 b1 = aabb3(vec3f(0, 1, 2), vec3f(1, 3, 5));
-	aabb3 b2 = { vec3f(2, 4, 6), vec3f(3, 5, 7) };
-	aabb3 b3 = b1;
-	aabb3 b4 = b2;
+	aabb3f b1 = aabb3f(vec3f(0, 1, 2), vec3f(1, 3, 5));
+	aabb3f b2 = { vec3f(2, 4, 6), vec3f(3, 5, 7) };
+	aabb3f b3 = b1;
+	aabb3f b4 = b2;
 
 	// [] access
 	vec3f min1 = b1.min;
@@ -588,7 +848,7 @@ bool testRotor()
 			std::printf("XY rotor rotation failed\n");
 		}
 
-		Mat5 mRotor = rotor.matrix();
+		mat5 mRotor = rotor.matrix();
 		vec4f matrixedPt = mRotor * vec5f(testPt, 1.0f);
 		if (!isNearVec4f(matrixedPt, expectedResult))
 		{
@@ -647,7 +907,7 @@ bool testRotor()
 						}
 
 						// matrix
-						Mat5 mRotor = rotor.matrix();
+						mat5 mRotor = rotor.matrix();
 						const vec4f matrixedPt = mRotor * vec5f(testPt, 1.0f);
 						if (!isNearVec4f(matrixedPt, expectedResult))
 						{
@@ -677,7 +937,7 @@ bool testRotor()
 			std::printf("Trig fromTo rotation failed\n");
 		}
 
-		Mat5 mRotor = rotor.matrix();
+		mat5 mRotor = rotor.matrix();
 		vec4f matrixedPt = mRotor * vec5f(testPt, 1.0f);
 		if (!isNearVec4f(matrixedPt, expectedResult))
 		{

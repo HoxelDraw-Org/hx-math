@@ -19,12 +19,12 @@ Justin Jensen
 namespace hxm
 {
 	// Forward declarations
-    class Mat3;
-    class Mat4;
-    class Mat5;
+    class mat3;
+    class mat4;
+    class mat5;
     
     // MAT3 -------------------------------------------------------------------
-    class Mat3 {
+    class mat3 {
         // Defines
     private:
     protected:
@@ -49,11 +49,11 @@ namespace hxm
     protected:
     public:
 
-        Mat3 operator*(const Mat3& b) const;
+        mat3 operator*(const mat3& b) const;
         vec3f operator*(const vec3f& rhs) const;
         float& operator[](uint32_t idx);        // for setting values and non-const Mat4's
         float operator[](uint32_t idx) const;   // for reading values from const Mat4's
-        bool operator==(const Mat3& b) const;
+        bool operator==(const mat3& b) const;
 
         const float* data() const;
 
@@ -74,21 +74,21 @@ namespace hxm
         vec2f right() const;
         vec2f up() const;
 
-        static Mat3 MakeTranslation(float x, float y);
-        static Mat3 MakeTranslation(const vec2f& v);
-        static Mat3 MakeRotation(float theta);  // radians
-        static Mat3 MakeScale(float x, float y);
-        static Mat3 MakeScale(const vec2f& v);
-        static Mat3 MakeScale(const float& v);
-        static Mat3 Transpose(const Mat3& m);
-        static Mat3 Invert(const Mat3& m);
+        static mat3 MakeTranslation(float x, float y);
+        static mat3 MakeTranslation(const vec2f& v);
+        static mat3 MakeRotation(float theta);  // radians
+        static mat3 MakeScale(float x, float y);
+        static mat3 MakeScale(const vec2f& v);
+        static mat3 MakeScale(const float& v);
+        static mat3 Transpose(const mat3& m);
+        static mat3 Invert(const mat3& m);
 
-        Mat3();
-        ~Mat3();
+        mat3();
+        ~mat3();
     };
 
 	// MAT4 -------------------------------------------------------------------
-    class Mat4 {
+    class mat4 {
         // Defines
     private:
     protected:
@@ -113,11 +113,11 @@ namespace hxm
     private:
     protected:
     public:
-        Mat4 operator*(const Mat4& b) const;
+        mat4 operator*(const mat4& b) const;
         vec4f operator*(const vec4f& rhs) const;
         float& operator[](uint32_t idx);        // for setting values and non-const Mat4's
         float operator[](uint32_t idx) const;   // for reading values from const Mat4's
-        bool operator==(const Mat4& b) const;
+        bool operator==(const mat4& b) const;
 
         const float* data() const;
 
@@ -144,29 +144,29 @@ namespace hxm
         vec3f up() const;
         vec3f forward() const;
 
-        static Mat4 MakeTranslation(float x, float y, float z);
-        static Mat4 MakeTranslation(const vec3f& v);
-        static Mat4 MakeRotationXY(float theta);    // radians
-        static Mat4 MakeRotationZX(float theta);    // radians
-        static Mat4 MakeRotationYZ(float theta);    // radians
-        static Mat4 Rotate(const Mat4& m, float theta, const vec3f& axis);  // radians
-        static Mat4 MakeScale(float x, float y, float z);
-        static Mat4 MakeScale(const vec3f& v);
-        static Mat4 MakeScale(float v);
-        static Mat4 LookAt(const vec3f& eye, const vec3f& center, const vec3f& up);
-        static Mat4 MakePerspective(float fovy, float aspect, float near, float far);   // fovy in radians
-        static Mat4 MakeBasis(const vec4f& i, const vec4f& j, const vec4f& k, const vec4f& l);
-        static Mat4 Transpose(const Mat4& m);
-        static Mat4 Invert(const Mat4& m);
+        static mat4 MakeTranslation(float x, float y, float z);
+        static mat4 MakeTranslation(const vec3f& v);
+        static mat4 MakeRotationXY(float theta);    // radians
+        static mat4 MakeRotationZX(float theta);    // radians
+        static mat4 MakeRotationYZ(float theta);    // radians
+        static mat4 Rotate(const mat4& m, float theta, const vec3f& axis);  // radians
+        static mat4 MakeScale(float x, float y, float z);
+        static mat4 MakeScale(const vec3f& v);
+        static mat4 MakeScale(float v);
+        static mat4 LookAt(const vec3f& eye, const vec3f& center, const vec3f& up);
+        static mat4 MakePerspective(float fovy, float aspect, float near, float far);   // fovy in radians
+        static mat4 MakeBasis(const vec4f& i, const vec4f& j, const vec4f& k, const vec4f& l);
+        static mat4 Transpose(const mat4& m);
+        static mat4 Invert(const mat4& m);
 
-        Mat4();
-        Mat4(const Mat3& m);
-        ~Mat4();
+        mat4();
+        mat4(const mat3& m);
+        ~mat4();
     };
 
 
 	// MAT5 -------------------------------------------------------------------
-    class Mat5 {
+    class mat5 {
         // Defines
     private:
     protected:
@@ -193,11 +193,11 @@ namespace hxm
     protected:
     public:
 
-        Mat5 operator*(const Mat5& b) const;
+        mat5 operator*(const mat5& b) const;
         vec5f operator*(const vec5f v) const;
         float& operator[](uint32_t idx);        // for setting values and non-const Mat5's
         float operator[](uint32_t idx) const;   // for reading values from const Mat5's
-        bool operator==(const Mat5& b) const;
+        bool operator==(const mat5& b) const;
 
         const float* data() const;
 
@@ -231,28 +231,28 @@ namespace hxm
         vec4f forward() const;
         vec4f over() const;
 
-        static Mat5 MakeTranslation(float x, float y, float z, float w);
-        static Mat5 MakeTranslation(vec4f v);
-        static Mat5 MakeScale(float x, float y, float z, float w);
-        static Mat5 MakeScale(const vec4f& v);
-        static Mat5 MakeScale(float v);
-        static Mat5 LookAt(const vec4f& eye, const vec4f& center, const vec4f& up, const vec4f& over);
-        static Mat5 MakeRotationXY(float theta);    // radians
-        static Mat5 MakeRotationZX(float theta);    // radians
-        static Mat5 MakeRotationXW(float theta);    // radians
-        static Mat5 MakeRotationYZ(float theta);    // radians
-        static Mat5 MakeRotationWY(float theta);    // radians
-        static Mat5 MakeRotationZW(float theta);    // radians
-        static Mat5 MakeRotationEuler(euler6 theta);    // TODO
-        static Mat5 MakeInvRotationEuler(euler6 theta); // TODO
-        static Mat5 MakePerspectiveProjection(float dist);
-        static Mat5 MakeParallelProjection();
-        static Mat5 Transpose(const Mat5& m);
-        static Mat5 Invert(const Mat5& m);
+        static mat5 MakeTranslation(float x, float y, float z, float w);
+        static mat5 MakeTranslation(vec4f v);
+        static mat5 MakeScale(float x, float y, float z, float w);
+        static mat5 MakeScale(const vec4f& v);
+        static mat5 MakeScale(float v);
+        static mat5 LookAt(const vec4f& eye, const vec4f& center, const vec4f& up, const vec4f& over);
+        static mat5 MakeRotationXY(float theta);    // radians
+        static mat5 MakeRotationZX(float theta);    // radians
+        static mat5 MakeRotationXW(float theta);    // radians
+        static mat5 MakeRotationYZ(float theta);    // radians
+        static mat5 MakeRotationWY(float theta);    // radians
+        static mat5 MakeRotationZW(float theta);    // radians
+        static mat5 MakeRotationEuler(euler6 theta);    // TODO
+        static mat5 MakeInvRotationEuler(euler6 theta); // TODO
+        static mat5 MakePerspectiveProjection(float dist);
+        static mat5 MakeParallelProjection();
+        static mat5 Transpose(const mat5& m);
+        static mat5 Invert(const mat5& m);
 
-        Mat5();
-        Mat5(const Mat3& m4);
-        Mat5(const Mat4& m4);
-        ~Mat5();
+        mat5();
+        mat5(const mat3& m4);
+        mat5(const mat4& m4);
+        ~mat5();
     };
 }
