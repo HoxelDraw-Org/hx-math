@@ -9,12 +9,12 @@ Vector, Matrix, and Math library for 4D, 3D, and 2D Computer Graphics
 - vec2f, vec2i, vec2u
 
 ### Matrix
-- Mat5
-- Mat4
-- Mat3
+- mat5
+- mat4
+- mat3
 
 ### Axis-Aligned Bounding Box
-- aabb4 (float)
+- aabb4f
 - aabb4i
 - aabb3
 
@@ -25,9 +25,9 @@ Vector, Matrix, and Math library for 4D, 3D, and 2D Computer Graphics
 ```
 TODO: usage examples
 hxm::vec4f();
-hxm::Mat5();
+hxm::mat5();
 hxm::ray4();
-hxm::aabb();
+hxm::aabb4f();
 hxm::rotor4();
 hxm::euler6();
 hxm::toRad();
@@ -38,5 +38,7 @@ etc.
 - Standardize vec, mat, and aabb APIs
 - ~~Add some Rotor rotation code~~
 - ~~Unit tests and/or sample project~~
+- ONB (Orthonormal Basis)
+- Spherical-to-Cartesian and Cartesian-to-Spherical conversion
 - Header-only
 - Version number
