@@ -57,6 +57,8 @@ namespace hxm
         vec2f& operator*=(float rhs);
         vec2f& operator/=(const vec2f& rhs);
         vec2f& operator/=(float rhs);
+        bool operator==(const vec2f& rhs) const;
+        bool operator!=(const vec2f& rhs) const;
         float& operator[](uint32_t idx);
         float operator[](uint32_t idx) const;
 
@@ -74,36 +76,43 @@ namespace hxm
         ~vec2f();
     };
 
-    inline vec2f operator+(vec2f lhs, const vec2f& rhs) {
+    inline vec2f operator+(vec2f lhs, const vec2f& rhs)
+    {
         lhs += rhs;
         return lhs;
     }
 
-    inline vec2f operator-(vec2f lhs, const vec2f& rhs) {
+    inline vec2f operator-(vec2f lhs, const vec2f& rhs)
+    {
         lhs -= rhs;
         return lhs;
     }
 
-    inline vec2f operator-(const vec2f& rhs) {
+    inline vec2f operator-(const vec2f& rhs)
+    {
         return vec2f(-rhs.x, -rhs.y);
     }
 
-    inline vec2f operator*(vec2f lhs, const vec2f& rhs) {
+    inline vec2f operator*(vec2f lhs, const vec2f& rhs)
+    {
         lhs *= rhs;
         return lhs;
     }
 
-    inline vec2f operator*(vec2f lhs, float rhs) {
+    inline vec2f operator*(vec2f lhs, float rhs)
+    {
         lhs *= rhs;
         return lhs;
     }
 
-    inline vec2f operator/(vec2f lhs, const vec2f& rhs) {
+    inline vec2f operator/(vec2f lhs, const vec2f& rhs)
+    {
         lhs /= rhs;
         return lhs;
     }
 
-    inline vec2f operator/(vec2f lhs, float rhs) {
+    inline vec2f operator/(vec2f lhs, float rhs)
+    {
         lhs /= rhs;
         return lhs;
     }
@@ -142,8 +151,8 @@ namespace hxm
         int32_t operator[](uint32_t idx) const;
         vec2i& operator+=(const vec2i& rhs);
         vec2i& operator-=(const vec2i& rhs);
-        bool operator==(const vec2i& other);
-        bool operator!=(const vec2i& rhs);
+        bool operator==(const vec2i& other) const;
+        bool operator!=(const vec2i& rhs) const;
 
         vec2i();
         vec2i(int32_t v);
@@ -153,7 +162,8 @@ namespace hxm
         ~vec2i();
     };
 
-    inline vec2i operator+(vec2i lhs, const vec2i& rhs) {
+    inline vec2i operator+(vec2i lhs, const vec2i& rhs)
+    {
         lhs += rhs;
         return lhs;
     }
@@ -200,8 +210,8 @@ namespace hxm
         uint32_t operator[](uint32_t idx) const;
         vec2u& operator+=(const vec2u& rhs);
         vec2u& operator-=(const vec2u& rhs);
-        bool operator==(const vec2u& rhs);
-        bool operator!=(const vec2u& rhs);
+        bool operator==(const vec2u& rhs) const;
+        bool operator!=(const vec2u& rhs) const;
 
         vec2u();
         vec2u(uint32_t v);
@@ -211,12 +221,14 @@ namespace hxm
         ~vec2u();
     };
 
-    inline vec2u operator+(vec2u lhs, const vec2u& rhs) {
+    inline vec2u operator+(vec2u lhs, const vec2u& rhs)
+    {
         lhs += rhs;
         return lhs;
     }
 
-    inline vec2u operator-(vec2u lhs, const vec2u& rhs) {
+    inline vec2u operator-(vec2u lhs, const vec2u& rhs)
+    {
         lhs -= rhs;
         return lhs;
     }
@@ -274,52 +286,62 @@ namespace hxm
         ~vec3f();
     };
 
-    inline vec3f operator+(vec3f lhs, const vec3f& rhs) {
+    inline vec3f operator+(vec3f lhs, const vec3f& rhs)
+    {
         lhs += rhs;
         return lhs;
     }
 
-    inline vec3f operator-(vec3f lhs, const vec3f& rhs) {
+    inline vec3f operator-(vec3f lhs, const vec3f& rhs)
+    {
         lhs -= rhs;
         return lhs;
     }
 
-    inline vec3f operator-(const vec3f& rhs) {
+    inline vec3f operator-(const vec3f& rhs)
+    {
         return vec3f(-rhs.x, -rhs.y, -rhs.z);
     }
 
-    inline vec3f operator*(vec3f lhs, const vec3f& rhs) {
+    inline vec3f operator*(vec3f lhs, const vec3f& rhs)
+    {
         lhs *= rhs;
         return lhs;
     }
 
-    inline vec3f operator+(vec3f lhs, float rhs) {
+    inline vec3f operator+(vec3f lhs, float rhs)
+    {
         lhs += rhs;
         return lhs;
     }
 
-    inline vec3f operator-(vec3f lhs, float rhs) {
+    inline vec3f operator-(vec3f lhs, float rhs)
+    {
         lhs -= rhs;
         return lhs;
     }
 
-    inline vec3f operator*(vec3f lhs, float rhs) {
+    inline vec3f operator*(vec3f lhs, float rhs)
+    {
         lhs *= rhs;
         return lhs;
     }
 
-    inline vec3f operator/(vec3f lhs, const vec3f& rhs) {
+    inline vec3f operator/(vec3f lhs, const vec3f& rhs)
+    {
         lhs /= rhs;
         return lhs;
     }
 
-    inline vec3f operator/(vec3f lhs, float rhs) {
+    inline vec3f operator/(vec3f lhs, float rhs)
+    {
         lhs /= rhs;
         return lhs;
     }
 
     // result is perpendicular to U and V
-    inline vec3f cross(const vec3f& U, const vec3f& V) {
+    inline vec3f cross(const vec3f& U, const vec3f& V)
+    {
         return vec3f((U.y * V.z) - (U.z * V.y),
                      (U.z * V.x) - (U.x * V.z),
                      (U.x * V.y) - (U.y * V.x));
@@ -375,8 +397,8 @@ namespace hxm
         int32_t operator[](uint32_t idx) const;
         vec3i& operator+=(const vec3i& rhs);
         vec3i& operator-=(const vec3i& rhs);
-        bool operator==(const vec3i& other);
-        bool operator!=(const vec3i& rhs);
+        bool operator==(const vec3i& other) const;
+        bool operator!=(const vec3i& rhs) const;
 
         vec3i();
         vec3i(int32_t v);
@@ -386,7 +408,8 @@ namespace hxm
         ~vec3i();
     };
 
-    inline vec3i operator+(vec3i lhs, const vec3i& rhs) {
+    inline vec3i operator+(vec3i lhs, const vec3i& rhs)
+    {
         lhs += rhs;
         return lhs;
     }
@@ -434,9 +457,9 @@ namespace hxm
         // TODO: more operators
         uint32_t& operator[](uint32_t idx);
         uint32_t operator[](uint32_t idx) const;
-        bool operator==(const vec3u& rhs);
+        //bool operator==(const vec3u& rhs);
         bool operator==(const vec3u& rhs) const;
-        bool operator!=(const vec3u& rhs);
+        bool operator!=(const vec3u& rhs) const;
 
         vec3u();
         vec3u(uint32_t v);
@@ -470,8 +493,8 @@ namespace hxm
         vec4f& operator*=(float rhs);
         vec4f& operator/=(const vec4f& rhs);
         vec4f& operator/=(float rhs);
-        bool operator==(const vec4f& other);
-        bool operator!=(const vec4f& other);
+        bool operator==(const vec4f& other) const;
+        bool operator!=(const vec4f& other) const;
         float& operator[](uint32_t idx);
         float operator[](uint32_t idx) const;
 
@@ -493,17 +516,20 @@ namespace hxm
         ~vec4f();
     };
 
-    inline vec4f operator+(vec4f lhs, const vec4f& rhs) {
+    inline vec4f operator+(vec4f lhs, const vec4f& rhs)
+    {
         lhs += rhs;
         return lhs;
     }
 
-    inline vec4f operator+(vec4f lhs, float rhs) {
+    inline vec4f operator+(vec4f lhs, float rhs)
+    {
         lhs += rhs;
         return lhs;
     }
 
-    inline vec4f operator-(vec4f lhs, const vec4f& rhs) {
+    inline vec4f operator-(vec4f lhs, const vec4f& rhs)
+    {
         lhs -= rhs;
         return lhs;
     }
@@ -513,27 +539,32 @@ namespace hxm
         return vec4f(-lhs.x, -lhs.y, -lhs.z, -lhs.w);
     }
 
-    inline vec4f operator-(vec4f lhs, float rhs) {
+    inline vec4f operator-(vec4f lhs, float rhs)
+    {
         lhs -= rhs;
         return lhs;
     }
 
-    inline vec4f operator*(vec4f lhs, const vec4f& rhs) {
+    inline vec4f operator*(vec4f lhs, const vec4f& rhs)
+    {
         lhs *= rhs;
         return lhs;
     }
 
-    inline vec4f operator*(vec4f lhs, float rhs) {
+    inline vec4f operator*(vec4f lhs, float rhs)
+    {
         lhs *= rhs;
         return lhs;
     }
 
-    inline vec4f operator/(vec4f lhs, const vec4f& rhs) {
+    inline vec4f operator/(vec4f lhs, const vec4f& rhs)
+    {
         lhs /= rhs;
         return lhs;
     }
 
-    inline vec4f operator/(vec4f lhs, float rhs) {
+    inline vec4f operator/(vec4f lhs, float rhs)
+    {
         lhs /= rhs;
         return lhs;
     }
@@ -619,9 +650,9 @@ namespace hxm
         vec4i& operator+=(const vec4i& rhs);
         vec4i& operator-=(const vec4i& rhs);
         vec4i& operator+=(int value);
-        bool operator==(const vec4i& other);
-        bool operator!=(const vec4i& other);
-        bool operator==(const vec4u& other);    // vec4i == vec4u
+        bool operator==(const vec4i& other) const;
+        bool operator!=(const vec4i& other) const;
+        bool operator==(const vec4u& other) const;    // vec4i == vec4u
 
         vec4i();
         vec4i(int32_t v);
@@ -713,9 +744,9 @@ namespace hxm
         // TODO: more operators
         uint32_t& operator[](uint32_t idx);
         uint32_t operator[](uint32_t idx) const;
-        bool operator==(const vec4u& other);
-        bool operator==(const vec4i& other);    // vec4u == vec4i
-        bool operator!=(const vec4u& other);
+        bool operator==(const vec4u& other) const;
+        bool operator==(const vec4i& other) const;    // vec4u == vec4i
+        bool operator!=(const vec4u& other) const;
         vec4u& operator/=(size_t value);
         vec4u& operator%=(size_t value);
         vec4u& operator+=(size_t rhs);
@@ -833,8 +864,8 @@ namespace hxm
         vec5f& operator*=(float rhs);
         vec5f& operator/=(const vec5f& rhs);
         vec5f& operator/=(float rhs);
-        bool operator==(const vec5f& other);
-        bool operator!=(const vec5f& other);
+        bool operator==(const vec5f& other) const;
+        bool operator!=(const vec5f& other) const;
         float& operator[](uint32_t idx);
         float operator[](uint32_t idx) const;
 
@@ -857,17 +888,20 @@ namespace hxm
         ~vec5f();
     };
 
-    inline vec5f operator+(vec5f lhs, const vec5f& rhs) {
+    inline vec5f operator+(vec5f lhs, const vec5f& rhs)
+    {
         lhs += rhs;
         return lhs;
     }
 
-    inline vec5f operator+(vec5f lhs, float rhs) {
+    inline vec5f operator+(vec5f lhs, float rhs)
+    {
         lhs += rhs;
         return lhs;
     }
 
-    inline vec5f operator-(vec5f lhs, const vec5f& rhs) {
+    inline vec5f operator-(vec5f lhs, const vec5f& rhs)
+    {
         lhs -= rhs;
         return lhs;
     }
@@ -877,22 +911,26 @@ namespace hxm
         return vec5f(-lhs.x, -lhs.y, -lhs.z, -lhs.w, -lhs.v);
     }
 
-    inline vec5f operator*(vec5f lhs, const vec5f& rhs) {
+    inline vec5f operator*(vec5f lhs, const vec5f& rhs)
+    {
         lhs *= rhs;
         return lhs;
     }
 
-    inline vec5f operator*(vec5f lhs, float rhs) {
+    inline vec5f operator*(vec5f lhs, float rhs)
+    {
         lhs *= rhs;
         return lhs;
     }
 
-    inline vec5f operator/(vec5f lhs, const vec5f& rhs) {
+    inline vec5f operator/(vec5f lhs, const vec5f& rhs)
+    {
         lhs /= rhs;
         return lhs;
     }
 
-    inline vec5f operator/(vec5f lhs, float rhs) {
+    inline vec5f operator/(vec5f lhs, float rhs)
+    {
         lhs /= rhs;
         return lhs;
     }
@@ -925,8 +963,8 @@ namespace hxm
         vec5i& operator+=(const vec5i& rhs);
         vec5i& operator-=(const vec5i& rhs);
         vec5i& operator+=(int value);
-        bool operator==(const vec5i& other);
-        bool operator!=(const vec5i& other);
+        bool operator==(const vec5i& other) const;
+        bool operator!=(const vec5i& other) const;
 
         vec5i();
         vec5i(int32_t v);

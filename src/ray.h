@@ -47,7 +47,8 @@ namespace hxm
         ~ray3() {};
     };
 
-    inline ray3 operator*(const mat4& m, const ray3& ray) {
+    inline ray3 operator*(const mat4& m, const ray3& ray)
+    {
         vec3f newOrig(0);
         vec3f newDir(0);
 
@@ -109,7 +110,8 @@ namespace hxm
         ~ray4() {};
     };
 
-    inline ray4 operator*(const mat5& m, const ray4& ray) {
+    inline ray4 operator*(const mat5& m, const ray4& ray)
+    {
         vec4f newOrig(0);
         vec4f newDir(0);
 
