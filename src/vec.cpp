@@ -65,15 +65,7 @@ namespace hxm
 
     float& vec2f::operator[](uint32_t idx)
     {
-        switch (idx)
-        {
-        case 0:
-            return x;
-        case 1:
-            return y;
-        default:
-            throw "index out of bounds";
-        }
+        return _v[idx];
     }
 
     float vec2f::operator[](uint32_t idx) const
