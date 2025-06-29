@@ -6,6 +6,7 @@
 #include "mat.h"
 #include "hxMath.h"
 #include "rotor.h"
+#include "onb.h"
 
 #define MAX_ERROR 1e-5f
 using namespace hxm;
@@ -1075,6 +1076,15 @@ bool testRotor()
 			std::printf("Quadruple 90 not equal to original point\n");
 		}
 	}
+
+	return success;
+}
+
+bool testONB()
+{
+	bool success = false;
+
+	// TODO
 
 	return success;
 }
