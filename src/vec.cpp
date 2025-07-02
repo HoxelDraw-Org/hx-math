@@ -402,6 +402,16 @@ namespace hxm
     vec3u::~vec3u() {}
 
 
+    // VEC3U8 ---------------------------------------------------------------------
+    uint8_t& vec3u8::operator[](uint32_t idx)
+    {
+        return _v[idx];
+    }
+
+    uint8_t vec3u8::operator[](uint32_t idx) const
+    {
+        return _v[idx];
+    }
 
     bool vec3u8::operator==(const vec3u8& rhs) const
     {

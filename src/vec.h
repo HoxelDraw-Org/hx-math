@@ -472,6 +472,10 @@ namespace hxm
     };
 
 
+    // VEC3U8 -----------------------------------------------------------------
+    class vec3u8 {
+        // Members
+    private:
     protected:
     public:
         union
