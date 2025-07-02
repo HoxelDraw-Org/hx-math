@@ -402,6 +402,41 @@ namespace hxm
     vec3u::~vec3u() {}
 
 
+
+    bool vec3u8::operator==(const vec3u8& rhs) const
+    {
+        return x == rhs.x && y == rhs.y && z == rhs.z;
+    }
+
+    bool vec3u8::operator!=(const vec3u8& rhs) const
+    {
+        return !(x == rhs.x && y == rhs.y && z == rhs.z);
+    }
+
+    vec3u8::vec3u8() : x(0), y(0), z(0) {}
+    vec3u8::vec3u8(uint8_t v) : x(v), y(v), z(v) {}
+    vec3u8::vec3u8(uint8_t x, uint8_t y, uint8_t z) : x(x), y(y), z(z) {}
+    vec3u8::vec3u8(const vec3f& v)
+    {
+        x = uint8_t(std::max(0.0f, v.x));
+        y = uint8_t(std::max(0.0f, v.y));
+        z = uint8_t(std::max(0.0f, v.z));
+    }
+    vec3u8::vec3u8(const vec3i& v)
+    {
+        x = std::max(0, v.x);
+        y = std::max(0, v.y);
+        z = std::max(0, v.z);
+    }
+    vec3u8::vec3u8(const vec3u& v)
+    {
+        x = uint8_t(std::max(0u, v.x));
+        y = uint8_t(std::max(0u, v.y));
+        z = uint8_t(std::max(0u, v.z));
+    }
+    vec3u8::~vec3u8() {}
+
+
     // VEC4F ----------------------------------------------------------------------
     vec4f& vec4f::operator+=(const vec4f& rhs)
     {
@@ -543,7 +578,7 @@ namespace hxm
         return (*this) /= (length());
     }
 
-    
+
 
     vec4f::vec4f() : x(0), y(0), z(0), w(0) {}
     vec4f::vec4f(float v) : x(v), y(v), z(v), w(v) {}
@@ -726,6 +761,91 @@ namespace hxm
         w = std::max(0, v.w);
     }
     vec4u::~vec4u() {}
+
+
+    // VEC4U8 ---------------------------------------------------------------------
+    uint8_t& vec4u8::operator[](uint32_t idx)
+    {
+        return _v[idx];
+    }
+
+    uint8_t vec4u8::operator[](uint32_t idx) const
+    {
+        return _v[idx];
+    }
+
+    bool vec4u8::operator==(const vec4u8& other) const
+    {
+        return x == other.x && y == other.y && z == other.z && w == other.w;
+    }
+
+    bool vec4u8::operator!=(const vec4u8& other) const
+    {
+        return x != other.x || y != other.y || z != other.z || w != other.w;
+    }
+
+    vec4u8& vec4u8::operator+=(size_t rhs)
+    {
+        x += rhs;
+        y += rhs;
+        z += rhs;
+        w += rhs;
+        return *this;
+    }
+
+    vec4u8& vec4u8::operator+=(const vec4u8& other)
+    {
+        x += other.x;
+        y += other.y;
+        z += other.z;
+        w += other.w;
+        return *this;
+    }
+
+    vec4u8& vec4u8::operator-=(const vec4u8& rhs)
+    {
+        x -= rhs.x;
+        y -= rhs.y;
+        z -= rhs.z;
+        w -= rhs.w;
+        return *this;
+    }
+
+    vec4u8& vec4u8::operator-=(const int& rhs)
+    {
+        x -= rhs;
+        y -= rhs;
+        z -= rhs;
+        w -= rhs;
+        return *this;
+    }
+
+    vec4u8::vec4u8() : x(0), y(0), z(0), w(0) {}
+    vec4u8::vec4u8(uint8_t v) : x(v), y(v), z(v), w(v) {}
+    vec4u8::vec4u8(uint8_t x, uint8_t y, uint8_t z, uint8_t w) : x(x), y(y), z(z), w(w) {}
+    vec4u8::vec4u8(const vec4f& v)
+    {
+        x = uint8_t(std::max(0.0f, v.x));
+        y = uint8_t(std::max(0.0f, v.y));
+        z = uint8_t(std::max(0.0f, v.z));
+        w = uint8_t(std::max(0.0f, v.w));
+    }
+    vec4u8::vec4u8(const vec4i& v)
+    {
+        x = uint8_t(std::max(0, v.x));
+        y = uint8_t(std::max(0, v.y));
+        z = uint8_t(std::max(0, v.z));
+        w = uint8_t(std::max(0, v.w));
+    }
+    vec4u8::vec4u8(const vec4u& v)
+    {
+        x = uint8_t(std::max(0u, v.x));
+        y = uint8_t(std::max(0u, v.y));
+        z = uint8_t(std::max(0u, v.z));
+        w = uint8_t(std::max(0u, v.w));
+    }
+    vec4u8::~vec4u8() {}
+
 
     // VEC5F ----------------------------------------------------------------------
     vec5f& vec5f::operator+=(const vec5f& rhs)

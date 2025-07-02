@@ -21,9 +21,11 @@ namespace hxm
     class vec3f;
     class vec3i;
     class vec3u;
+    class vec3u8;
     class vec4f;
     class vec4i;
     class vec4u;
+    class vec4u8;
     class vec5f;
     class vec5i;
 
@@ -470,6 +472,36 @@ namespace hxm
     };
 
 
+    protected:
+    public:
+        union
+        {
+            uint8_t _v[3];
+            struct { uint8_t x, y, z; };
+            struct { uint8_t r, g, b; };
+        };
+
+        // Functions
+    private:
+    protected:
+    public:
+        // TODO: more operators
+        uint8_t& operator[](uint32_t idx);
+        uint8_t operator[](uint32_t idx) const;
+        //bool operator==(const vec3u& rhs);
+        bool operator==(const vec3u8& rhs) const;
+        bool operator!=(const vec3u8& rhs) const;
+
+        vec3u8();
+        vec3u8(uint8_t v);
+        vec3u8(uint8_t x, uint8_t y, uint8_t z);
+        vec3u8(const vec3f& v);
+        vec3u8(const vec3i& v);
+        vec3u8(const vec3u& v);
+        ~vec3u8();
+    };
+
+
     // VEC4F ------------------------------------------------------------------
     class vec4f {
         // Members
@@ -582,9 +614,9 @@ namespace hxm
         F = (V.z * W.w) - (V.w * W.z);
 
         vec4f result(0);
-        result.x =  (U.y * F) - (U.z * E) + (U.w * D);
+        result.x = (U.y * F) - (U.z * E) + (U.w * D);
         result.y = -(U.x * F) + (U.z * C) - (U.w * B);
-        result.z =  (U.x * E) - (U.y * C) + (U.w * A);
+        result.z = (U.x * E) - (U.y * C) + (U.w * A);
         result.w = -(U.x * D) + (U.y * B) - (U.z * A);
 
         return result;
@@ -840,6 +872,72 @@ namespace hxm
     }
 
 
+    // VEC4U8 -----------------------------------------------------------------
+    class vec4u8 {
+        // Members
+    private:
+    protected:
+    public:
+        union
+        {
+            uint8_t _v[4];
+            struct { uint8_t x, y, z, w; };
+            struct { uint8_t r, g, b, a; };
+        };
+
+        // Functions
+    private:
+    protected:
+    public:
+        // TODO: more operators
+        uint8_t& operator[](uint32_t idx);
+        uint8_t operator[](uint32_t idx) const;
+        bool operator==(const vec4u8& other) const;
+        bool operator!=(const vec4u8& other) const;
+        //vec4u8& operator/=(size_t value);
+        //vec4u8& operator%=(size_t value);
+        vec4u8& operator+=(size_t rhs);
+        vec4u8& operator+=(const vec4u8& other);
+        vec4u8& operator-=(const vec4u8& rhs);
+        vec4u8& operator-=(const int& rhs);
+
+        vec4u8();
+        vec4u8(uint8_t v);
+        vec4u8(uint8_t x, uint8_t y, uint8_t z, uint8_t w);
+        vec4u8(const vec4f& v);
+        vec4u8(const vec4i& v);
+        vec4u8(const vec4u& v);
+        ~vec4u8();
+    };
+
+    inline vec4u8 operator+(vec4u8 lhs, uint8_t rhs)
+    {
+        lhs += rhs;
+        return lhs;
+    }
+
+    inline vec4u8 operator+(vec4u8 lhs, const vec4u8& rhs)
+    {
+        lhs += rhs;
+        return lhs;
+    }
+
+    inline vec4u8 operator-(vec4u8 lhs, const vec4u8& rhs)
+    {
+        lhs -= rhs;
+        return lhs;
+    }
+
+    inline vec4u8 clamp(vec4u8 v, const vec4u8& vMin, const vec4u8& vMax)
+    {
+        v.x = std::max(std::min(v.x, vMax.x), vMin.x);
+        v.y = std::max(std::min(v.y, vMax.y), vMin.y);
+        v.z = std::max(std::min(v.z, vMax.z), vMin.z);
+        v.w = std::max(std::min(v.w, vMax.w), vMin.w);
+        return v;
+    }
+
+
     // VEC5F ------------------------------------------------------------------
     class vec5f {
         // Members
@@ -970,7 +1068,7 @@ namespace hxm
         vec5i(int32_t v);
         vec5i(int32_t x, int32_t y, int32_t z, int32_t w, int32_t v);
         ~vec5i();
-    };    
+    };
 
     inline vec5i operator+(vec5i lhs, size_t rhs)
     {
