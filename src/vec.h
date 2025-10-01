@@ -685,6 +685,7 @@ namespace hxm
         int32_t operator[](uint32_t idx) const;
         vec4i& operator+=(const vec4i& rhs);
         vec4i& operator-=(const vec4i& rhs);
+        vec4i& operator*=(const vec4i& rhs);
         vec4i& operator+=(int value);
         bool operator==(const vec4i& other) const;
         bool operator!=(const vec4i& other) const;
@@ -713,6 +714,12 @@ namespace hxm
     inline vec4i operator-(vec4i lhs, const vec4i& rhs)
     {
         lhs -= rhs;
+        return lhs;
+    }
+
+    inline vec4i operator*(vec4i lhs, const vec4i& rhs)
+    {
+        lhs *= rhs;
         return lhs;
     }
 

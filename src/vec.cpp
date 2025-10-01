@@ -619,6 +619,15 @@ namespace hxm
         return *this;
     }
 
+    vec4i& vec4i::operator*=(const vec4i& rhs)
+    {
+        x *= rhs.x;
+        y *= rhs.y;
+        z *= rhs.z;
+        w *= rhs.w;
+        return *this;
+    }
+
     vec4i& vec4i::operator+=(int value)
     {
         x += value;

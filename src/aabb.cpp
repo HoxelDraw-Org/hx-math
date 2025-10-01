@@ -62,6 +62,12 @@ namespace hxm
         return result;
     }
 
+    float aabb3f::area() const
+    {
+        vec3f d = dim();
+        return 2.0f * ((d.x * d.y) + (d.x * d.z) + (d.y * d.z));
+    }
+
     float aabb3f::volume() const
     {
         if (!isValid())
@@ -238,6 +244,15 @@ namespace hxm
         return result;
     }
     
+    int aabb4i::volume(bool halfOpenInterval) const
+    {
+        vec4i d = dim();
+        if (!halfOpenInterval)
+            d += 1;
+
+        return 2 * ((d.x * d.y * d.z) + (d.x * d.y * d.w) + (d.x * d.z * d.w) + (d.y * d.z * d.w));
+    }
+
     int aabb4i::bulk(bool halfOpenInterval) const
     {
         if (!isValid())
@@ -358,6 +373,12 @@ namespace hxm
         return result;
     }
     
+    float aabb4f::volume() const
+    {
+        vec4f d = dim();
+        return 2.0f * ((d.x * d.y * d.z) + (d.x * d.y * d.w) + (d.x * d.z * d.w) + (d.y * d.z * d.w));
+    }
+
     float aabb4f::bulk() const
     {
         if (!isValid())

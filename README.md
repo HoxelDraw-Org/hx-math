@@ -16,7 +16,7 @@ Vector, Matrix, and Math library for 4D, 3D, and 2D Computer Graphics
 ### Axis-Aligned Bounding Box
 - aabb4f
 - aabb4i
-- aabb3
+- aabb3f
 
 ### Rotors
 - rotor4
@@ -42,3 +42,4 @@ etc.
 - Spherical-to-Cartesian and Cartesian-to-Spherical conversion
 - Header-only
 - Version number
+- Double-precision

@@ -55,6 +55,7 @@ namespace hxm
 
         aabb3f intersect(const aabb3f& other) const;
 
+        float area() const; // surface area
         float volume() const;
 
         vec3f centroid() const;
@@ -111,6 +112,7 @@ namespace hxm
         aabb4i intersect(const aabb4i& other) const;
         aabb4i intersect(const vec4i& otherStart, const vec4i& otherEnd) const;
         
+        int volume(bool halfOpenInterval = true) const; // surface volume
         int bulk(bool halfOpenInterval = true) const;
 
         void reset();
@@ -160,6 +162,7 @@ namespace hxm
 
         aabb4f intersect(const aabb4f& other) const;
         
+        float volume() const; // surface volume
         float bulk() const;
 
         vec4f centroid() const;

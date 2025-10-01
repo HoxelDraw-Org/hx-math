@@ -87,6 +87,19 @@ bool testVector()
 		success = false;
 	}
 
+	// pointer access
+	vec4f ptrVec = { 1, 2, 3, 4 };
+	auto ptr = &(ptrVec.x);
+	xVal = *(ptr + 0);
+	yVal = *(ptr + 1);
+	zVal = *(ptr + 2);
+	wVal = *(ptr + 3);
+	if (xVal != 1 || yVal != 2 || zVal != 3 || wVal != 4)
+	{
+		std::printf("Vector pointer accessor failed!\n");
+		success = false;
+	}
+
 	float dotProduct0 = dot(v4_0, v4_1);
 	float dotProduct1 = v4_0.dot(v4_1);	// two ways to do the dot product (and many operators)
 	if (dotProduct0 != 0.0f || dotProduct1 != 0.0f)
@@ -776,38 +789,55 @@ bool testAABB()
 {
 	bool success = true;
 
-	aabb3f b1 = aabb3f(vec3f(0, 1, 2), vec3f(1, 3, 5));
-	aabb3f b2 = { vec3f(2, 4, 6), vec3f(3, 5, 7) };
-	aabb3f b3 = b1;
-	aabb3f b4 = b2;
-
-	// [] access
-	vec3f min1 = b1.min;
-	vec3f min2 = b2[0];
-	vec3f max2 = { b2._v[3], b2._v[4], b2._v[5] };
-
-	// [] modifying
-	b1[0] = { 7, 8, 9 };
-	if (b1[0] != vec3f(7, 8, 9))
+	// AABB3F
 	{
-		std::printf("AABB3 [] operator failed\n");
-		success = false;
+		aabb3f b1 = aabb3f(vec3f(0, 1, 2), vec3f(1, 3, 5));
+		aabb3f b2 = { vec3f(2, 4, 6), vec3f(3, 5, 7) };
+		aabb3f b3 = b1;
+		aabb3f b4 = b2;
+
+		// [] access
+		vec3f min1 = b1.min;
+		vec3f min2 = b2[0];
+		vec3f max2 = { b2._v[3], b2._v[4], b2._v[5] };
+
+		// [] modifying
+		b1[0] = { 7, 8, 9 };
+		if (b1[0] != vec3f(7, 8, 9))
+		{
+			std::printf("AABB3 [] operator failed\n");
+			success = false;
+		}
+
+		// centroid
+		vec3f centroid3 = b3.centroid();
+		if (centroid3 != vec3f(0.5f, 2.0f, 3.5f))
+		{
+			std::printf("AABB3 centroid failed\n");
+			success = false;
+		}
+
+		float centroid4axis0 = b4.centroid(0);
+		if (centroid4axis0 != 2.5f)
+		{
+			std::printf("AABB3 centroid axis failed\n");
+			success = false;
+		}
 	}
 
-	// centroid
-	vec3f centroid3 = b3.centroid();
-	if (centroid3 != vec3f(0.5f, 2.0f, 3.5f))
+	// AABB4F
 	{
-		std::printf("AABB3 centroid failed\n");
-		success = false;
+		// surface volume
+		aabb4f b1 = aabb4f(vec4f(0), vec4f(1, 2, 3, 4));
+		const float expectedVolumeB1 = 100.f;	// 2 * ((1 * 2 * 3) + (1 * 2 * 4) + (1 * 3 * 4) + (2 * 3 * 4))
+		const float volumeB1 = b1.volume();
+		if (volumeB1 != expectedVolumeB1)
+		{
+			std::printf("AABB4F surface volume failed\n");
+			success = false;
+		}
 	}
 
-	float centroid4axis0 = b4.centroid(0);
-	if (centroid4axis0 != 2.5f)
-	{
-		std::printf("AABB3 centroid axis failed\n");
-		success = false;
-	}
 
 	return success;
 }
