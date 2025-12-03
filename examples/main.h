@@ -797,7 +797,7 @@ bool testAABB()
 		aabb3f b4 = b2;
 
 		// [] access
-		vec3f min1 = b1.min;
+		vec3f min1 = b1.min();
 		vec3f min2 = b2[0];
 		vec3f max2 = { b2._v[3], b2._v[4], b2._v[5] };
 
@@ -908,8 +908,8 @@ bool testRotor()
 						vec4f fromVec = 0;
 						fromVec[i] = 1.0f;
 
-						float sinj = std::sinf(angle);
-						float cosj = std::cosf(angle);
+						float sinj = std::sin(angle);
+						float cosj = std::cos(angle);
 						vec4f toVec = 0;
 						toVec[i] = cosj;
 						toVec[j] = sinj;

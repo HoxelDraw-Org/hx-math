@@ -108,8 +108,6 @@ namespace hxm
     vec2f::vec2f(const vec2i& v) : x(v.x), y(v.y) {}
     vec2f::vec2f(const vec2u& v) : x(float(v.x)), y(float(v.y)) {}
 
-    vec2f::~vec2f() {}
-
 
     // VEC2I ----------------------------------------------------------------------
     vec2i& vec2i::operator+=(const vec2i& rhs)
@@ -151,7 +149,6 @@ namespace hxm
     vec2i::vec2i(int32_t x, int32_t y) : x(x), y(y) {}
     vec2i::vec2i(const vec2f& fvec) : x(int32_t(fvec.x)), y(int32_t(fvec.y)) {}
     vec2i::vec2i(const vec2u& v) : x(int32_t(v.x)), y(int32_t(v.y)) {}
-    vec2i::~vec2i() {}
 
 
     // VEC2U ----------------------------------------------------------------------
@@ -201,7 +198,6 @@ namespace hxm
         x = std::max(0, v.x);
         y = std::max(0, v.y);
     }
-    vec2u::~vec2u() {}
 
 
     // VEC3F ----------------------------------------------------------------------
@@ -315,7 +311,6 @@ namespace hxm
     vec3f::vec3f(const vec3i& v) : x(float(v.x)), y(float(v.y)), z(float(v.z)) {}
     vec3f::vec3f(const vec4f& v) : x(v.x), y(v.y), z(v.z) {}
     vec3f::vec3f(const vec4u& v) : x(float(v.x)), y(float(v.y)), z(float(v.z)) {}
-    vec3f::~vec3f() {}
 
 
     // VEC3I ----------------------------------------------------------------------
@@ -360,7 +355,6 @@ namespace hxm
     vec3i::vec3i(int32_t x, int32_t y, int32_t z) : x(x), y(y), z(z) {}
     vec3i::vec3i(const vec3f& fvec) : x(int32_t(fvec.x)), y(int32_t(fvec.y)), z(int32_t(fvec.z)) {}
     vec3i::vec3i(const vec3u& v) : x(int32_t(v.x)), y(int32_t(v.y)), z(int32_t(v.z)) {}
-    vec3i::~vec3i() {}
 
 
     // VEC3U ----------------------------------------------------------------------
@@ -399,7 +393,6 @@ namespace hxm
         y = std::max(0, v.y);
         z = std::max(0, v.z);
     }
-    vec3u::~vec3u() {}
 
 
     // VEC3U8 ---------------------------------------------------------------------
@@ -444,7 +437,6 @@ namespace hxm
         y = uint8_t(std::max(0u, v.y));
         z = uint8_t(std::max(0u, v.z));
     }
-    vec3u8::~vec3u8() {}
 
 
     // VEC4F ----------------------------------------------------------------------
@@ -546,25 +538,25 @@ namespace hxm
         float minVal = FLT_MAX;
 
         // don't consider components with -infinity values
-        if (!isinf(x) && x < minVal)
+        if (!std::isinf(x) && x < minVal)
         {
             minIdx = 0;
             minVal = x;
         }
 
-        if (!isinf(y) && y < minVal)
+        if (!std::isinf(y) && y < minVal)
         {
             minIdx = 1;
             minVal = y;
         }
 
-        if (!isinf(z) && z < minVal)
+        if (!std::isinf(z) && z < minVal)
         {
             minIdx = 2;
             minVal = z;
         }
 
-        if (!isinf(w) && w < minVal)
+        if (!std::isinf(w) && w < minVal)
         {
             minIdx = 3;
             minVal = w;
@@ -598,7 +590,6 @@ namespace hxm
     vec4f::vec4f(const vec4u& vec) : x(vec.x), y(vec.y), z(vec.z), w(vec.w) {}
     vec4f::vec4f(const vec4i& vec) : x(vec.x), y(vec.y), z(vec.z), w(vec.w) {}
     vec4f::vec4f(const vec5f& vec) : x(vec.x), y(vec.y), z(vec.z), w(vec.w) {}
-    vec4f::~vec4f() {}
 
     // VEC4I ----------------------------------------------------------------------
     vec4i& vec4i::operator+=(const vec4i& rhs)
@@ -679,7 +670,6 @@ namespace hxm
         z = (int32_t)uvec.z;
         w = (int32_t)uvec.w;
     }
-    vec4i::~vec4i() {}
 
     // VEC4U ----------------------------------------------------------------------
     uint32_t& vec4u::operator[](uint32_t idx)
@@ -779,7 +769,6 @@ namespace hxm
         z = std::max(0, v.z);
         w = std::max(0, v.w);
     }
-    vec4u::~vec4u() {}
 
 
     // VEC4U8 ---------------------------------------------------------------------
@@ -863,7 +852,6 @@ namespace hxm
         z = uint8_t(std::max(0u, v.z));
         w = uint8_t(std::max(0u, v.w));
     }
-    vec4u8::~vec4u8() {}
 
 
     // VEC5F ----------------------------------------------------------------------
@@ -993,31 +981,31 @@ namespace hxm
         float minVal = FLT_MAX;
 
         // don't consider components with -infinity values
-        if (!isinf(x) && x < minVal)
+        if (!std::isinf(x) && x < minVal)
         {
             minIdx = 0;
             minVal = x;
         }
 
-        if (!isinf(y) && y < minVal)
+        if (!std::isinf(y) && y < minVal)
         {
             minIdx = 1;
             minVal = y;
         }
 
-        if (!isinf(z) && z < minVal)
+        if (!std::isinf(z) && z < minVal)
         {
             minIdx = 2;
             minVal = z;
         }
 
-        if (!isinf(w) && w < minVal)
+        if (!std::isinf(w) && w < minVal)
         {
             minIdx = 3;
             minVal = w;
         }
 
-        if (!isinf(v) && v < minVal)
+        if (!std::isinf(v) && v < minVal)
         {
             minIdx = 4;
             minVal = v;
@@ -1050,7 +1038,6 @@ namespace hxm
     vec5f::vec5f(const vec4u& vec) : x(vec.x), y(vec.y), z(vec.z), w(vec.w), v(0) {}
     vec5f::vec5f(const vec4i& vec) : x(vec.x), y(vec.y), z(vec.z), w(vec.w), v(0) {}
     vec5f::vec5f(const vec5i& vec) : x(vec.x), y(vec.y), z(vec.z), w(vec.w), v(vec.v) {}
-    vec5f::~vec5f() {}
 
 
     // VEC5I ----------------------------------------------------------------------
@@ -1107,5 +1094,4 @@ namespace hxm
     vec5i::vec5i() : x(0), y(0), z(0), w(0), v(0) {}
     vec5i::vec5i(int32_t v) : x(v), y(v), z(v), w(v), v(v) {}
     vec5i::vec5i(int32_t x, int32_t y, int32_t z, int32_t w, int32_t v) : x(x), y(y), z(z), w(w), v(v) {}
-    vec5i::~vec5i() {}
 }

@@ -37,7 +37,6 @@ namespace hxm
         {
             float _v[6];                // { min_x, min_y, min_z, max_x, max_y, max_z }
             struct { vec3f _b[2]; };    // { min, max }
-            struct { vec3f min, max; }; // min, max
         };
 
         // Functions
@@ -65,6 +64,8 @@ namespace hxm
 
         vec3f& operator[](uint32_t idx);        // 0: min, 1: max
         vec3f operator[](uint32_t idx) const;
+        vec3f min() const;
+        vec3f max() const;
         aabb3f& operator+=(const aabb3f& other);
         aabb3f& operator+=(const vec3f& v);
 
@@ -92,7 +93,6 @@ namespace hxm
         {
             int32_t _v[8];              // { min_x, min_y, min_z, min_w, max_x, max_y, max_z, max_w }
             struct { vec4i _b[2]; };    // { min, max }
-            struct { vec4i min, max; }; // min, max
         };
 
         // Functions
@@ -119,6 +119,8 @@ namespace hxm
 
         vec4i& operator[](uint32_t idx);        // 0: min, 1: max
         vec4i operator[](uint32_t idx) const;
+        vec4i min() const;
+        vec4i max() const;
         aabb4i& operator+=(const aabb4i& other);
     
         aabb4i();
@@ -144,7 +146,6 @@ namespace hxm
         {
             float _v[8];              // { min_x, min_y, min_z, min_w, max_x, max_y, max_z, max_w }
             struct { vec4f _b[2]; };    // { min, max }
-            struct { vec4f min, max; }; // min, max
         };
 
         // Functions
@@ -174,6 +175,8 @@ namespace hxm
 
         vec4f& operator[](uint32_t idx);        // 0: min, 1: max
         vec4f operator[](uint32_t idx) const;
+        vec4f min() const;
+        vec4f max() const;
         aabb4f& operator+=(const aabb4f& other);
         aabb4f& operator+=(const vec4f& v);
 

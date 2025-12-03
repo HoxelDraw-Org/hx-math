@@ -6,24 +6,25 @@ Justin Jensen
 */
 
 #include "aabb.h"
+#include <climits>
 
 namespace hxm
 {
     // AABB3 (float) ------------------------------------------------------------
     void aabb3f::addPoint(const vec3f& pt)
     {
-        min.x = std::min(pt.x, min.x);
-        min.y = std::min(pt.y, min.y);
-        min.z = std::min(pt.z, min.z);
+        _b[0].x = std::min(pt.x, _b[0].x);
+        _b[0].y = std::min(pt.y, _b[0].y);
+        _b[0].z = std::min(pt.z, _b[0].z);
 
-        max.x = std::max(pt.x, max.x);
-        max.y = std::max(pt.y, max.y);
-        max.z = std::max(pt.z, max.z);
+        _b[1].x = std::max(pt.x, _b[1].x);
+        _b[1].y = std::max(pt.y, _b[1].y);
+        _b[1].z = std::max(pt.z, _b[1].z);
     }
 
     vec3f aabb3f::dim() const
     {
-        return max - min;
+        return _b[1] - _b[0];
     }
 
     bool aabb3f::empty() const
@@ -34,30 +35,30 @@ namespace hxm
 
     bool aabb3f::isValid() const
     {
-        return !(max.x < min.x || max.y < min.y || max.z < min.z);
+        return !(max().x > min().x || max().y > min().y || max().z > min().z);
     }
 
     void aabb3f::addAABB(const aabb3f& other)
     {
-        min.x = std::min(other.min.x, min.x);
-        min.y = std::min(other.min.y, min.y);
-        min.z = std::min(other.min.z, min.z);
+        _b[0].x = std::min(other.min().x, _b[0].x);
+        _b[0].y = std::min(other.min().y, _b[0].y);
+        _b[0].z = std::min(other.min().z, _b[0].z);
 
-        max.x = std::max(other.max.x, max.x);
-        max.y = std::max(other.max.y, max.y);
-        max.z = std::max(other.max.z, max.z);
+        _b[1].x = std::max(other.max().x, _b[1].x);
+        _b[1].y = std::max(other.max().y, _b[1].y);
+        _b[1].z = std::max(other.max().z, _b[1].z);
     }
 
     aabb3f aabb3f::intersect(const aabb3f& other) const
     {
         aabb3f result;
-        result.min.x = std::max(min.x, other.min.x);
-        result.min.y = std::max(min.y, other.min.y);
-        result.min.z = std::max(min.z, other.min.z);
+        result._b[0].x = std::max(_b[0].x, other.min().x);
+        result._b[0].y = std::max(_b[0].y, other.min().y);
+        result._b[0].z = std::max(_b[0].z, other.min().z);
 
-        result.max.x = std::min(max.x, other.max.x);
-        result.max.y = std::min(max.y, other.max.y);
-        result.max.z = std::min(max.z, other.max.z);
+        result._b[1].x = std::min(_b[1].x, other.max().x);
+        result._b[1].y = std::min(_b[1].y, other.max().y);
+        result._b[1].z = std::min(_b[1].z, other.max().z);
 
         return result;
     }
@@ -75,17 +76,17 @@ namespace hxm
             return 0.0f;
         }
 
-        return (max.x - min.x) * (max.y - min.y) * (max.z - min.z);
+        return (max().x - min().x) * (max().y - min().y) * (max().z - min().z);
     }
 
     vec3f aabb3f::centroid() const
     {
-        return (min + max) * 0.5f;
+        return (min() + max()) * 0.5f;
     }
 
     float aabb3f::centroid(uint32_t axis) const
     {
-        return (min[axis] + max[axis]) * 0.5f;
+        return (min()[axis] + max()[axis]) * 0.5f;
     }
 
     void aabb3f::padToMin(float pad)
@@ -95,10 +96,10 @@ namespace hxm
         const size_t nDimensions = 3;
         for (size_t axIdx = 0; axIdx < nDimensions; axIdx++)
         {
-            if (max[axIdx] - min[axIdx] < AABB_MIN)
+            if (max()[axIdx] - min()[axIdx] < AABB_MIN)
             {
-                min[axIdx] -= halfDelta;
-                max[axIdx] += halfDelta;
+                _b[0][axIdx] -= halfDelta;
+                _b[1][axIdx] += halfDelta;
             }
         }
     }
@@ -113,36 +114,46 @@ namespace hxm
         return _b[idx];
     }
 
+    vec3f aabb3f::min() const
+    {
+        return _b[0];
+    }
+
+    vec3f aabb3f::max() const
+    {
+        return _b[1];
+    }
+
     aabb3f& aabb3f::operator+=(const aabb3f& other)
     {
-        min.x = std::min(other.min.x, min.x);
-        min.y = std::min(other.min.y, min.y);
-        min.z = std::min(other.min.z, min.z);
+        _b[0].x = std::min(other.min().x, _b[0].x);
+        _b[0].y = std::min(other.min().y, _b[0].y);
+        _b[0].z = std::min(other.min().z, _b[0].z);
 
-        max.x = std::max(other.max.x, max.x);
-        max.y = std::max(other.max.y, max.y);
-        max.z = std::max(other.max.z, max.z);
+        _b[1].x = std::max(other.max().x, _b[1].x);
+        _b[1].y = std::max(other.max().y, _b[1].y);
+        _b[1].z = std::max(other.max().z, _b[1].z);
 
         return *this;
     }
 
     aabb3f& aabb3f::operator+=(const vec3f& v)
     {
-        min.x = std::min(v.x, min.x);
-        min.y = std::min(v.y, min.y);
-        min.z = std::min(v.z, min.z);
+        _b[0].x = std::min(v.x, _b[0].x);
+        _b[0].y = std::min(v.y, _b[0].y);
+        _b[0].z = std::min(v.z, _b[0].z);
 
-        max.x = std::max(v.x, max.x);
-        max.y = std::max(v.y, max.y);
-        max.z = std::max(v.z, max.z);
+        _b[1].x = std::max(v.x, _b[1].x);
+        _b[1].y = std::max(v.y, _b[1].y);
+        _b[1].z = std::max(v.z, _b[1].z);
 
         return *this;
     }
 
     void aabb3f::reset()
     {
-        min = vec3f(FLT_MAX);
-        max = vec3f(-FLT_MAX);
+        _b[0] = vec3f(FLT_MAX);
+        _b[1] = vec3f(-FLT_MAX);
     }
 
     aabb3f::aabb3f()
@@ -150,8 +161,10 @@ namespace hxm
         reset();
     }
 
-    aabb3f::aabb3f(const vec3f& min, const vec3f& max) : min(min), max(max)
+    aabb3f::aabb3f(const vec3f& min, const vec3f& max)
     {
+        _b[0] = min;
+        _b[1] = max;
     }
 
     // END AABB3 ----------------------------------------------------------------
@@ -159,30 +172,30 @@ namespace hxm
     // AABB4I -------------------------------------------------------------------
     void aabb4i::addPoint(const vec4i& pt, bool halfOpenInterval)
     {
-        min.x = std::min(pt.x, min.x);
-        min.y = std::min(pt.y, min.y);
-        min.z = std::min(pt.z, min.z);
-        min.w = std::min(pt.w, min.w);
+        _b[0].x = std::min(pt.x, _b[0].x);
+        _b[0].y = std::min(pt.y, _b[0].y);
+        _b[0].z = std::min(pt.z, _b[0].z);
+        _b[0].w = std::min(pt.w, _b[0].w);
 
         if (halfOpenInterval)
         {
-            max.x = std::max(pt.x + 1, max.x);
-            max.y = std::max(pt.y + 1, max.y);
-            max.z = std::max(pt.z + 1, max.z);
-            max.w = std::max(pt.w + 1, max.w);
+            _b[1].x = std::max(pt.x + 1, _b[1].x);
+            _b[1].y = std::max(pt.y + 1, _b[1].y);
+            _b[1].z = std::max(pt.z + 1, _b[1].z);
+            _b[1].w = std::max(pt.w + 1, _b[1].w);
         }
         else
         {
-            max.x = std::max(pt.x, max.x);
-            max.y = std::max(pt.y, max.y);
-            max.z = std::max(pt.z, max.z);
-            max.w = std::max(pt.w, max.w);
+            _b[1].x = std::max(pt.x, _b[1].x);
+            _b[1].y = std::max(pt.y, _b[1].y);
+            _b[1].z = std::max(pt.z, _b[1].z);
+            _b[1].w = std::max(pt.w, _b[1].w);
         }
     }
 
     vec4i aabb4i::dim() const
     {
-        return max - min;
+        return max() - min();
     }
 
     bool aabb4i::empty() const
@@ -195,39 +208,39 @@ namespace hxm
     {
         if (halfOpenInterval)
         {
-            return !(max.x <= min.x || max.y <= min.y || max.z <= min.z || max.w <= min.w);
+            return !(max().x <= min().x || max().y <= min().y || max().z <= min().z || max().w <= min().w);
         }
         else
         {
-            return !(max.x < min.x || max.y < min.y || max.z < min.z || max.w < min.w);
+            return !(max().x < min().x || max().y < min().y || max().z < min().z || max().w < min().w);
         }
     }
 
     void aabb4i::addAABB(const aabb4i& other)
     {
-        min.x = std::min(other.min.x, min.x);
-        min.y = std::min(other.min.y, min.y);
-        min.z = std::min(other.min.z, min.z);
-        min.w = std::min(other.min.w, min.w);
+        _b[0].x = std::min(other.min().x, _b[0].x);
+        _b[0].y = std::min(other.min().y, _b[0].y);
+        _b[0].z = std::min(other.min().z, _b[0].z);
+        _b[0].w = std::min(other.min().w, _b[0].w);
 
-        max.x = std::max(other.max.x, max.x);
-        max.y = std::max(other.max.y, max.y);
-        max.z = std::max(other.max.z, max.z);
-        max.w = std::max(other.max.w, max.w);
+        _b[1].x = std::max(other.max().x, _b[1].x);
+        _b[1].y = std::max(other.max().y, _b[1].y);
+        _b[1].z = std::max(other.max().z, _b[1].z);
+        _b[1].w = std::max(other.max().w, _b[1].w);
     }
 
     aabb4i aabb4i::intersect(const aabb4i& other) const
     {
         aabb4i result;
-        result.min.x = std::max(min.x, other.min.x);
-        result.min.y = std::max(min.y, other.min.y);
-        result.min.z = std::max(min.z, other.min.z);
-        result.min.w = std::max(min.w, other.min.w);
+        result._b[0].x = std::max(_b[0].x, other.min().x);
+        result._b[0].y = std::max(_b[0].y, other.min().y);
+        result._b[0].z = std::max(_b[0].z, other.min().z);
+        result._b[0].w = std::max(_b[0].w, other.min().w);
 
-        result.max.x = std::min(max.x, other.max.x);
-        result.max.y = std::min(max.y, other.max.y);
-        result.max.z = std::min(max.z, other.max.z);
-        result.max.w = std::min(max.w, other.max.w);
+        result._b[1].x = std::min(_b[1].x, other.max().x);
+        result._b[1].y = std::min(_b[1].y, other.max().y);
+        result._b[1].z = std::min(_b[1].z, other.max().z);
+        result._b[1].w = std::min(_b[1].w, other.max().w);
 
         return result;
     }
@@ -237,8 +250,8 @@ namespace hxm
         aabb4i result;
         for (uint32_t cIdx = 0; cIdx < 4; cIdx++)
         {
-            result.min[cIdx] = std::max(otherStart[cIdx], min[cIdx]);
-            result.max[cIdx] = std::min(otherEnd[cIdx], max[cIdx]);
+            result._b[0][cIdx] = std::max(otherStart[cIdx], _b[0][cIdx]);
+            result._b[1][cIdx] = std::min(otherEnd[cIdx], _b[1][cIdx]);
         }
 
         return result;
@@ -263,11 +276,11 @@ namespace hxm
         vec4i tDim;
         if (halfOpenInterval)
         {
-            tDim = max - min;
+            tDim = max() - min();
         }
         else
         {
-            tDim = (max + 1) - min;
+            tDim = (max() + 1) - min();
         }
         
         return tDim.x * tDim.y * tDim.z * tDim.w;
@@ -275,8 +288,8 @@ namespace hxm
 
     void aabb4i::reset()
     {
-        min = vec4i(INT_MAX);
-        max = vec4i(INT_MIN);
+        _b[0] = vec4i(INT_MAX);
+        _b[1] = vec4i(INT_MIN);
     }
 
     vec4i& aabb4i::operator[](uint32_t idx)
@@ -289,17 +302,27 @@ namespace hxm
         return _b[idx];
     }
 
+    vec4i aabb4i::min() const
+    {
+        return _b[0];
+    }
+
+    vec4i aabb4i::max() const
+    {
+        return _b[1];
+    }
+
     aabb4i& aabb4i::operator+=(const aabb4i& other)
     {
-        min.x = std::min(other.min.x, min.x);
-        min.y = std::min(other.min.y, min.y);
-        min.z = std::min(other.min.z, min.z);
-        min.w = std::min(other.min.w, min.w);
+        _b[0].x = std::min(other.min().x, _b[0].x);
+        _b[0].y = std::min(other.min().y, _b[0].y);
+        _b[0].z = std::min(other.min().z, _b[0].z);
+        _b[0].w = std::min(other.min().w, _b[0].w);
 
-        max.x = std::max(other.max.x, max.x);
-        max.y = std::max(other.max.y, max.y);
-        max.z = std::max(other.max.z, max.z);
-        max.w = std::max(other.max.w, max.w);
+        _b[1].x = std::max(other.max().x, _b[1].x);
+        _b[1].y = std::max(other.max().y, _b[1].y);
+        _b[1].z = std::max(other.max().z, _b[1].z);
+        _b[1].w = std::max(other.max().w, _b[1].w);
 
         return *this;
     }
@@ -309,28 +332,30 @@ namespace hxm
         reset();
     }
 
-    aabb4i::aabb4i(const vec4i& min, const vec4i& max) : min(min), max(max)
+    aabb4i::aabb4i(const vec4i& min, const vec4i& max)
     {
+        _b[0] = min;
+        _b[1] = max;
     }
     // END AABB4I ---------------------------------------------------------------
 
     // AABB4F -------------------------------------------------------------------
     void aabb4f::addPoint(const vec4f& pt)
     {
-        min.x = std::min(pt.x, min.x);
-        min.y = std::min(pt.y, min.y);
-        min.z = std::min(pt.z, min.z);
-        min.w = std::min(pt.w, min.w);
-        
-        max.x = std::max(pt.x, max.x);
-        max.y = std::max(pt.y, max.y);
-        max.z = std::max(pt.z, max.z);
-        max.w = std::max(pt.w, max.w);
+        _b[0].x = std::min(pt.x, _b[0].x);
+        _b[0].y = std::min(pt.y, _b[0].y);
+        _b[0].z = std::min(pt.z, _b[0].z);
+        _b[0].w = std::min(pt.w, _b[0].w);
+
+        _b[1].x = std::max(pt.x, _b[1].x);
+        _b[1].y = std::max(pt.y, _b[1].y);
+        _b[1].z = std::max(pt.z, _b[1].z);
+        _b[1].w = std::max(pt.w, _b[1].w);
     }
 
     vec4f aabb4f::dim() const
     {
-        return max - min;
+        return max() - min();
     }
 
     bool aabb4f::empty() const
@@ -341,34 +366,34 @@ namespace hxm
 
     bool aabb4f::isValid() const
     {
-        return !(max.x < min.x || max.y < min.y || max.z < min.z || max.w < min.w);
+        return !(max().x < min().x || max().y < min().y || max().z < min().z || max().w < min().w);
     }
 
     void aabb4f::addAABB(const aabb4f& other)
     {
-        min.x = std::min(other.min.x, min.x);
-        min.y = std::min(other.min.y, min.y);
-        min.z = std::min(other.min.z, min.z);
-        min.w = std::min(other.min.w, min.w);
+        _b[0].x = std::min(other.min().x, _b[0].x);
+        _b[0].y = std::min(other.min().y, _b[0].y);
+        _b[0].z = std::min(other.min().z, _b[0].z);
+        _b[0].w = std::min(other.min().w, _b[0].w);
 
-        max.x = std::max(other.max.x, max.x);
-        max.y = std::max(other.max.y, max.y);
-        max.z = std::max(other.max.z, max.z);
-        max.w = std::max(other.max.w, max.w);
+        _b[1].x = std::max(other.max().x, _b[1].x);
+        _b[1].y = std::max(other.max().y, _b[1].y);
+        _b[1].z = std::max(other.max().z, _b[1].z);
+        _b[1].w = std::max(other.max().w, _b[1].w);
     }
 
     aabb4f aabb4f::intersect(const aabb4f& other) const
     {
         aabb4f result;
-        result.min.x = std::max(min.x, other.min.x);
-        result.min.y = std::max(min.y, other.min.y);
-        result.min.z = std::max(min.z, other.min.z);
-        result.min.w = std::max(min.w, other.min.w);
+        result._b[0].x = std::max(_b[0].x, other.min().x);
+        result._b[0].y = std::max(_b[0].y, other.min().y);
+        result._b[0].z = std::max(_b[0].z, other.min().z);
+        result._b[0].w = std::max(_b[0].w, other.min().w);
 
-        result.max.x = std::min(max.x, other.max.x);
-        result.max.y = std::min(max.y, other.max.y);
-        result.max.z = std::min(max.z, other.max.z);
-        result.max.w = std::min(max.w, other.max.w);
+        result._b[1].x = std::min(_b[1].x, other.max().x);
+        result._b[1].y = std::min(_b[1].y, other.max().y);
+        result._b[1].z = std::min(_b[1].z, other.max().z);
+        result._b[1].w = std::min(_b[1].w, other.max().w);
 
         return result;
     }
@@ -386,17 +411,17 @@ namespace hxm
             return 0.0f;
         }
         
-        return (max.x - min.x) * (max.y - min.y) * (max.z - min.z) * (max.w - min.w);
+        return (max().x - min().x) * (max().y - min().y) * (max().z - min().z) * (max().w - min().w);
     }
 
     vec4f aabb4f::centroid() const
     {
-        return (min + max) * 0.5f;
+        return (min() + max()) * 0.5f;
     }
 
     float aabb4f::centroid(uint32_t axis) const
     {
-        return (min[axis] + max[axis]) * 0.5f;
+        return (min()[axis] + max()[axis]) * 0.5f;
     }
 
     void aabb4f::padToMin(float pad)
@@ -406,18 +431,18 @@ namespace hxm
         const size_t nDimensions = 4;
         for (size_t axIdx = 0; axIdx < nDimensions; axIdx++)
         {
-            if (max[axIdx] - min[axIdx] < AABB_MIN)
+            if (_b[1][axIdx] - _b[0][axIdx] < AABB_MIN)
             {
-                min[axIdx] -= halfDelta;
-                max[axIdx] += halfDelta;
+                _b[0][axIdx] -= halfDelta;
+                _b[1][axIdx] += halfDelta;
             }
         }
     }
 
     void aabb4f::reset()
     {
-        min = vec4f(FLT_MAX);
-        max = vec4f(-FLT_MAX);
+        _b[0] = vec4f(FLT_MAX);
+        _b[1] = vec4f(-FLT_MAX);
     }
 
     vec4f& aabb4f::operator[](uint32_t idx)
@@ -430,32 +455,42 @@ namespace hxm
         return _b[idx];
     }
 
+    vec4f aabb4f::min() const
+    {
+        return _b[0];
+    }
+
+    vec4f aabb4f::max() const
+    {
+        return _b[1];
+    }
+
     aabb4f& aabb4f::operator+=(const aabb4f& other)
     {
-        min.x = std::min(other.min.x, min.x);
-        min.y = std::min(other.min.y, min.y);
-        min.z = std::min(other.min.z, min.z);
-        min.w = std::min(other.min.w, min.w);
+        _b[0].x = std::min(other.min().x, _b[0].x);
+        _b[0].y = std::min(other.min().y, _b[0].y);
+        _b[0].z = std::min(other.min().z, _b[0].z);
+        _b[0].w = std::min(other.min().w, _b[0].w);
 
-        max.x = std::max(other.max.x, max.x);
-        max.y = std::max(other.max.y, max.y);
-        max.z = std::max(other.max.z, max.z);
-        max.w = std::max(other.max.w, max.w);
+        _b[1].x = std::max(other.max().x, _b[1].x);
+        _b[1].y = std::max(other.max().y, _b[1].y);
+        _b[1].z = std::max(other.max().z, _b[1].z);
+        _b[1].w = std::max(other.max().w, _b[1].w);
 
         return *this;
     }
 
     aabb4f& aabb4f::operator+=(const vec4f& v)
     {
-        min.x = std::min(v.x, min.x);
-        min.y = std::min(v.y, min.y);
-        min.z = std::min(v.z, min.z);
-        min.w = std::min(v.w, min.w);
+        _b[0].x = std::min(v.x, _b[0].x);
+        _b[0].y = std::min(v.y, _b[0].y);
+        _b[0].z = std::min(v.z, _b[0].z);
+        _b[0].w = std::min(v.w, _b[0].w);
 
-        max.x = std::max(v.x, max.x);
-        max.y = std::max(v.y, max.y);
-        max.z = std::max(v.z, max.z);
-        max.w = std::max(v.w, max.w);
+        _b[1].x = std::max(v.x, _b[1].x);
+        _b[1].y = std::max(v.y, _b[1].y);
+        _b[1].z = std::max(v.z, _b[1].z);
+        _b[1].w = std::max(v.w, _b[1].w);
 
         return *this;
     }
@@ -465,12 +500,16 @@ namespace hxm
         reset();
     }
 
-    aabb4f::aabb4f(const vec4f& min, const vec4f& max) : min(min), max(max)
+    aabb4f::aabb4f(const vec4f& min, const vec4f& max)
     {
+        _b[0] = min;
+        _b[1] = max;
     }
 
-    aabb4f::aabb4f(const aabb4i& otheri) : min(vec4f(otheri.min)), max(vec4f(otheri.max))
+    aabb4f::aabb4f(const aabb4i& otheri)
     {
+        _b[0] = vec4f(otheri.min());
+        _b[1] = vec4f(otheri.max());
     }
 
     // END AABB4 ----------------------------------------------------------------

@@ -57,7 +57,14 @@ namespace hxm
         if (dot(fromNorm, toNorm) < -0.99999f)
         {
             // TODO: what's the best course of action here?
-            std::printf("Invalid rotor: 180 degree rotation\n");
+            //std::printf("Invalid rotor: 180 degree rotation\n");
+            xy = 0.0f;
+            zx = 0.0f;
+            xw = 0.0f;
+            yz = 0.0f;
+            wy = 0.0f;
+            zw = 0.0f;
+            return *this;
         }
 
         // get the normalized vector halfway between the to and from directions
@@ -88,14 +95,21 @@ namespace hxm
         if (dot(fromNorm, toNorm) < -0.99999f)
         {
             // TODO: what's the best course of action here?
-            std::printf("Invalid rotor: 180 degree rotation\n");
+            //std::printf("Invalid rotor: 180 degree rotation\n");
+            xy = 0.0f;
+            zx = 0.0f;
+            xw = 0.0f;
+            yz = 0.0f;
+            wy = 0.0f;
+            zw = 0.0f;
+            return *this;
         }
         
         // get the angle between the input directions
         const float fromDotTo = std::min(std::max(dot(fromNorm, toNorm), -1.0f), 1.0f);
-        const float theta = std::acosf(fromDotTo);
-        const float cosHalfTheta = std::cosf(theta * 0.5f);
-        const float sinHalfTheta = std::sinf(theta * 0.5f);
+        const float theta = std::acos(fromDotTo);
+        const float cosHalfTheta = std::cos(theta * 0.5f);
+        const float sinHalfTheta = std::sin(theta * 0.5f);
 
         // compute the normalized "toDir wedge fromDir" product
         const float a = (toNorm.x * fromNorm.y) - (toNorm.y * fromNorm.x);
@@ -104,7 +118,7 @@ namespace hxm
         const float d = (toNorm.y * fromNorm.z) - (toNorm.z * fromNorm.y);
         const float e = (toNorm.w * fromNorm.y) - (toNorm.y * fromNorm.w);
         const float f = (toNorm.z * fromNorm.w) - (toNorm.w * fromNorm.z);
-        const float len = std::sqrtf((a * a) + (b * b) + (c * c) + (d * d) + (e * e) + (f * f));
+        const float len = std::sqrt((a * a) + (b * b) + (c * c) + (d * d) + (e * e) + (f * f));
 
         scalar = cosHalfTheta;
         xy = sinHalfTheta * (a / len);
