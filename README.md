@@ -1,6 +1,8 @@
 # hx-math
 Vector, Matrix, and Math library for 4D, 3D, and 2D Computer Graphics
 
+Tested in MSVC and GCC (Ubuntu)
+
 ## Data types
 ### Vector
 - vec5f, vec5i
