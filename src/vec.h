@@ -75,7 +75,6 @@ namespace hxm
         vec2f(const vec3f& v);
         vec2f(const vec2i& v);
         vec2f(const vec2u& v);
-        ~vec2f();
     };
 
     inline vec2f operator+(vec2f lhs, const vec2f& rhs)
@@ -161,7 +160,6 @@ namespace hxm
         vec2i(int32_t x, int32_t y);
         vec2i(const vec2f& fvec);
         vec2i(const vec2u& uvec);
-        ~vec2i();
     };
 
     inline vec2i operator+(vec2i lhs, const vec2i& rhs)
@@ -220,7 +218,6 @@ namespace hxm
         vec2u(uint32_t x, uint32_t y);
         vec2u(const vec2i& v);
         vec2u(const vec2f& v);
-        ~vec2u();
     };
 
     inline vec2u operator+(vec2u lhs, const vec2u& rhs)
@@ -285,7 +282,6 @@ namespace hxm
         vec3f(const vec3i& v);
         vec3f(const vec4f& v);
         vec3f(const vec4u& v);
-        ~vec3f();
     };
 
     inline vec3f operator+(vec3f lhs, const vec3f& rhs)
@@ -407,7 +403,6 @@ namespace hxm
         vec3i(int32_t x, int32_t y, int32_t z);
         vec3i(const vec3f& fvec);
         vec3i(const vec3u& uvec);
-        ~vec3i();
     };
 
     inline vec3i operator+(vec3i lhs, const vec3i& rhs)
@@ -468,7 +463,6 @@ namespace hxm
         vec3u(uint32_t x, uint32_t y, uint32_t z);
         vec3u(const vec3f& v);
         vec3u(const vec3i& v);
-        ~vec3u();
     };
 
 
@@ -502,7 +496,6 @@ namespace hxm
         vec3u8(const vec3f& v);
         vec3u8(const vec3i& v);
         vec3u8(const vec3u& v);
-        ~vec3u8();
     };
 
 
@@ -549,7 +542,6 @@ namespace hxm
         vec4f(const vec4u& vec);
         vec4f(const vec4i& vec);
         vec4f(const vec5f& vec);
-        ~vec4f();
     };
 
     inline vec4f operator+(vec4f lhs, const vec4f& rhs)
@@ -696,7 +688,6 @@ namespace hxm
         vec4i(int32_t x, int32_t y, int32_t z, int32_t w);
         vec4i(const vec4f& fvec);
         vec4i(const vec4u& uvec);
-        ~vec4i();
     };
 
     inline vec4i operator+(vec4i lhs, size_t rhs)
@@ -802,7 +793,6 @@ namespace hxm
         vec4u(uint32_t x, uint32_t y, uint32_t z, uint32_t w);
         vec4u(const vec4f& v);
         vec4u(const vec4i& v);
-        ~vec4u();
     };
 
     inline vec4u operator/(vec4u lhs, size_t rhs)
@@ -918,7 +908,6 @@ namespace hxm
         vec4u8(const vec4f& v);
         vec4u8(const vec4i& v);
         vec4u8(const vec4u& v);
-        ~vec4u8();
     };
 
     inline vec4u8 operator+(vec4u8 lhs, uint8_t rhs)
@@ -994,7 +983,6 @@ namespace hxm
         vec5f(const vec4u& vec);
         vec5f(const vec4i& vec);
         vec5f(const vec5i& vec);
-        ~vec5f();
     };
 
     inline vec5f operator+(vec5f lhs, const vec5f& rhs)
@@ -1078,7 +1066,6 @@ namespace hxm
         vec5i();
         vec5i(int32_t v);
         vec5i(int32_t x, int32_t y, int32_t z, int32_t w, int32_t v);
-        ~vec5i();
     };
 
     inline vec5i operator+(vec5i lhs, size_t rhs)
