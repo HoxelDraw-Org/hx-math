@@ -421,6 +421,22 @@ namespace hxm
 		return true;
 	}
 
+	float mat4::determinant()
+	{
+		// TODO jjensen
+		float a11 = m00;
+		float a21 = m10;
+		float a31 = m20;
+		float a41 = m30;
+
+		// determinant of A1
+
+		// determinant of A2
+		// determinant of A3
+		// determinant of A4
+		return 0.0f;
+	}
+
 	// nAB: the value at row A, column B
 	void mat4::set(float n11, float n12, float n13, float n14, float n21, float n22, float n23, float n24, float n31, float n32, float n33, float n34, float n41, float n42, float n43, float n44)
 	{

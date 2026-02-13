@@ -99,7 +99,7 @@ namespace hxm
     protected:
         union
         {
-            float el[16];
+            float el[16];   // column-major
             struct {
                 float   m00, m10, m20, m30, // column 0
                         m01, m11, m21, m31, // column 1
@@ -123,6 +123,7 @@ namespace hxm
 
         void transpose();
         bool invert();
+        float determinant();
 
         // n[row][column]
         //  n23 == second row, third column
@@ -161,6 +162,7 @@ namespace hxm
 
         mat4();
         mat4(const mat3& m);
+        // TODO jjensen: constructor that takes the four rows/columns
         ~mat4();
     };
 

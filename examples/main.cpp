@@ -37,8 +37,12 @@ int main()
 		std::printf("Rotor tests failed!-------------------------\n\n");
 	}
 
+	if (!testONB())
+	{
+		std::printf("ONB tests failed!---------------------------\n\n");
+	}
+
 	//TODO
-	// Orthonormal basis
 	// Spherical-to-Cartesian conversion
 	// Cartesian-to-Spherical conversion
 
