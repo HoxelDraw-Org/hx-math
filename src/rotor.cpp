@@ -54,7 +54,10 @@ namespace hxm
         vec4f fromNorm = normalize(fromDir);
         vec4f toNorm = normalize(toDir);
 
-        if (dot(fromNorm, toNorm) < -0.99999f)
+        // make sure it's not a 180-degree rotation
+        // also check for NaN
+        const float theDot = dot(fromNorm, toNorm);
+        if (theDot < -0.99999f || theDot != theDot)
         {
             // TODO: what's the best course of action here?
             //std::printf("Invalid rotor: 180 degree rotation\n");
@@ -64,6 +67,7 @@ namespace hxm
             yz = 0.0f;
             wy = 0.0f;
             zw = 0.0f;
+            scalar = 1.0f;
             return *this;
         }
 
@@ -92,7 +96,9 @@ namespace hxm
         vec4f fromNorm = normalize(fromDir);
         vec4f toNorm = normalize(toDir);
 
-        if (dot(fromNorm, toNorm) < -0.99999f)
+        // check for 180-degree rotation and for NaN
+        const float theDot = dot(fromNorm, toNorm);
+        if (theDot < -0.99999f || theDot != theDot)
         {
             // TODO: what's the best course of action here?
             //std::printf("Invalid rotor: 180 degree rotation\n");

@@ -39,6 +39,11 @@ bool isNearVec5f(const vec5f& a, const vec5f& b, float error = MAX_ERROR)
 		std::abs(a.v - b.v) <= error;
 }
 
+bool isEqualRotor4(const rotor4& a, const rotor4& b)
+{
+	return a.xy == b.xy && a.zx == b.zx && a.xw == b.xw && a.yz == b.yz && a.wy == b.wy && a.zw == b.zw && a.scalar == b.scalar;
+}
+
 bool testVector()
 {
 	bool success = true;
@@ -1103,6 +1108,45 @@ bool testRotor()
 		{
 			success = false;
 			std::printf("Quadruple 90 not equal to original point\n");
+		}
+	}
+
+	// test zero-vector for from and/or to vectors
+	{
+		rotor4 rotorZeroFrom = hxm::rotor4(vec4f(0), vec4f(1));
+		rotor4 rotorZeroTo = hxm::rotor4(vec4f(1), vec4f(0));
+		rotor4 rotorZeroBoth = hxm::rotor4(vec4f(0), vec4f(0));
+		rotor4 expectedRotor = hxm::rotor4();
+
+		if (!isEqualRotor4(rotorZeroFrom, expectedRotor))
+		{
+			success = false;
+			std::printf("Rotor4 from zero to non-zero is not equal to the default rotor\n");
+		}
+
+		if (!isEqualRotor4(rotorZeroTo, expectedRotor))
+		{
+			success = false;
+			std::printf("Rotor4 from non-zero to zero is not equal to the default rotor\n");
+		}
+
+		if (!isEqualRotor4(rotorZeroBoth, expectedRotor))
+		{
+			success = false;
+			std::printf("Rotor4 from non-zero to non-zero is not equal to the default rotor\n");
+		}
+	}
+
+	// another test
+	{
+		rotor4 rotorOneXtoOneOneOne = rotor4(vec4f(1, 0, 0, 0), vec4f(1, 1, 1, 0));
+		vec4f oneX = { 1,0,0,0 };
+		const vec4f expectedVec4f = normalize(vec4f(1, 1, 1, 0));
+		const vec4f result = rotorOneXtoOneOneOne * oneX;
+		if (!isNearVec4f(result, expectedVec4f))
+		{
+			success = false;
+			std::printf("Rotor4 from positive X to positive XYZ failed\n");
 		}
 	}
 
