@@ -8,7 +8,6 @@ set (HEADERS
 	${INCLUDE_DIR}/ray.h
 	${INCLUDE_DIR}/vec.h
 	${INCLUDE_DIR}/rotor.h
-	${INCLUDE_DIR}/onb.h
 	)
 
 set (MATH_SOURCES

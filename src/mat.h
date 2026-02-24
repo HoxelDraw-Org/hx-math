@@ -18,11 +18,11 @@ Justin Jensen
 
 namespace hxm
 {
-	// Forward declarations
+    // Forward declarations
     class mat3;
     class mat4;
     class mat5;
-    
+
     // MAT3 -------------------------------------------------------------------
     class mat3 {
         // Defines
@@ -74,6 +74,8 @@ namespace hxm
         vec2f right() const;
         vec2f up() const;
 
+        float Determinant() const;
+
         static mat3 MakeTranslation(float x, float y);
         static mat3 MakeTranslation(const vec2f& v);
         static mat3 MakeRotation(float theta);  // radians
@@ -83,11 +85,19 @@ namespace hxm
         static mat3 Transpose(const mat3& m);
         static mat3 Invert(const mat3& m);
 
+        void fromRows(const vec3f& r0, const vec3f& r1, const vec3f& r2);
+        void fromColumns(const vec3f& c0, const vec3f& c1, const vec3f& c2);
+
         mat3();
         ~mat3();
     };
 
-	// MAT4 -------------------------------------------------------------------
+    inline float Determinant(const mat3& m)
+    {
+        return m.Determinant();
+    }
+
+    // MAT4 -------------------------------------------------------------------
     class mat4 {
         // Defines
     private:
@@ -123,7 +133,6 @@ namespace hxm
 
         void transpose();
         bool invert();
-        float determinant();
 
         // n[row][column]
         //  n23 == second row, third column
@@ -145,6 +154,8 @@ namespace hxm
         vec3f up() const;
         vec3f forward() const;
 
+        float Determinant() const;
+
         static mat4 MakeTranslation(float x, float y, float z);
         static mat4 MakeTranslation(const vec3f& v);
         static mat4 MakeRotationXY(float theta);    // radians
@@ -160,14 +171,20 @@ namespace hxm
         static mat4 Transpose(const mat4& m);
         static mat4 Invert(const mat4& m);
 
+        void fromRows(const vec4f& r0, const vec4f& r1, const vec4f& r2, const vec4f& r3);
+        void fromColumns(const vec4f& c0, const vec4f& c1, const vec4f& c2, const vec4f& c3);
+
         mat4();
         mat4(const mat3& m);
-        // TODO jjensen: constructor that takes the four rows/columns
         ~mat4();
     };
 
+    inline float Determinant(const mat4& m)
+    {
+        return m.Determinant();
+    }
 
-	// MAT5 -------------------------------------------------------------------
+    // MAT5 -------------------------------------------------------------------
     class mat5 {
         // Defines
     private:
@@ -233,6 +250,8 @@ namespace hxm
         vec4f forward() const;
         vec4f over() const;
 
+        float Determinant() const;
+
         static mat5 MakeTranslation(float x, float y, float z, float w);
         static mat5 MakeTranslation(vec4f v);
         static mat5 MakeScale(float x, float y, float z, float w);
@@ -252,9 +271,17 @@ namespace hxm
         static mat5 Transpose(const mat5& m);
         static mat5 Invert(const mat5& m);
 
+        void fromRows(const vec5f& r0, const vec5f& r1, const vec5f& r2, const vec5f& r3, const vec5f& r4);
+        void fromColumns(const vec5f& c0, const vec5f& c1, const vec5f& c2, const vec5f& c3, const vec5f& c4);
+
         mat5();
         mat5(const mat3& m4);
         mat5(const mat4& m4);
         ~mat5();
     };
+
+    inline float Determinant(const mat5& m)
+    {
+        return m.Determinant();
+    }
 }

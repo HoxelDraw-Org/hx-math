@@ -6,7 +6,6 @@
 #include "mat.h"
 #include "hxMath.h"
 #include "rotor.h"
-#include "onb.h"
 
 #define MAX_ERROR 1e-5f
 using namespace hxm;
@@ -783,6 +782,90 @@ bool testMatrix()
 		}
 	}
 
+	// Determinants
+	{
+		// Mat3
+		{
+			mat3 identity = mat3();
+			const float expectedDet1 = 1.f;
+			if (identity.Determinant() != expectedDet1)
+			{
+				success = false;
+				std::printf("Mat3 Determinant of identity failed\n");
+			}
+
+			mat3 scaleMat = mat3::MakeScale(vec2f(2, 3));
+			const float expectedDet2 = 2.f * 3.f;
+			if (scaleMat.Determinant() != expectedDet2)
+			{
+				success = false;
+				std::printf("Mat3 Determinant of scale failed\n");
+			}
+
+			mat3 rotMat = mat3::MakeRotation(HX_PI * 0.2f);
+			const float expectedDet3 = 1.f;
+			if (rotMat.Determinant() != expectedDet3)
+			{
+				success = false;
+				std::printf("Mat3 Determinant of rotate failed\n");
+			}
+		}
+
+		// Mat4
+		{
+			mat4 identity = mat4();
+			const float expectedDet1 = 1.f;
+			if (identity.Determinant() != expectedDet1)
+			{
+				success = false;
+				std::printf("Mat4 Determinant of identity failed\n");
+			}
+
+			mat4 scaleMat = mat4::MakeScale(vec3f(2, 3, 4));
+			const float expectedDet2 = 2.f * 3.f * 4.f;
+			if (scaleMat.Determinant() != expectedDet2)
+			{
+				success = false;
+				std::printf("Mat4 Determinant of scale failed\n");
+			}
+
+			mat4 rotMat = mat4::MakeRotationXY(HX_PI * 0.2f);
+			const float expectedDet3 = 1.f;
+			if (rotMat.Determinant() != expectedDet3)
+			{
+				success = false;
+				std::printf("Mat4 Determinant of rotate failed\n");
+			}
+		}
+
+		// Mat5
+		{
+			mat5 identity = mat5();
+			const float expectedDet1 = 1.f;
+			if (identity.Determinant() != expectedDet1)
+			{
+				success = false;
+				std::printf("Mat5 Determinant of identity failed\n");
+			}
+
+			mat5 scaleMat = mat5::MakeScale(vec4f(2, 3, 4, 5));
+			const float expectedDet2 = 2.f * 3.f * 4.f * 5.f;
+			if (scaleMat.Determinant() != expectedDet2)
+			{
+				success = false;
+				std::printf("Mat5 Determinant of scale failed\n");
+			}
+
+			mat5 rotMat = mat5::MakeRotationXY(HX_PI * 0.2f);
+			const float expectedDet3 = 1.f;
+			if (rotMat.Determinant() != expectedDet3)
+			{
+				success = false;
+				std::printf("Mat5 Determinant of rotate failed\n");
+			}
+		}
+	}
+
 	return success;
 }
 
@@ -1107,147 +1190,6 @@ bool testRotor()
 		}
 	}
 
-	// test near 180 degree rotation
-	{
-		vec4f fromVec = { 0, 0, 0, 1 };
-		vec4f toVecAlmost180 = { 0.01f, 0, 0, -1 };
-		rotor4 rotAlmost180XW = rotor4(fromVec, toVecAlmost180);
-
-		vec4f ptX = { 1, 0, 0, 0 };
-		vec4f ptY = { 0, 1, 0, 0 };
-		vec4f ptZ = { 0, 0, 1, 0 };
-		vec4f ptW = { 0, 0, 0, 1 };
-
-		vec4f transX = rotAlmost180XW * ptX;
-		vec4f transY = rotAlmost180XW * ptY;
-		vec4f transZ = rotAlmost180XW * ptZ;
-		vec4f transW = rotAlmost180XW * ptW;
-
-		int todoremove = 2;
-	}
-
 	return success;
 }
 
-double dotDouble(const hxm::vec4f& a, const hxm::vec4f& b)
-{
-	return double(a.x) * double(b.x) +
-		double(a.y) * double(b.y) +
-		double(a.z) * double(b.z) +
-		double(a.w) * double(b.w);
-}
-
-double lengthDouble(const hxm::vec4f& v)
-{
-	return std::sqrt(dotDouble(v, v));
-}
-
-double onbError(hxm::vec4f v0, hxm::vec4f v1, hxm::vec4f v2, hxm::vec4f v3)
-{
-	// each vector should be unit-length
-	double lenErr0 = std::pow(lengthDouble(v0) - 1.0, 2.0);
-	double lenErr1 = std::pow(lengthDouble(v1) - 1.0, 2.0);
-	double lenErr2 = std::pow(lengthDouble(v2) - 1.0, 2.0);
-	double lenErr3 = std::pow(lengthDouble(v3) - 1.0, 2.0);
-
-	// the dot product between each vector should be zero
-	double dotV0V1err = std::pow(dotDouble(v0, v1), 2.0);
-	double dotV0V2err = std::pow(dotDouble(v0, v2), 2.0);
-	double dotV0V3err = std::pow(dotDouble(v0, v3), 2.0);
-	double dotV1V2err = std::pow(dotDouble(v1, v2), 2.0);
-	double dotV1V3err = std::pow(dotDouble(v1, v3), 2.0);
-	double dotV2V3err = std::pow(dotDouble(v2, v3), 2.0);
-
-	return (lenErr0 + lenErr1 + lenErr2 + lenErr3 + dotV0V1err + dotV0V2err + dotV0V3err + dotV1V2err + dotV1V3err + dotV2V3err) / 10.0;
-}
-
-bool testONB()
-{
-	{
-		hxm::vec4f inVecX = { 1, 0, 0, 0 };
-		hxm::vec4f inVecY = { 0, 1, 0, 0 };
-		hxm::vec4f inVecZ = { 0, 0, 1, 0 };
-		hxm::vec4f inVecW = { 0, 0, 0, 1 };
-		hxm::vec4f onb0, onb1, onb2, onb3;
-
-		{
-			makeONB4(inVecX, onb0, onb1, onb2, onb3);
-
-			// just x and w should have changed
-		}
-
-		{
-			makeONB4(inVecY, onb0, onb1, onb2, onb3);
-
-			// just y and w should have changed
-		}
-
-		{
-			makeONB4(inVecZ, onb0, onb1, onb2, onb3);
-
-			// just z and w should have changed
-		}
-
-		{
-			makeONB4(inVecW, onb0, onb1, onb2, onb3);
-
-			// nothing should have changed
-		}
-
-		{
-			hxm::vec4f inVecAlmostNegW = { 0.001f, 0.001f, 0.001f, -1.0f };
-			makeONB4(inVecAlmostNegW, onb0, onb1, onb2, onb3);
-			int todoremove = 2;
-		}
-	}
-
-	// TODO:
-	// test all positive axes
-	// test all negative axes
-	// test a handful of other vectors
-	{
-		const uint32_t gridSize = 72;
-		double maxError = -1.0;
-		double totalError = 0.0;
-
-		// maybe just check that it produces a valid orthonormal basis, not necessarily looking for one specific one
-		hxm::vec4u idx;
-		for (idx.w = 0; idx.w < gridSize; idx.w++)
-		{
-			for (idx.z = 0; idx.z < gridSize; idx.z++)
-			{
-				for (idx.y = 0; idx.y < gridSize; idx.y++)
-				{
-					for (idx.x = 0; idx.x < gridSize; idx.x++)
-					{
-						hxm::vec4f idxFactor = hxm::vec4f(idx) / hxm::vec4f(gridSize - 1);
-						hxm::vec4f toPt = (idxFactor * 2.0f) - 1.0f;
-
-						hxm::vec4f onb0, onb1, onb2, onb3;
-						makeONB4(toPt, onb0, onb1, onb2, onb3);
-
-						double err = onbError(onb0, onb1, onb2, onb3);
-
-						if (err != err)
-						{
-							int todoremove = 2;
-						}
-
-						//std::printf("(%i, %i, %i, %i) error: %f\n", idx.x, idx.y, idx.z, idx.w, err * 1e12);
-
-						maxError = std::max(maxError, err);
-						totalError += err;
-					}
-				}
-			}
-		}
-
-		double avgError = totalError / double(gridSize * gridSize * gridSize * gridSize);
-
-		std::printf("trials: %i\n", int(gridSize * gridSize * gridSize * gridSize));
-		std::printf("maxError: %f * 10^14\n", maxError * 1e14);
-		std::printf("avgError: %f * 10^14\n", avgError * 1e14);
-	}
-
-	return false;
-}
