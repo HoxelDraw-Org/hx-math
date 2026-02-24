@@ -85,8 +85,8 @@ namespace hxm
         static mat3 Transpose(const mat3& m);
         static mat3 Invert(const mat3& m);
 
-        void fromRows(const vec3f& r0, const vec3f& r1, const vec3f& r2);
-        void fromColumns(const vec3f& c0, const vec3f& c1, const vec3f& c2);
+        void setRows(const vec3f& r0, const vec3f& r1, const vec3f& r2);
+        void setColumns(const vec3f& c0, const vec3f& c1, const vec3f& c2);
 
         mat3();
         ~mat3();
@@ -171,8 +171,8 @@ namespace hxm
         static mat4 Transpose(const mat4& m);
         static mat4 Invert(const mat4& m);
 
-        void fromRows(const vec4f& r0, const vec4f& r1, const vec4f& r2, const vec4f& r3);
-        void fromColumns(const vec4f& c0, const vec4f& c1, const vec4f& c2, const vec4f& c3);
+        void setRows(const vec4f& r0, const vec4f& r1, const vec4f& r2, const vec4f& r3);
+        void setColumns(const vec4f& c0, const vec4f& c1, const vec4f& c2, const vec4f& c3);
 
         mat4();
         mat4(const mat3& m);
@@ -271,8 +271,8 @@ namespace hxm
         static mat5 Transpose(const mat5& m);
         static mat5 Invert(const mat5& m);
 
-        void fromRows(const vec5f& r0, const vec5f& r1, const vec5f& r2, const vec5f& r3, const vec5f& r4);
-        void fromColumns(const vec5f& c0, const vec5f& c1, const vec5f& c2, const vec5f& c3, const vec5f& c4);
+        void setRows(const vec5f& r0, const vec5f& r1, const vec5f& r2, const vec5f& r3, const vec5f& r4);
+        void setColumns(const vec5f& c0, const vec5f& c1, const vec5f& c2, const vec5f& c3, const vec5f& c4);
 
         mat5();
         mat5(const mat3& m4);

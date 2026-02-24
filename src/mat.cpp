@@ -265,14 +265,14 @@ namespace hxm
 		return mat;
 	}
 
-	void mat3::fromRows(const vec3f& r0, const vec3f& r1, const vec3f& r2)
+	void mat3::setRows(const vec3f& r0, const vec3f& r1, const vec3f& r2)
 	{
 		set(r0.x, r0.y, r0.z,
 			r1.x, r1.y, r1.z,
 			r2.x, r2.y, r2.z);
 	}
 
-	void mat3::fromColumns(const vec3f& c0, const vec3f& c1, const vec3f& c2)
+	void mat3::setColumns(const vec3f& c0, const vec3f& c1, const vec3f& c2)
 	{
 		set(c0.x, c1.x, c2.x,
 			c0.y, c1.y, c2.y,
@@ -755,7 +755,7 @@ namespace hxm
 		return mat;
 	}
 
-	void mat4::fromRows(const vec4f& r0, const vec4f& r1, const vec4f& r2, const vec4f& r3)
+	void mat4::setRows(const vec4f& r0, const vec4f& r1, const vec4f& r2, const vec4f& r3)
 	{
 		set(r0.x, r0.y, r0.z, r0.w,
 			r1.x, r1.y, r1.z, r1.w,
@@ -763,7 +763,7 @@ namespace hxm
 			r3.x, r3.y, r3.z, r3.w);
 	}
 
-	void mat4::fromColumns(const vec4f& c0, const vec4f& c1, const vec4f& c2, const vec4f& c3)
+	void mat4::setColumns(const vec4f& c0, const vec4f& c1, const vec4f& c2, const vec4f& c3)
 	{
 		set(c0.x, c1.x, c2.x, c3.x,
 			c0.y, c1.y, c2.y, c3.y,
@@ -1416,7 +1416,7 @@ namespace hxm
 		return mat;
 	}
 
-	void mat5::fromRows(const vec5f& r0, const vec5f& r1, const vec5f& r2, const vec5f& r3, const vec5f& r4)
+	void mat5::setRows(const vec5f& r0, const vec5f& r1, const vec5f& r2, const vec5f& r3, const vec5f& r4)
 	{
 		set(r0.x, r0.y, r0.z, r0.w, r0.v,
 			r1.x, r1.y, r1.z, r1.w, r1.v,
@@ -1425,7 +1425,7 @@ namespace hxm
 			r4.x, r4.y, r4.z, r4.w, r4.v);
 	}
 
-	void mat5::fromColumns(const vec5f& c0, const vec5f& c1, const vec5f& c2, const vec5f& c3, const vec5f& c4)
+	void mat5::setColumns(const vec5f& c0, const vec5f& c1, const vec5f& c2, const vec5f& c3, const vec5f& c4)
 	{
 		set(c0.x, c1.x, c2.x, c3.x, c4.x,
 			c0.y, c1.y, c2.y, c3.y, c4.y,
