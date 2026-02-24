@@ -38,7 +38,6 @@ int main()
 	}
 
 	//TODO
-	// Orthonormal basis
 	// Spherical-to-Cartesian conversion
 	// Cartesian-to-Spherical conversion
 

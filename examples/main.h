@@ -787,6 +787,90 @@ bool testMatrix()
 		}
 	}
 
+	// Determinants
+	{
+		// Mat3
+		{
+			mat3 identity = mat3();
+			const float expectedDet1 = 1.f;
+			if (identity.Determinant() != expectedDet1)
+			{
+				success = false;
+				std::printf("Mat3 Determinant of identity failed\n");
+			}
+
+			mat3 scaleMat = mat3::MakeScale(vec2f(2, 3));
+			const float expectedDet2 = 2.f * 3.f;
+			if (scaleMat.Determinant() != expectedDet2)
+			{
+				success = false;
+				std::printf("Mat3 Determinant of scale failed\n");
+			}
+
+			mat3 rotMat = mat3::MakeRotation(HX_PI * 0.2f);
+			const float expectedDet3 = 1.f;
+			if (rotMat.Determinant() != expectedDet3)
+			{
+				success = false;
+				std::printf("Mat3 Determinant of rotate failed\n");
+			}
+		}
+
+		// Mat4
+		{
+			mat4 identity = mat4();
+			const float expectedDet1 = 1.f;
+			if (identity.Determinant() != expectedDet1)
+			{
+				success = false;
+				std::printf("Mat4 Determinant of identity failed\n");
+			}
+
+			mat4 scaleMat = mat4::MakeScale(vec3f(2, 3, 4));
+			const float expectedDet2 = 2.f * 3.f * 4.f;
+			if (scaleMat.Determinant() != expectedDet2)
+			{
+				success = false;
+				std::printf("Mat4 Determinant of scale failed\n");
+			}
+
+			mat4 rotMat = mat4::MakeRotationXY(HX_PI * 0.2f);
+			const float expectedDet3 = 1.f;
+			if (rotMat.Determinant() != expectedDet3)
+			{
+				success = false;
+				std::printf("Mat4 Determinant of rotate failed\n");
+			}
+		}
+
+		// Mat5
+		{
+			mat5 identity = mat5();
+			const float expectedDet1 = 1.f;
+			if (identity.Determinant() != expectedDet1)
+			{
+				success = false;
+				std::printf("Mat5 Determinant of identity failed\n");
+			}
+
+			mat5 scaleMat = mat5::MakeScale(vec4f(2, 3, 4, 5));
+			const float expectedDet2 = 2.f * 3.f * 4.f * 5.f;
+			if (scaleMat.Determinant() != expectedDet2)
+			{
+				success = false;
+				std::printf("Mat5 Determinant of scale failed\n");
+			}
+
+			mat5 rotMat = mat5::MakeRotationXY(HX_PI * 0.2f);
+			const float expectedDet3 = 1.f;
+			if (rotMat.Determinant() != expectedDet3)
+			{
+				success = false;
+				std::printf("Mat5 Determinant of rotate failed\n");
+			}
+		}
+	}
+
 	return success;
 }
 
@@ -1152,3 +1236,4 @@ bool testRotor()
 
 	return success;
 }
+

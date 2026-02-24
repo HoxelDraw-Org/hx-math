@@ -124,15 +124,15 @@ namespace hxm
         const float d = (toNorm.y * fromNorm.z) - (toNorm.z * fromNorm.y);
         const float e = (toNorm.w * fromNorm.y) - (toNorm.y * fromNorm.w);
         const float f = (toNorm.z * fromNorm.w) - (toNorm.w * fromNorm.z);
-        const float len = std::sqrt((a * a) + (b * b) + (c * c) + (d * d) + (e * e) + (f * f));
+        const float invLen = 1.f / std::sqrt((a * a) + (b * b) + (c * c) + (d * d) + (e * e) + (f * f));
 
         scalar = cosHalfTheta;
-        xy = sinHalfTheta * (a / len);
-        zx = sinHalfTheta * (b / len);
-        xw = sinHalfTheta * (c / len);
-        yz = sinHalfTheta * (d / len);
-        wy = sinHalfTheta * (e / len);
-        zw = sinHalfTheta * (f / len);
+        xy = sinHalfTheta * (a * invLen);
+        zx = sinHalfTheta * (b * invLen);
+        xw = sinHalfTheta * (c * invLen);
+        yz = sinHalfTheta * (d * invLen);
+        wy = sinHalfTheta * (e * invLen);
+        zw = sinHalfTheta * (f * invLen);
 
         return *this;
     }

@@ -202,6 +202,13 @@ namespace hxm
 		return vec2f(el[1], el[4]);
 	}
 
+	float mat3::Determinant() const
+	{
+		return m00 * (m11 * m22 - m12 * m21)
+			- m01 * (m10 * m22 - m12 * m20)
+			+ m02 * (m10 * m21 - m11 * m20);
+	}
+
 	mat3 mat3::MakeTranslation(float x, float y)
 	{
 		mat3 mat = mat3();
@@ -256,6 +263,20 @@ namespace hxm
 		mat3 mat = m;
 		mat.invert();
 		return mat;
+	}
+
+	void mat3::setRows(const vec3f& r0, const vec3f& r1, const vec3f& r2)
+	{
+		set(r0.x, r0.y, r0.z,
+			r1.x, r1.y, r1.z,
+			r2.x, r2.y, r2.z);
+	}
+
+	void mat3::setColumns(const vec3f& c0, const vec3f& c1, const vec3f& c2)
+	{
+		set(c0.x, c1.x, c2.x,
+			c0.y, c1.y, c2.y,
+			c0.z, c1.z, c2.z);
 	}
 
 	mat3::mat3()
@@ -571,6 +592,33 @@ namespace hxm
 		return vec3f(el[2], el[6], el[10]);
 	}
 
+	float mat4::Determinant() const
+	{
+		float A2323 = m22 * m33 - m23 * m32;
+		float A1323 = m21 * m33 - m23 * m31;
+		float A1223 = m21 * m32 - m22 * m31;
+		float A0323 = m20 * m33 - m23 * m30;
+		float A0223 = m20 * m32 - m22 * m30;
+		float A0123 = m20 * m31 - m21 * m30;
+		float A2313 = m12 * m33 - m13 * m32;
+		float A1313 = m11 * m33 - m13 * m31;
+		float A1213 = m11 * m32 - m12 * m31;
+		float A2312 = m12 * m23 - m13 * m22;
+		float A1312 = m11 * m23 - m13 * m21;
+		float A1212 = m11 * m22 - m12 * m21;
+		float A0313 = m10 * m33 - m13 * m30;
+		float A0213 = m10 * m32 - m12 * m30;
+		float A0312 = m10 * m23 - m13 * m20;
+		float A0212 = m10 * m22 - m12 * m20;
+		float A0113 = m10 * m31 - m11 * m30;
+		float A0112 = m10 * m21 - m11 * m20;
+
+		return m00 * (m11 * A2323 - m12 * A1323 + m13 * A1223)
+			- m01 * (m10 * A2323 - m12 * A0323 + m13 * A0223)
+			+ m02 * (m10 * A1323 - m11 * A0323 + m13 * A0123)
+			- m03 * (m10 * A1223 - m11 * A0223 + m12 * A0123);
+	}
+
 	mat4 mat4::MakeTranslation(float x, float y, float z)
 	{
 		mat4 mat = mat4();
@@ -705,6 +753,22 @@ namespace hxm
 		mat4 mat = m;
 		mat.invert();
 		return mat;
+	}
+
+	void mat4::setRows(const vec4f& r0, const vec4f& r1, const vec4f& r2, const vec4f& r3)
+	{
+		set(r0.x, r0.y, r0.z, r0.w,
+			r1.x, r1.y, r1.z, r1.w,
+			r2.x, r2.y, r2.z, r2.w,
+			r3.x, r3.y, r3.z, r3.w);
+	}
+
+	void mat4::setColumns(const vec4f& c0, const vec4f& c1, const vec4f& c2, const vec4f& c3)
+	{
+		set(c0.x, c1.x, c2.x, c3.x,
+			c0.y, c1.y, c2.y, c3.y,
+			c0.z, c1.z, c2.z, c3.z,
+			c0.w, c1.w, c2.w, c3.w);
 	}
 
 	mat4::mat4()
@@ -1158,6 +1222,87 @@ namespace hxm
 		return vec4f(el[3], el[8], el[13], el[18]);
 	}
 
+	float mat5::Determinant() const
+	{
+		float A3434 = m33 * m44 - m34 * m43;
+		float A2434 = m32 * m44 - m34 * m42;
+		float A2334 = m32 * m43 - m33 * m42;
+		float A1434 = m31 * m44 - m34 * m41;
+		float A1334 = m31 * m43 - m33 * m41;
+		float A1234 = m31 * m42 - m32 * m41;
+		float A0434 = m30 * m44 - m34 * m40;
+		float A0334 = m30 * m43 - m33 * m40;
+		float A0234 = m30 * m42 - m32 * m40;
+		float A0134 = m30 * m41 - m31 * m40;
+		float A3424 = m23 * m44 - m24 * m43;
+		float A2424 = m22 * m44 - m24 * m42;
+		float A2324 = m22 * m43 - m23 * m42;
+		float A1424 = m21 * m44 - m24 * m41;
+		float A1324 = m21 * m43 - m23 * m41;
+		float A1224 = m21 * m42 - m22 * m41;
+		float A3423 = m23 * m34 - m24 * m33;
+		float A2423 = m22 * m34 - m24 * m32;
+		float A2323 = m22 * m33 - m23 * m32;
+		float A1423 = m21 * m34 - m24 * m31;
+		float A1323 = m21 * m33 - m23 * m31;
+		float A1223 = m21 * m32 - m22 * m31;
+		float A0424 = m20 * m44 - m24 * m40;
+		float A0324 = m20 * m43 - m23 * m40;
+		float A0224 = m20 * m42 - m22 * m40;
+		float A0423 = m20 * m34 - m24 * m30;
+		float A0323 = m20 * m33 - m23 * m30;
+		float A0223 = m20 * m32 - m22 * m30;
+		float A0124 = m20 * m41 - m21 * m40;
+		float A0123 = m20 * m31 - m21 * m30;
+
+		float B234234 = m22 * A3434 - m23 * A2434 + m24 * A2334;
+		float B134234 = m21 * A3434 - m23 * A1434 + m24 * A1334;
+		float B124234 = m21 * A2434 - m22 * A1434 + m24 * A1234;
+		float B123234 = m21 * A2334 - m22 * A1334 + m23 * A1234;
+		float B034234 = m20 * A3434 - m23 * A0434 + m24 * A0334;
+		float B024234 = m20 * A2434 - m22 * A0434 + m24 * A0234;
+		float B023234 = m20 * A2334 - m22 * A0334 + m23 * A0234;
+		float B014234 = m20 * A1434 - m21 * A0434 + m24 * A0134;
+		float B013234 = m20 * A1334 - m21 * A0334 + m23 * A0134;
+		float B012234 = m20 * A1234 - m21 * A0234 + m22 * A0134;
+		float B234134 = m12 * A3434 - m13 * A2434 + m14 * A2334;
+		float B134134 = m11 * A3434 - m13 * A1434 + m14 * A1334;
+		float B124134 = m11 * A2434 - m12 * A1434 + m14 * A1234;
+		float B123134 = m11 * A2334 - m12 * A1334 + m13 * A1234;
+		float B234124 = m12 * A3424 - m13 * A2424 + m14 * A2324;
+		float B134124 = m11 * A3424 - m13 * A1424 + m14 * A1324;
+		float B124124 = m11 * A2424 - m12 * A1424 + m14 * A1224;
+		float B123124 = m11 * A2324 - m12 * A1324 + m13 * A1224;
+		float B234123 = m12 * A3423 - m13 * A2423 + m14 * A2323;
+		float B134123 = m11 * A3423 - m13 * A1423 + m14 * A1323;
+		float B124123 = m11 * A2423 - m12 * A1423 + m14 * A1223;
+		float B123123 = m11 * A2323 - m12 * A1323 + m13 * A1223;
+		float B034134 = m10 * A3434 - m13 * A0434 + m14 * A0334;
+		float B024134 = m10 * A2434 - m12 * A0434 + m14 * A0234;
+		float B023134 = m10 * A2334 - m12 * A0334 + m13 * A0234;
+		float B034124 = m10 * A3424 - m13 * A0424 + m14 * A0324;
+		float B024124 = m10 * A2424 - m12 * A0424 + m14 * A0224;
+		float B023124 = m10 * A2324 - m12 * A0324 + m13 * A0224;
+		float B034123 = m10 * A3423 - m13 * A0423 + m14 * A0323;
+		float B024123 = m10 * A2423 - m12 * A0423 + m14 * A0223;
+		float B023123 = m10 * A2323 - m12 * A0323 + m13 * A0223;
+		float B014134 = m10 * A1434 - m11 * A0434 + m14 * A0134;
+		float B013134 = m10 * A1334 - m11 * A0334 + m13 * A0134;
+		float B014124 = m10 * A1424 - m11 * A0424 + m14 * A0124;
+		float B013124 = m10 * A1324 - m11 * A0324 + m13 * A0124;
+		float B014123 = m10 * A1423 - m11 * A0423 + m14 * A0123;
+		float B013123 = m10 * A1323 - m11 * A0323 + m13 * A0123;
+		float B012134 = m10 * A1234 - m11 * A0234 + m12 * A0134;
+		float B012124 = m10 * A1224 - m11 * A0224 + m12 * A0124;
+		float B012123 = m10 * A1223 - m11 * A0223 + m12 * A0123;
+
+		return m00 * (m11 * B234234 - m12 * B134234 + m13 * B124234 - m14 * B123234)
+			- m01 * (m10 * B234234 - m12 * B034234 + m13 * B024234 - m14 * B023234)
+			+ m02 * (m10 * B134234 - m11 * B034234 + m13 * B014234 - m14 * B013234)
+			- m03 * (m10 * B124234 - m11 * B024234 + m12 * B014234 - m14 * B012234)
+			+ m04 * (m10 * B123234 - m11 * B023234 + m12 * B013234 - m13 * B012234);
+	}
+
 	mat5 mat5::MakeTranslation(float x, float y, float z, float w)
 	{
 		mat5 mat = mat5();
@@ -1269,6 +1414,24 @@ namespace hxm
 		mat5 mat = m;
 		mat.invert();
 		return mat;
+	}
+
+	void mat5::setRows(const vec5f& r0, const vec5f& r1, const vec5f& r2, const vec5f& r3, const vec5f& r4)
+	{
+		set(r0.x, r0.y, r0.z, r0.w, r0.v,
+			r1.x, r1.y, r1.z, r1.w, r1.v,
+			r2.x, r2.y, r2.z, r2.w, r2.v,
+			r3.x, r3.y, r3.z, r3.w, r3.v,
+			r4.x, r4.y, r4.z, r4.w, r4.v);
+	}
+
+	void mat5::setColumns(const vec5f& c0, const vec5f& c1, const vec5f& c2, const vec5f& c3, const vec5f& c4)
+	{
+		set(c0.x, c1.x, c2.x, c3.x, c4.x,
+			c0.y, c1.y, c2.y, c3.y, c4.y,
+			c0.z, c1.z, c2.z, c3.z, c4.z,
+			c0.w, c1.w, c2.w, c3.w, c4.w,
+			c0.v, c1.v, c2.v, c3.v, c4.v);
 	}
 
 	mat5::mat5()
