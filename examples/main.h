@@ -6,6 +6,10 @@
 #include "mat.h"
 #include "hxMath.h"
 #include "rotor.h"
+#include "onb.h"
+#include <vector>
+#include <chrono>
+using namespace std::chrono;
 
 #define MAX_ERROR 1e-5f
 using namespace hxm;
@@ -42,6 +46,19 @@ bool isNearVec5f(const vec5f& a, const vec5f& b, float error = MAX_ERROR)
 bool isEqualRotor4(const rotor4& a, const rotor4& b)
 {
 	return a.xy == b.xy && a.zx == b.zx && a.xw == b.xw && a.yz == b.yz && a.wy == b.wy && a.zw == b.zw && a.scalar == b.scalar;
+}
+
+double dotDouble(const hxm::vec4f& a, const hxm::vec4f& b)
+{
+	return double(a.x) * double(b.x) +
+		double(a.y) * double(b.y) +
+		double(a.z) * double(b.z) +
+		double(a.w) * double(b.w);
+}
+
+double lengthDouble(const hxm::vec4f& v)
+{
+	return std::sqrt(dotDouble(v, v));
 }
 
 bool testVector()
@@ -1237,3 +1254,253 @@ bool testRotor()
 	return success;
 }
 
+double onb3SqError(hxm::vec3f v0, hxm::vec3f v1, hxm::vec3f v2)
+{
+	// each vector should be unit-length
+	double lenErr0 = std::pow(lengthDouble(v0) - 1.0, 2.0);
+	double lenErr1 = std::pow(lengthDouble(v1) - 1.0, 2.0);
+	double lenErr2 = std::pow(lengthDouble(v2) - 1.0, 2.0);
+
+	// the dot product between each vector should be zero
+	double dotV0V1err = std::pow(dotDouble(v0, v1), 2.0);
+	double dotV0V2err = std::pow(dotDouble(v0, v2), 2.0);
+	double dotV1V2err = std::pow(dotDouble(v1, v2), 2.0);
+
+	// mean squared error
+	return (lenErr0 + lenErr1 + lenErr2 + dotV0V1err + dotV0V2err + dotV1V2err) / 6.0;
+}
+
+double onb4SqError(hxm::vec4f v0, hxm::vec4f v1, hxm::vec4f v2, hxm::vec4f v3)
+{
+	// each vector should be unit-length
+	double lenErr0 = std::pow(lengthDouble(v0) - 1.0, 2.0);
+	double lenErr1 = std::pow(lengthDouble(v1) - 1.0, 2.0);
+	double lenErr2 = std::pow(lengthDouble(v2) - 1.0, 2.0);
+	double lenErr3 = std::pow(lengthDouble(v3) - 1.0, 2.0);
+
+	// the dot product between each vector should be zero
+	double dotV0V1err = std::pow(dotDouble(v0, v1), 2.0);
+	double dotV0V2err = std::pow(dotDouble(v0, v2), 2.0);
+	double dotV0V3err = std::pow(dotDouble(v0, v3), 2.0);
+	double dotV1V2err = std::pow(dotDouble(v1, v2), 2.0);
+	double dotV1V3err = std::pow(dotDouble(v1, v3), 2.0);
+	double dotV2V3err = std::pow(dotDouble(v2, v3), 2.0);
+
+	// mean squared error
+	return (lenErr0 + lenErr1 + lenErr2 + lenErr3 + dotV0V1err + dotV0V2err + dotV0V3err + dotV1V2err + dotV1V3err + dotV2V3err) / 10.0;
+}
+
+bool testONB()
+{
+	bool success = true;
+
+	{
+		const uint32_t gridSize = 31;
+		double maxError = -1.0;
+		double totalError = 0.0;
+
+		std::vector<hxm::vec3f> testPts;
+		testPts.reserve(gridSize * gridSize * gridSize);
+
+		// grid of points centered around the origin
+		hxm::vec3u idx;
+		for (idx.z = 0; idx.z < gridSize; idx.z++)
+		{
+			for (idx.y = 0; idx.y < gridSize; idx.y++)
+			{
+				for (idx.x = 0; idx.x < gridSize; idx.x++)
+				{
+					hxm::vec3f idxFactor = hxm::vec3f(idx) / hxm::vec3f(gridSize - 1);
+					hxm::vec3f toPt = (idxFactor * 2.0f) - 1.0f;
+
+					if (std::abs(toPt.length()) > 1e-6f)
+					{
+						testPts.push_back(hxm::normalize(toPt));
+					}
+				}
+			}
+		}
+
+		auto onb3TestStart = high_resolution_clock::now();
+		// make sure that the determinant of the basis is +1
+			// also measure the error
+		for (size_t ptIdx = 0; ptIdx < testPts.size(); ptIdx++)
+		{
+			hxm::vec3f toPtNorm = testPts[ptIdx];
+
+			hxm::vec3f onb0, onb1;
+			hxm::makeONB3(toPtNorm, onb0, onb1);
+
+			const double err = onb3SqError(onb0, onb1, toPtNorm);
+
+			// if NaN
+			if (err != err)
+			{
+				std::printf("ONB3 NaN error value for vector: {%f,%f,%f}", toPtNorm.x, toPtNorm.y, toPtNorm.z);
+				success = false;
+				continue;
+			}
+
+			maxError = std::max(maxError, err);
+			totalError += err;
+
+			// also check that the determinant is +1
+			hxm::mat3 matOnb;
+			matOnb.setColumns(onb0, onb1, toPtNorm);
+			const float onbDet = matOnb.Determinant();
+			if (std::abs(onbDet - 1.f) > 1e-5f)
+			{
+				std::printf("ONB3 invalid determinant for {%f,%f,%f}: det: %f\n", toPtNorm.x, toPtNorm.y, toPtNorm.z, onbDet);
+				success = false;
+			}
+		}
+
+		auto onb3TestEnd = high_resolution_clock::now();
+		auto onb3Duration = duration_cast<milliseconds>(onb3TestEnd - onb3TestStart);
+
+		double avgError = totalError / double(testPts.size());
+
+		std::printf("==== ONB3 error testing ====\n");
+		std::printf("trials: %i\n", int(testPts.size()));
+		std::printf("maxError: %f * 10^-14\n", maxError * 1e14);
+		std::printf("avgError: %f * 10^-14\n", avgError * 1e14);
+		std::printf("ONB3 test time: %i ms\n", int(onb3Duration.count()));
+		std::printf("============================\n\n");
+	}
+
+	// ONB4
+	{
+		// test principal axes
+		{
+			hxm::vec4f inVecX = { 1, 0, 0, 0 };
+			hxm::vec4f inVecY = { 0, 1, 0, 0 };
+			hxm::vec4f inVecZ = { 0, 0, 1, 0 };
+			hxm::vec4f inVecW = { 0, 0, 0, 1 };
+			hxm::vec4f onbX, onbY, onbZ;
+
+			{
+				makeONB4(inVecX, onbX, onbY, onbZ);
+
+				// just x and w should have changed
+				if (!isNearVec4f(onbX, vec4f(0, 0, 0, -1)) || !isNearVec4f(onbY, vec4f(0, 1, 0, 0)) || !isNearVec4f(onbZ, vec4f(0, 0, 1, 0)))
+				{
+					std::printf("ONB4: to +X test failed\n");
+					success = false;
+				}
+			}
+
+			{
+				makeONB4(inVecY, onbX, onbY, onbZ);
+
+				// just y and w should have changed
+				if (!isNearVec4f(onbX, vec4f(1, 0, 0, 0)) || !isNearVec4f(onbY, vec4f(0, 0, 0, -1)) || !isNearVec4f(onbZ, vec4f(0, 0, 1, 0)))
+				{
+					std::printf("ONB4: to +Y test failed\n");
+					success = false;
+				}
+			}
+
+			{
+				makeONB4(inVecZ, onbX, onbY, onbZ);
+
+				// just z and w should have changed
+				if (!isNearVec4f(onbX, vec4f(1, 0, 0, 0)) || !isNearVec4f(onbY, vec4f(0, 1, 0, 0)) || !isNearVec4f(onbZ, vec4f(0, 0, 0, -1)))
+				{
+					std::printf("ONB4: to +Z test failed\n");
+					success = false;
+				}
+			}
+
+			{
+				makeONB4(inVecW, onbX, onbY, onbZ);
+
+				// nothing should have changed
+				if (!isNearVec4f(onbX, vec4f(1, 0, 0, 0)) || !isNearVec4f(onbY, vec4f(0, 1, 0, 0)) || !isNearVec4f(onbZ, vec4f(0, 0, 1, 0)))
+				{
+					std::printf("ONB4: to +W test failed\n");
+					success = false;
+				}
+			}
+		}
+
+		// test a handful of other vectors
+		{
+			const uint32_t gridSize = 31;
+			double maxError = -1.0;
+			double totalError = 0.0;
+
+			std::vector<hxm::vec4f> testPts;
+			testPts.reserve(gridSize * gridSize * gridSize * gridSize);
+
+			// grid of points centered around the origin
+			hxm::vec4u idx;
+			for (idx.w = 0; idx.w < gridSize; idx.w++)
+			{
+				for (idx.z = 0; idx.z < gridSize; idx.z++)
+				{
+					for (idx.y = 0; idx.y < gridSize; idx.y++)
+					{
+						for (idx.x = 0; idx.x < gridSize; idx.x++)
+						{
+							hxm::vec4f idxFactor = hxm::vec4f(idx) / hxm::vec4f(gridSize - 1);
+							hxm::vec4f toPt = (idxFactor * 2.0f) - 1.0f;
+
+							if (std::abs(toPt.length()) > 1e-6f)
+							{
+								testPts.push_back(hxm::normalize(toPt));
+							}
+						}
+					}
+				}
+			}
+
+			// make sure that the determinant of the basis is +1
+			// also measure the error
+			auto onb4TestStart = high_resolution_clock::now();
+			for (size_t ptIdx = 0; ptIdx < testPts.size(); ptIdx++)
+			{
+				hxm::vec4f toPtNorm = testPts[ptIdx];
+
+				hxm::vec4f onb0, onb1, onb2;
+				makeONB4(toPtNorm, onb0, onb1, onb2);
+
+				const double err = onb4SqError(onb0, onb1, onb2, toPtNorm);
+
+				// if NaN
+				if (err != err)
+				{
+					std::printf("ONB4 NaN error value for vector: {%f,%f,%f,%f}", toPtNorm.x, toPtNorm.y, toPtNorm.z, toPtNorm.w);
+					success = false;
+					continue;
+				}
+
+				maxError = std::max(maxError, err);
+				totalError += err;
+
+				// also check that the determinant is +1
+				hxm::mat4 matOnb;
+				matOnb.setColumns(onb0, onb1, onb2, toPtNorm);
+				const float onbDet = matOnb.Determinant();
+				if (std::abs(onbDet - 1.f) > 1e-5f)
+				{
+					std::printf("ONB4 invalid determinant for {%f,%f,%f,%f}: det: %f\n", toPtNorm.x, toPtNorm.y, toPtNorm.z, toPtNorm.w, onbDet);
+					success = false;
+				}
+			}
+
+			auto onb4TestEnd = high_resolution_clock::now();
+			auto onb4Duration = duration_cast<milliseconds>(onb4TestEnd - onb4TestStart);
+
+			double avgError = totalError / double(testPts.size());
+
+			std::printf("==== ONB4 error testing ====\n");
+			std::printf("trials: %i\n", int(testPts.size()));
+			std::printf("maxError: %f * 10^-14\n", maxError * 1e14);
+			std::printf("avgError: %f * 10^-14\n", avgError * 1e14);
+			std::printf("ONB4 test time: %i ms\n", int(onb4Duration.count()));
+			std::printf("============================\n\n");
+		}
+	}
+
+	return success;
+}
