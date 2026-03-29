@@ -65,10 +65,10 @@ namespace hxm
         float dX = ray.dir.x;
         float dY = ray.dir.y;
         float dZ = ray.dir.z;
-        newDir.x = (m[0] * dX) + (m[4] * dY) + (m[8] * dZ) + m[12];
-        newDir.y = (m[1] * dX) + (m[5] * dY) + (m[9] * dZ) + m[13];
-        newDir.z = (m[2] * dX) + (m[6] * dY) + (m[10] * dZ) + m[14];
-        //newDir.w = (m[3] * dX) + (m[7] * dY) + (m[11] * dZ) + m[15];
+        newDir.x = (m[0] * dX) + (m[4] * dY) + (m[8] * dZ);
+        newDir.y = (m[1] * dX) + (m[5] * dY) + (m[9] * dZ);
+        newDir.z = (m[2] * dX) + (m[6] * dY) + (m[10] * dZ);
+        //newDir.w = (m[3] * dX) + (m[7] * dY) + (m[11] * dZ);
 
         return ray3(newOrig, newDir);
     }
