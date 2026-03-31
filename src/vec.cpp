@@ -18,10 +18,24 @@ namespace hxm
         return *this;
     }
 
+    vec2f& vec2f::operator+=(const float rhs)
+    {
+        x += rhs;
+        y += rhs;
+        return *this;
+    }
+
     vec2f& vec2f::operator-=(const vec2f& rhs)
     {
         x -= rhs.x;
         y -= rhs.y;
+        return *this;
+    }
+
+    vec2f& vec2f::operator-=(const float rhs)
+    {
+        x -= rhs;
+        y -= rhs;
         return *this;
     }
 
@@ -32,7 +46,7 @@ namespace hxm
         return *this;
     }
 
-    vec2f& vec2f::operator*=(float rhs)
+    vec2f& vec2f::operator*=(const float rhs)
     {
         x *= rhs;
         y *= rhs;
@@ -46,7 +60,7 @@ namespace hxm
         return *this;
     }
 
-    vec2f& vec2f::operator/=(float rhs)
+    vec2f& vec2f::operator/=(const float rhs)
     {
         x /= rhs;
         y /= rhs;
@@ -93,12 +107,14 @@ namespace hxm
 
     float vec2f::length() const
     {
-        return sqrt(this->dot(*this));
+        return std::sqrt((x * x) + (y * y));
     }
 
-    vec2f& vec2f::normalize()
+    float vec2f::normalize()
     {
-        return (*this) /= (length());
+        const float len = length();
+        (*this) /= len;
+        return len;
     }
 
     vec2f::vec2f() : x(0), y(0) {}
@@ -117,6 +133,13 @@ namespace hxm
         return *this;
     }
 
+    vec2i& vec2i::operator+=(const int32_t rhs)
+    {
+        x += rhs;
+        y += rhs;
+        return *this;
+    }
+
     vec2i& vec2i::operator-=(const vec2i& rhs)
     {
         x -= rhs.x;
@@ -124,9 +147,44 @@ namespace hxm
         return *this;
     }
 
-    bool vec2i::operator==(const vec2i& other) const
+    vec2i& vec2i::operator-=(const int32_t rhs)
     {
-        return x == other.x && y == other.y;
+        x -= rhs;
+        y -= rhs;
+        return *this;
+    }
+
+    vec2i& vec2i::operator*=(const vec2i& rhs)
+    {
+        x *= rhs.x;
+        y *= rhs.y;
+        return *this;
+    }
+
+    vec2i& vec2i::operator*=(const int32_t rhs)
+    {
+        x *= rhs;
+        y *= rhs;
+        return *this;
+    }
+
+    vec2i& vec2i::operator/=(const vec2i& rhs)
+    {
+        x /= rhs.x;
+        y /= rhs.y;
+        return *this;
+    }
+
+    vec2i& vec2i::operator/=(const int32_t rhs)
+    {
+        x /= rhs;
+        y /= rhs;
+        return *this;
+    }
+
+    bool vec2i::operator==(const vec2i& rhs) const
+    {
+        return x == rhs.x && y == rhs.y;
     }
 
     bool vec2i::operator!=(const vec2i& rhs) const
@@ -152,15 +210,6 @@ namespace hxm
 
 
     // VEC2U ----------------------------------------------------------------------
-    uint32_t& vec2u::operator[](uint32_t idx) {
-        return _v[idx];
-    }
-
-    uint32_t vec2u::operator[](uint32_t idx) const
-    {
-        return _v[idx];
-    }
-
     vec2u& vec2u::operator+=(const vec2u& rhs)
     {
         x += rhs.x;
@@ -168,10 +217,52 @@ namespace hxm
         return *this;
     }
 
+    vec2u& vec2u::operator+=(const uint32_t rhs)
+    {
+        x += rhs;
+        y += rhs;
+        return *this;
+    }
+
     vec2u& vec2u::operator-=(const vec2u& rhs)
     {
         x -= rhs.x;
         y -= rhs.y;
+        return *this;
+    }
+
+    vec2u& vec2u::operator-=(const uint32_t rhs)
+    {
+        x -= rhs;
+        y -= rhs;
+        return *this;
+    }
+
+    vec2u& vec2u::operator*=(const vec2u& rhs)
+    {
+        x *= rhs.x;
+        y *= rhs.y;
+        return *this;
+    }
+
+    vec2u& vec2u::operator*=(const uint32_t rhs)
+    {
+        x *= rhs;
+        y *= rhs;
+        return *this;
+    }
+
+    vec2u& vec2u::operator/=(const vec2u& rhs)
+    {
+        x /= rhs.x;
+        y /= rhs.y;
+        return *this;
+    }
+
+    vec2u& vec2u::operator/=(const uint32_t rhs)
+    {
+        x /= rhs;
+        y /= rhs;
         return *this;
     }
 
@@ -183,6 +274,16 @@ namespace hxm
     bool vec2u::operator!=(const vec2u& rhs) const
     {
         return x != rhs.x || y != rhs.y;
+    }
+
+    uint32_t& vec2u::operator[](uint32_t idx)
+    {
+        return _v[idx];
+    }
+
+    uint32_t vec2u::operator[](uint32_t idx) const
+    {
+        return _v[idx];
     }
 
     vec2u::vec2u() : x(0), y(0) {}
@@ -209,11 +310,27 @@ namespace hxm
         return *this;
     }
 
+    vec3f& vec3f::operator+=(const float rhs)
+    {
+        x += rhs;
+        y += rhs;
+        z += rhs;
+        return *this;
+    }
+
     vec3f& vec3f::operator-=(const vec3f& rhs)
     {
         x -= rhs.x;
         y -= rhs.y;
         z -= rhs.z;
+        return *this;
+    }
+
+    vec3f& vec3f::operator-=(const float rhs)
+    {
+        x -= rhs;
+        y -= rhs;
+        z -= rhs;
         return *this;
     }
 
@@ -225,7 +342,7 @@ namespace hxm
         return *this;
     }
 
-    vec3f& vec3f::operator*=(float rhs)
+    vec3f& vec3f::operator*=(const float rhs)
     {
         x *= rhs;
         y *= rhs;
@@ -241,22 +358,12 @@ namespace hxm
         return *this;
     }
 
-    vec3f& vec3f::operator/=(float rhs)
+    vec3f& vec3f::operator/=(const float rhs)
     {
         x /= rhs;
         y /= rhs;
         z /= rhs;
         return *this;
-    }
-
-    float& vec3f::operator[](uint32_t idx)
-    {
-        return _v[idx];
-    }
-
-    float vec3f::operator[](uint32_t idx) const
-    {
-        return _v[idx];
     }
 
     bool vec3f::operator==(const vec3f& rhs) const
@@ -267,6 +374,16 @@ namespace hxm
     bool vec3f::operator!=(const vec3f& rhs) const
     {
         return x != rhs.x || y != rhs.y || z != rhs.z;
+    }
+
+    float& vec3f::operator[](uint32_t idx)
+    {
+        return _v[idx];
+    }
+
+    float vec3f::operator[](uint32_t idx) const
+    {
+        return _v[idx];
     }
 
     uint32_t vec3f::minCompIdx() const
@@ -295,12 +412,14 @@ namespace hxm
 
     float vec3f::length() const
     {
-        return sqrt(this->dot(*this));
+        return std::sqrt((x * x) + (y * y) + (z * z));
     }
 
-    vec3f& vec3f::normalize()
+    float vec3f::normalize()
     {
-        return (*this) /= (length());
+        const float len = length();
+        (*this) /= len;
+        return len;
     }
 
     vec3f::vec3f() : x(0), y(0), z(0) {}
@@ -322,11 +441,59 @@ namespace hxm
         return *this;
     }
 
+    vec3i& vec3i::operator+=(const int32_t rhs)
+    {
+        x += rhs;
+        y += rhs;
+        z += rhs;
+        return *this;
+    }
+
     vec3i& vec3i::operator-=(const vec3i& rhs)
     {
         x -= rhs.x;
         y -= rhs.y;
         z -= rhs.z;
+        return *this;
+    }
+
+    vec3i& vec3i::operator-=(const int32_t rhs)
+    {
+        x -= rhs;
+        y -= rhs;
+        z -= rhs;
+        return *this;
+    }
+
+    vec3i& vec3i::operator*=(const vec3i& rhs)
+    {
+        x *= rhs.x;
+        y *= rhs.y;
+        z *= rhs.z;
+        return *this;
+    }
+
+    vec3i& vec3i::operator*=(const int32_t rhs)
+    {
+        x *= rhs;
+        y *= rhs;
+        z *= rhs;
+        return *this;
+    }
+
+    vec3i& vec3i::operator/=(const vec3i& rhs)
+    {
+        x /= rhs.x;
+        y /= rhs.y;
+        z /= rhs.z;
+        return *this;
+    }
+
+    vec3i& vec3i::operator/=(const int32_t rhs)
+    {
+        x /= rhs;
+        y /= rhs;
+        z /= rhs;
         return *this;
     }
 
@@ -358,14 +525,68 @@ namespace hxm
 
 
     // VEC3U ----------------------------------------------------------------------
-    uint32_t& vec3u::operator[](uint32_t idx)
+    vec3u& vec3u::operator+=(const vec3u& rhs)
     {
-        return _v[idx];
+        x += rhs.x;
+        y += rhs.y;
+        z += rhs.z;
+        return *this;
     }
 
-    uint32_t vec3u::operator[](uint32_t idx) const
+    vec3u& vec3u::operator+=(const uint32_t rhs)
     {
-        return _v[idx];
+        x += rhs;
+        y += rhs;
+        z += rhs;
+        return *this;
+    }
+
+    vec3u& vec3u::operator-=(const vec3u& rhs)
+    {
+        x -= rhs.x;
+        y -= rhs.y;
+        z -= rhs.z;
+        return *this;
+    }
+
+    vec3u& vec3u::operator-=(const uint32_t rhs)
+    {
+        x -= rhs;
+        y -= rhs;
+        z -= rhs;
+        return *this;
+    }
+
+    vec3u& vec3u::operator*=(const vec3u& rhs)
+    {
+        x *= rhs.x;
+        y *= rhs.y;
+        z *= rhs.z;
+        return *this;
+    }
+
+    vec3u& vec3u::operator*=(const uint32_t rhs)
+    {
+        x *= rhs;
+        y *= rhs;
+        z *= rhs;
+        return *this;
+    }
+
+    vec3u& vec3u::operator/=(const vec3u& rhs)
+    {
+        x /= rhs.x;
+        y /= rhs.y;
+        z /= rhs.z;
+        return *this;
+    }
+
+    vec3u& vec3u::operator/=(const uint32_t rhs)
+    {
+        x /= rhs;
+        y /= rhs;
+        z /= rhs;
+        return *this;
     }
 
     bool vec3u::operator==(const vec3u& rhs) const
@@ -376,6 +597,16 @@ namespace hxm
     bool vec3u::operator!=(const vec3u& rhs) const
     {
         return !(x == rhs.x && y == rhs.y && z == rhs.z);
+    }
+
+    uint32_t& vec3u::operator[](uint32_t idx)
+    {
+        return _v[idx];
+    }
+
+    uint32_t vec3u::operator[](uint32_t idx) const
+    {
+        return _v[idx];
     }
 
     vec3u::vec3u() : x(0), y(0), z(0) {}
@@ -396,14 +627,68 @@ namespace hxm
 
 
     // VEC3U8 ---------------------------------------------------------------------
-    uint8_t& vec3u8::operator[](uint32_t idx)
+    vec3u8& vec3u8::operator+=(const vec3u8& rhs)
     {
-        return _v[idx];
+        x += rhs.x;
+        y += rhs.y;
+        z += rhs.z;
+        return *this;
     }
 
-    uint8_t vec3u8::operator[](uint32_t idx) const
+    vec3u8& vec3u8::operator+=(const uint8_t rhs)
     {
-        return _v[idx];
+        x += rhs;
+        y += rhs;
+        z += rhs;
+        return *this;
+    }
+
+    vec3u8& vec3u8::operator-=(const vec3u8& rhs)
+    {
+        x -= rhs.x;
+        y -= rhs.y;
+        z -= rhs.z;
+        return *this;
+    }
+
+    vec3u8& vec3u8::operator-=(const uint8_t rhs)
+    {
+        x -= rhs;
+        y -= rhs;
+        z -= rhs;
+        return *this;
+    }
+
+    vec3u8& vec3u8::operator*=(const vec3u8& rhs)
+    {
+        x *= rhs.x;
+        y *= rhs.y;
+        z *= rhs.z;
+        return *this;
+    }
+
+    vec3u8& vec3u8::operator*=(const uint8_t rhs)
+    {
+        x *= rhs;
+        y *= rhs;
+        z *= rhs;
+        return *this;
+    }
+
+    vec3u8& vec3u8::operator/=(const vec3u8& rhs)
+    {
+        x /= rhs.x;
+        y /= rhs.y;
+        z /= rhs.z;
+        return *this;
+    }
+
+    vec3u8& vec3u8::operator/=(const uint8_t rhs)
+    {
+        x /= rhs;
+        y /= rhs;
+        z /= rhs;
+        return *this;
     }
 
     bool vec3u8::operator==(const vec3u8& rhs) const
@@ -414,6 +699,16 @@ namespace hxm
     bool vec3u8::operator!=(const vec3u8& rhs) const
     {
         return !(x == rhs.x && y == rhs.y && z == rhs.z);
+    }
+
+    uint8_t& vec3u8::operator[](uint32_t idx)
+    {
+        return _v[idx];
+    }
+
+    uint8_t vec3u8::operator[](uint32_t idx) const
+    {
+        return _v[idx];
     }
 
     vec3u8::vec3u8() : x(0), y(0), z(0) {}
@@ -449,12 +744,30 @@ namespace hxm
         return *this;
     }
 
+    vec4f& vec4f::operator+=(const float rhs)
+    {
+        x += rhs;
+        y += rhs;
+        z += rhs;
+        w += rhs;
+        return *this;
+    }
+
     vec4f& vec4f::operator-=(const vec4f& rhs)
     {
         x -= rhs.x;
         y -= rhs.y;
         z -= rhs.z;
         w -= rhs.w;
+        return *this;
+    }
+
+    vec4f& vec4f::operator-=(const float rhs)
+    {
+        x -= rhs;
+        y -= rhs;
+        z -= rhs;
+        w -= rhs;
         return *this;
     }
 
@@ -467,7 +780,7 @@ namespace hxm
         return *this;
     }
 
-    vec4f& vec4f::operator*=(float rhs)
+    vec4f& vec4f::operator*=(const float rhs)
     {
         x *= rhs;
         y *= rhs;
@@ -485,7 +798,7 @@ namespace hxm
         return *this;
     }
 
-    vec4f& vec4f::operator/=(float rhs)
+    vec4f& vec4f::operator/=(const float rhs)
     {
         x /= rhs;
         y /= rhs;
@@ -514,6 +827,7 @@ namespace hxm
         return _v[idx];
     }
 
+    // TODO jjensen: remove copy and set
     vec4f& vec4f::copy(const vec4f& v)
     {
         x = v.x;
@@ -572,14 +886,15 @@ namespace hxm
 
     float vec4f::length() const
     {
-        return sqrt(this->dot(*this));
+        return std::sqrt((x * x) + (y * y) + (z * z) + (w * w));
     }
 
-    vec4f& vec4f::normalize()
+    float vec4f::normalize()
     {
-        return (*this) /= (length());
+        const float len = length();
+        (*this) /= len;
+        return len;
     }
-
 
 
     vec4f::vec4f() : x(0), y(0), z(0), w(0) {}
@@ -601,12 +916,30 @@ namespace hxm
         return *this;
     }
 
+    vec4i& vec4i::operator+=(const int32_t rhs)
+    {
+        x += rhs;
+        y += rhs;
+        z += rhs;
+        w += rhs;
+        return *this;
+    }
+
     vec4i& vec4i::operator-=(const vec4i& rhs)
     {
         x -= rhs.x;
         y -= rhs.y;
         z -= rhs.z;
         w -= rhs.w;
+        return *this;
+    }
+
+    vec4i& vec4i::operator-=(const int32_t rhs)
+    {
+        x -= rhs;
+        y -= rhs;
+        z -= rhs;
+        w -= rhs;
         return *this;
     }
 
@@ -619,23 +952,31 @@ namespace hxm
         return *this;
     }
 
-    vec4i& vec4i::operator+=(int value)
+    vec4i& vec4i::operator*=(const int32_t rhs)
     {
-        x += value;
-        y += value;
-        z += value;
-        w += value;
+        x *= rhs;
+        y *= rhs;
+        z *= rhs;
+        w *= rhs;
         return *this;
     }
 
-    int32_t& vec4i::operator[](uint32_t idx)
+    vec4i& vec4i::operator/=(const vec4i& rhs)
     {
-        return _v[idx];
+        x /= rhs.x;
+        y /= rhs.y;
+        z /= rhs.z;
+        w /= rhs.w;
+        return *this;
     }
 
-    int32_t vec4i::operator[](uint32_t idx) const
+    vec4i& vec4i::operator/=(const int32_t rhs)
     {
-        return _v[idx];
+        x /= rhs;
+        y /= rhs;
+        z /= rhs;
+        w /= rhs;
+        return *this;
     }
 
     bool vec4i::operator==(const vec4i& other) const
@@ -653,33 +994,115 @@ namespace hxm
         return x == other.x && y == other.y && z == other.z && w == other.w;
     }
 
+    int32_t& vec4i::operator[](uint32_t idx)
+    {
+        return _v[idx];
+    }
+
+    int32_t vec4i::operator[](uint32_t idx) const
+    {
+        return _v[idx];
+    }
+
     vec4i::vec4i() : x(0), y(0), z(0), w(0) {}
     vec4i::vec4i(int32_t v) : x(v), y(v), z(v), w(v) {}
     vec4i::vec4i(int32_t x, int32_t y, int32_t z, int32_t w) : x(x), y(y), z(z), w(w) {}
     vec4i::vec4i(const vec4f& fvec)
     {
-        x = (int32_t)fvec.x;
-        y = (int32_t)fvec.y;
-        z = (int32_t)fvec.z;
-        w = (int32_t)fvec.w;
+        x = int32_t(fvec.x);
+        y = int32_t(fvec.y);
+        z = int32_t(fvec.z);
+        w = int32_t(fvec.w);
     }
     vec4i::vec4i(const vec4u& uvec)
     {
-        x = (int32_t)uvec.x;
-        y = (int32_t)uvec.y;
-        z = (int32_t)uvec.z;
-        w = (int32_t)uvec.w;
+        x = int32_t(uvec.x);
+        y = int32_t(uvec.y);
+        z = int32_t(uvec.z);
+        w = int32_t(uvec.w);
     }
 
     // VEC4U ----------------------------------------------------------------------
-    uint32_t& vec4u::operator[](uint32_t idx)
+    vec4u& vec4u::operator+=(const vec4u& rhs)
     {
-        return _v[idx];
+        x += rhs.x;
+        y += rhs.y;
+        z += rhs.z;
+        w += rhs.w;
+        return *this;
     }
 
-    uint32_t vec4u::operator[](uint32_t idx) const
+    vec4u& vec4u::operator+=(const uint32_t rhs)
     {
-        return _v[idx];
+        x += rhs;
+        y += rhs;
+        z += rhs;
+        w += rhs;
+        return *this;
+    }
+
+    vec4u& vec4u::operator-=(const vec4u& rhs)
+    {
+        x -= rhs.x;
+        y -= rhs.y;
+        z -= rhs.z;
+        w -= rhs.w;
+        return *this;
+    }
+
+    vec4u& vec4u::operator-=(const uint32_t rhs)
+    {
+        x -= rhs;
+        y -= rhs;
+        z -= rhs;
+        w -= rhs;
+        return *this;
+    }
+
+    vec4u& vec4u::operator*=(const vec4u& rhs)
+    {
+        x *= rhs.x;
+        y *= rhs.y;
+        z *= rhs.z;
+        w *= rhs.w;
+        return *this;
+    }
+
+    vec4u& vec4u::operator*=(const uint32_t rhs)
+    {
+        x *= rhs;
+        y *= rhs;
+        z *= rhs;
+        w *= rhs;
+        return *this;
+    }
+
+    // integer division
+    vec4u& vec4u::operator/=(const vec4u& rhs)
+    {
+        x /= rhs.x;
+        y /= rhs.y;
+        z /= rhs.z;
+        w /= rhs.w;
+        return *this;
+    }
+
+    vec4u& vec4u::operator/=(const uint32_t rhs)
+    {
+        x /= rhs;
+        y /= rhs;
+        z /= rhs;
+        w /= rhs;
+        return *this;
+    }
+
+    vec4u& vec4u::operator%=(const uint32_t rhs)
+    {
+        x %= rhs;
+        y %= rhs;
+        z %= rhs;
+        w %= rhs;
+        return *this;
     }
 
     bool vec4u::operator==(const vec4u& other) const
@@ -697,59 +1120,14 @@ namespace hxm
         return x != other.x || y != other.y || z != other.z || w != other.w;
     }
 
-    // integer division
-    vec4u& vec4u::operator/=(size_t value)
+    uint32_t& vec4u::operator[](uint32_t idx)
     {
-        x /= value;
-        y /= value;
-        z /= value;
-        w /= value;
-        return *this;
+        return _v[idx];
     }
 
-    vec4u& vec4u::operator%=(size_t value)
+    uint32_t vec4u::operator[](uint32_t idx) const
     {
-        x %= value;
-        y %= value;
-        z %= value;
-        w %= value;
-        return *this;
-    }
-
-    vec4u& vec4u::operator+=(size_t rhs)
-    {
-        x += rhs;
-        y += rhs;
-        z += rhs;
-        w += rhs;
-        return *this;
-    }
-
-    vec4u& vec4u::operator+=(const vec4u& other)
-    {
-        x += other.x;
-        y += other.y;
-        z += other.z;
-        w += other.w;
-        return *this;
-    }
-
-    vec4u& vec4u::operator-=(const vec4u& rhs)
-    {
-        x -= rhs.x;
-        y -= rhs.y;
-        z -= rhs.z;
-        w -= rhs.w;
-        return *this;
-    }
-
-    vec4u& vec4u::operator-=(const int& rhs)
-    {
-        x -= rhs;
-        y -= rhs;
-        z -= rhs;
-        w -= rhs;
-        return *this;
+        return _v[idx];
     }
 
     vec4u::vec4u() : x(0), y(0), z(0), w(0) {}
@@ -772,41 +1150,21 @@ namespace hxm
 
 
     // VEC4U8 ---------------------------------------------------------------------
-    uint8_t& vec4u8::operator[](uint32_t idx)
+    vec4u8& vec4u8::operator+=(const vec4u8& rhs)
     {
-        return _v[idx];
+        x += rhs.x;
+        y += rhs.y;
+        z += rhs.z;
+        w += rhs.w;
+        return *this;
     }
 
-    uint8_t vec4u8::operator[](uint32_t idx) const
-    {
-        return _v[idx];
-    }
-
-    bool vec4u8::operator==(const vec4u8& other) const
-    {
-        return x == other.x && y == other.y && z == other.z && w == other.w;
-    }
-
-    bool vec4u8::operator!=(const vec4u8& other) const
-    {
-        return x != other.x || y != other.y || z != other.z || w != other.w;
-    }
-
-    vec4u8& vec4u8::operator+=(size_t rhs)
+    vec4u8& vec4u8::operator+=(const uint8_t rhs)
     {
         x += rhs;
         y += rhs;
         z += rhs;
         w += rhs;
-        return *this;
-    }
-
-    vec4u8& vec4u8::operator+=(const vec4u8& other)
-    {
-        x += other.x;
-        y += other.y;
-        z += other.z;
-        w += other.w;
         return *this;
     }
 
@@ -819,13 +1177,69 @@ namespace hxm
         return *this;
     }
 
-    vec4u8& vec4u8::operator-=(const int& rhs)
+    vec4u8& vec4u8::operator-=(const uint8_t rhs)
     {
         x -= rhs;
         y -= rhs;
         z -= rhs;
         w -= rhs;
         return *this;
+    }
+
+    vec4u8& vec4u8::operator*=(const vec4u8& rhs)
+    {
+        x *= rhs.x;
+        y *= rhs.y;
+        z *= rhs.z;
+        w *= rhs.w;
+        return *this;
+    }
+
+    vec4u8& vec4u8::operator*=(const uint8_t rhs)
+    {
+        x *= rhs;
+        y *= rhs;
+        z *= rhs;
+        w *= rhs;
+        return *this;
+    }
+
+    vec4u8& vec4u8::operator/=(const vec4u8& rhs)
+    {
+        x /= rhs.x;
+        y /= rhs.y;
+        z /= rhs.z;
+        w /= rhs.w;
+        return *this;
+    }
+
+    vec4u8& vec4u8::operator/=(const uint8_t rhs)
+    {
+        x /= rhs;
+        y /= rhs;
+        z /= rhs;
+        w /= rhs;
+        return *this;
+    }
+
+    bool vec4u8::operator==(const vec4u8& other) const
+    {
+        return x == other.x && y == other.y && z == other.z && w == other.w;
+    }
+
+    bool vec4u8::operator!=(const vec4u8& other) const
+    {
+        return x != other.x || y != other.y || z != other.z || w != other.w;
+    }
+
+    uint8_t& vec4u8::operator[](uint32_t idx)
+    {
+        return _v[idx];
+    }
+
+    uint8_t vec4u8::operator[](uint32_t idx) const
+    {
+        return _v[idx];
     }
 
     vec4u8::vec4u8() : x(0), y(0), z(0), w(0) {}
@@ -865,7 +1279,7 @@ namespace hxm
         return *this;
     }
 
-    vec5f& vec5f::operator+=(float rhs)
+    vec5f& vec5f::operator+=(const float rhs)
     {
         x += rhs;
         y += rhs;
@@ -885,7 +1299,7 @@ namespace hxm
         return *this;
     }
 
-    vec5f& vec5f::operator-=(float rhs)
+    vec5f& vec5f::operator-=(const float rhs)
     {
         x -= rhs;
         y -= rhs;
@@ -905,7 +1319,7 @@ namespace hxm
         return *this;
     }
 
-    vec5f& vec5f::operator*=(float rhs)
+    vec5f& vec5f::operator*=(const float rhs)
     {
         x *= rhs;
         y *= rhs;
@@ -925,7 +1339,7 @@ namespace hxm
         return *this;
     }
 
-    vec5f& vec5f::operator/=(float rhs)
+    vec5f& vec5f::operator/=(const float rhs)
     {
         x /= rhs;
         y /= rhs;
@@ -955,6 +1369,7 @@ namespace hxm
         return _v[idx];
     }
 
+    // TODO jjensen: remove copy and set
     vec5f& vec5f::copy(const vec5f& v)
     {
         this->x = v.x;
@@ -1021,12 +1436,14 @@ namespace hxm
 
     float vec5f::length() const
     {
-        return sqrt(this->dot(*this));
+        return std::sqrt((x * x) + (y * y) + (z * z) + (w * w) + (v * v));
     }
 
-    vec5f& vec5f::normalize()
+    float vec5f::normalize()
     {
-        return (*this) /= (length());
+        const float len = length();
+        (*this) /= len;
+        return len;
     }
 
     vec5f::vec5f() : x(0), y(0), z(0), w(0), v(0) {}
@@ -1051,6 +1468,16 @@ namespace hxm
         return *this;
     }
 
+    vec5i& vec5i::operator+=(const int32_t value)
+    {
+        x += value;
+        y += value;
+        z += value;
+        w += value;
+        v += value;
+        return *this;
+    }
+
     vec5i& vec5i::operator-=(const vec5i& rhs)
     {
         x -= rhs.x;
@@ -1061,13 +1488,53 @@ namespace hxm
         return *this;
     }
 
-    vec5i& vec5i::operator+=(int value)
+    vec5i& vec5i::operator-=(const int32_t rhs)
     {
-        x += value;
-        y += value;
-        z += value;
-        w += value;
-        v += value;
+        x -= rhs;
+        y -= rhs;
+        z -= rhs;
+        w -= rhs;
+        v -= rhs;
+        return *this;
+    }
+
+    vec5i& vec5i::operator*=(const vec5i& rhs)
+    {
+        x *= rhs.x;
+        y *= rhs.y;
+        z *= rhs.z;
+        w *= rhs.w;
+        v *= rhs.v;
+        return *this;
+    }
+
+    vec5i& vec5i::operator*=(const int32_t rhs)
+    {
+        x *= rhs;
+        y *= rhs;
+        z *= rhs;
+        w *= rhs;
+        v *= rhs;
+        return *this;
+    }
+
+    vec5i& vec5i::operator/=(const vec5i& rhs)
+    {
+        x /= rhs.x;
+        y /= rhs.y;
+        z /= rhs.z;
+        w /= rhs.w;
+        v /= rhs.v;
+        return *this;
+    }
+
+    vec5i& vec5i::operator/=(const int32_t rhs)
+    {
+        x /= rhs;
+        y /= rhs;
+        z /= rhs;
+        w /= rhs;
+        v /= rhs;
         return *this;
     }
 
@@ -1094,4 +1561,126 @@ namespace hxm
     vec5i::vec5i() : x(0), y(0), z(0), w(0), v(0) {}
     vec5i::vec5i(int32_t v) : x(v), y(v), z(v), w(v), v(v) {}
     vec5i::vec5i(int32_t x, int32_t y, int32_t z, int32_t w, int32_t v) : x(x), y(y), z(z), w(w), v(v) {}
+
+    // VEC5U ----------------------------------------------------------------------
+    vec5u& vec5u::operator+=(const vec5u& rhs)
+    {
+        x += rhs.x;
+        y += rhs.y;
+        z += rhs.z;
+        w += rhs.w;
+        v += rhs.v;
+        return *this;
+    }
+
+    vec5u& vec5u::operator+=(const uint32_t rhs)
+    {
+        x += rhs;
+        y += rhs;
+        z += rhs;
+        w += rhs;
+        v += rhs;
+        return *this;
+    }
+
+    vec5u& vec5u::operator-=(const vec5u& rhs)
+    {
+        x -= rhs.x;
+        y -= rhs.y;
+        z -= rhs.z;
+        w -= rhs.w;
+        v -= rhs.v;
+        return *this;
+    }
+
+    vec5u& vec5u::operator-=(const uint32_t rhs)
+    {
+        x -= rhs;
+        y -= rhs;
+        z -= rhs;
+        w -= rhs;
+        v -= rhs;
+        return *this;
+    }
+
+    vec5u& vec5u::operator*=(const vec5u& rhs)
+    {
+        x *= rhs.x;
+        y *= rhs.y;
+        z *= rhs.z;
+        w *= rhs.w;
+        v *= rhs.v;
+        return *this;
+    }
+
+    vec5u& vec5u::operator*=(const uint32_t rhs)
+    {
+        x *= rhs;
+        y *= rhs;
+        z *= rhs;
+        w *= rhs;
+        v *= rhs;
+        return *this;
+    }
+
+    // integer division
+    vec5u& vec5u::operator/=(const vec5u& rhs)
+    {
+        x /= rhs.x;
+        y /= rhs.y;
+        z /= rhs.z;
+        w /= rhs.w;
+        v /= rhs.v;
+        return *this;
+    }
+
+    vec5u& vec5u::operator/=(const uint32_t rhs)
+    {
+        x /= rhs;
+        y /= rhs;
+        z /= rhs;
+        w /= rhs;
+        v /= rhs;
+        return *this;
+    }
+
+    bool vec5u::operator==(const vec5u& other) const
+    {
+        return x == other.x && y == other.y && z == other.z && w == other.w;
+    }
+
+    bool vec5u::operator!=(const vec5u& other) const
+    {
+        return x != other.x || y != other.y || z != other.z || w != other.w;
+    }
+
+    uint32_t& vec5u::operator[](uint32_t idx)
+    {
+        return _v[idx];
+    }
+
+    uint32_t vec5u::operator[](uint32_t idx) const
+    {
+        return _v[idx];
+    }
+
+    vec5u::vec5u() : x(0), y(0), z(0), w(0), v(0) {}
+    vec5u::vec5u(uint32_t v) : x(v), y(v), z(v), w(v), v(v) {}
+    vec5u::vec5u(uint32_t x, uint32_t y, uint32_t z, uint32_t w, uint32_t v) : x(x), y(y), z(z), w(w), v(v) {}
+    vec5u::vec5u(const vec5f& vec)
+    {
+        x = uint32_t(std::max(0.0f, vec.x));
+        y = uint32_t(std::max(0.0f, vec.y));
+        z = uint32_t(std::max(0.0f, vec.z));
+        w = uint32_t(std::max(0.0f, vec.w));
+        v = uint32_t(std::max(0.0f, vec.v));
+    }
+    vec5u::vec5u(const vec5i& ivec)
+    {
+        x = std::max(0, ivec.x);
+        y = std::max(0, ivec.y);
+        z = std::max(0, ivec.z);
+        w = std::max(0, ivec.w);
+        v = std::max(0, ivec.v);
+    }
 }

@@ -5,10 +5,14 @@ Tested in MSVC and GCC (Ubuntu)
 
 ## Data types
 ### Vector
-- vec5f, vec5i
+- vec5f, vec5i, vec5u
 - vec4f, vec4i, vec4u
-- vec3f, vec3u
+- vec3f, vec3i, vec3u
 - vec2f, vec2i, vec2u
+
+### 8-bit RGB and RGBA
+- vec3u8
+- vec4u8
 
 ### Matrix
 - mat5
@@ -19,6 +23,7 @@ Tested in MSVC and GCC (Ubuntu)
 - aabb4f
 - aabb4i
 - aabb3f
+- aabb3i
 
 ### Rotors
 - rotor4
@@ -41,7 +46,7 @@ etc.
 ```
 
 ### TODO:
-- Standardize vec, mat, and aabb APIs
+- Standardize ~~vec~~, mat, and aabb APIs
 - ~~Add some Rotor rotation code~~
 - ~~Unit tests and/or sample project~~
 - ~~ONB (Orthonormal Basis)~~

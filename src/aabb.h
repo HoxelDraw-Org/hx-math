@@ -15,11 +15,64 @@ namespace hxm
 {
     // Forward declarations of classes here
     class aabb3f;
+    class aabb3i;
     class aabb4f;
     class aabb4i;
 
     typedef aabb3f aabb3;
     typedef aabb4f aabb4;
+
+    // AABB3I -------------------------------------------------------------------
+    class aabb3i
+    {
+        // Defines
+    private:
+    protected:
+    public:
+
+        // Members
+    private:
+    protected:
+    public:
+        union
+        {
+            int32_t _v[6];              // { min_x, min_y, min_z, max_x, max_y, max_z }
+            struct { vec3i _b[2]; };    // { min, max }
+        };
+
+        // Functions
+    private:
+    protected:
+    public:
+        // halfOpenInterval means the AABB includes _min and includes _max-1, but does not include _max
+        void addPoint(const vec3i& pt, bool halfOpenInterval = false);
+
+        vec3i dim() const;
+
+        bool empty() const;
+        bool isValid(bool halfOpenInterval = true) const;
+
+        void addAABB(const aabb3i& other);
+
+        aabb3i intersect(const aabb3i& other) const;
+        aabb3i intersect(const vec3i& otherStart, const vec3i& otherEnd) const;
+
+        int area(bool halfOpenInterval = true) const; // surface area
+        int volume(bool halfOpenInterval = true) const;
+
+        void reset();
+
+        vec3i& operator[](uint32_t idx);        // 0: min, 1: max
+        vec3i operator[](uint32_t idx) const;
+        vec3i min() const;
+        vec3i max() const;
+        aabb3i& operator+=(const aabb3i& other);
+
+        aabb3i();
+        aabb3i(const vec3i& min, const vec3i& max);
+        ~aabb3i() {}
+    };
+    // END AABB3I ---------------------------------------------------------------
 
     // AABB3F -------------------------------------------------------------------
     class aabb3f
@@ -127,7 +180,7 @@ namespace hxm
         aabb4i(const vec4i& min, const vec4i& max);
         ~aabb4i() {}
     };
-    // END AABBI ---------------------------------------------------------------
+    // END AABB4I ---------------------------------------------------------------
 
 
     // AABB4F -------------------------------------------------------------------

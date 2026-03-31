@@ -10,7 +10,168 @@ Justin Jensen
 
 namespace hxm
 {
-    // AABB3 (float) ------------------------------------------------------------
+    // AABB3I -------------------------------------------------------------------
+    void aabb3i::addPoint(const vec3i& pt, bool halfOpenInterval)
+    {
+        _b[0].x = std::min(pt.x, _b[0].x);
+        _b[0].y = std::min(pt.y, _b[0].y);
+        _b[0].z = std::min(pt.z, _b[0].z);
+
+        if (halfOpenInterval)
+        {
+            _b[1].x = std::max(pt.x + 1, _b[1].x);
+            _b[1].y = std::max(pt.y + 1, _b[1].y);
+            _b[1].z = std::max(pt.z + 1, _b[1].z);
+        }
+        else
+        {
+            _b[1].x = std::max(pt.x, _b[1].x);
+            _b[1].y = std::max(pt.y, _b[1].y);
+            _b[1].z = std::max(pt.z, _b[1].z);
+        }
+    }
+
+    vec3i aabb3i::dim() const
+    {
+        return max() - min();
+    }
+
+    bool aabb3i::empty() const
+    {
+        vec3i theDim = dim();
+        return (theDim.x <= 0 || theDim.y <= 0 || theDim.z <= 0);
+    }
+
+    bool aabb3i::isValid(bool halfOpenInterval) const
+    {
+        if (halfOpenInterval)
+        {
+            return !(max().x <= min().x || max().y <= min().y || max().z <= min().z);
+        }
+        else
+        {
+            return !(max().x < min().x || max().y < min().y || max().z < min().z);
+        }
+    }
+
+    void aabb3i::addAABB(const aabb3i& other)
+    {
+        _b[0].x = std::min(other.min().x, _b[0].x);
+        _b[0].y = std::min(other.min().y, _b[0].y);
+        _b[0].z = std::min(other.min().z, _b[0].z);
+
+        _b[1].x = std::max(other.max().x, _b[1].x);
+        _b[1].y = std::max(other.max().y, _b[1].y);
+        _b[1].z = std::max(other.max().z, _b[1].z);
+    }
+
+    aabb3i aabb3i::intersect(const aabb3i& other) const
+    {
+        aabb3i result;
+        result._b[0].x = std::max(_b[0].x, other.min().x);
+        result._b[0].y = std::max(_b[0].y, other.min().y);
+        result._b[0].z = std::max(_b[0].z, other.min().z);
+
+        result._b[1].x = std::min(_b[1].x, other.max().x);
+        result._b[1].y = std::min(_b[1].y, other.max().y);
+        result._b[1].z = std::min(_b[1].z, other.max().z);
+
+        return result;
+    }
+
+    aabb3i aabb3i::intersect(const vec3i& otherStart, const vec3i& otherEnd) const
+    {
+        aabb3i result;
+        for (uint32_t cIdx = 0; cIdx < 3; cIdx++)
+        {
+            result._b[0][cIdx] = std::max(otherStart[cIdx], _b[0][cIdx]);
+            result._b[1][cIdx] = std::min(otherEnd[cIdx], _b[1][cIdx]);
+        }
+
+        return result;
+    }
+
+    int aabb3i::area(bool halfOpenInterval) const
+    {
+        vec3i d = dim();
+        if (!halfOpenInterval)
+            d += 1;
+
+        return 2 * ((d.x * d.y) + (d.x * d.z) + (d.y * d.z));
+    }
+
+    int aabb3i::volume(bool halfOpenInterval) const
+    {
+        if (!isValid())
+        {
+            return 0;
+        }
+
+        vec3i tDim;
+        if (halfOpenInterval)
+        {
+            tDim = max() - min();
+        }
+        else
+        {
+            tDim = (max() + 1) - min();
+        }
+
+        return tDim.x * tDim.y * tDim.z;
+    }
+
+    void aabb3i::reset()
+    {
+        _b[0] = vec3i(INT_MAX);
+        _b[1] = vec3i(INT_MIN);
+    }
+
+    vec3i& aabb3i::operator[](uint32_t idx)
+    {
+        return _b[idx];
+    }
+
+    vec3i aabb3i::operator[](uint32_t idx) const
+    {
+        return _b[idx];
+    }
+
+    vec3i aabb3i::min() const
+    {
+        return _b[0];
+    }
+
+    vec3i aabb3i::max() const
+    {
+        return _b[1];
+    }
+
+    aabb3i& aabb3i::operator+=(const aabb3i& other)
+    {
+        _b[0].x = std::min(other.min().x, _b[0].x);
+        _b[0].y = std::min(other.min().y, _b[0].y);
+        _b[0].z = std::min(other.min().z, _b[0].z);
+
+        _b[1].x = std::max(other.max().x, _b[1].x);
+        _b[1].y = std::max(other.max().y, _b[1].y);
+        _b[1].z = std::max(other.max().z, _b[1].z);
+
+        return *this;
+    }
+
+    aabb3i::aabb3i()
+    {
+        reset();
+    }
+
+    aabb3i::aabb3i(const vec3i& min, const vec3i& max)
+    {
+        _b[0] = min;
+        _b[1] = max;
+    }
+    // END AABB3I ---------------------------------------------------------------
+
+    // AABB3F ------------------------------------------------------------
     void aabb3f::addPoint(const vec3f& pt)
     {
         _b[0].x = std::min(pt.x, _b[0].x);
