@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include "vec.h"
+#include "vecUtils.h"
 #include "aabb.h"
 #include "mat.h"
 #include "hxMath.h"
@@ -187,6 +188,59 @@ bool testVector()
 	{
 		std::printf("Vec4f inline normalize failed!\n");
 		success = false;
+	}
+
+	// negation operators
+	{
+		const vec2f vPos2f = { 1, 2 };
+		const vec2i vPos2i = { 1, 2 };
+		const vec3f vPos3f = { 1, 2, 3 };
+		const vec3i vPos3i = { 1, 2, 3 };
+		const vec4f vPos4f = { 1, 2, 3, 4 };
+		const vec4i vPos4i = { 1, 2, 3, 4 };
+		const vec5f vPos5f = { 1, 2, 3, 4, 5 };
+		const vec5i vPos5i = { 1, 2, 3, 4, 5 };
+
+		if (-vPos2f != vec2f(-1, -2))
+		{
+			std::printf("vec2f negation failed!\n");
+			success = false;
+		}
+		if (-vPos2i != vec2i(-1, -2))
+		{
+			std::printf("vec2i negation failed!\n");
+			success = false;
+		}
+		if (-vPos3f != vec3f(-1, -2, -3))
+		{
+			std::printf("vec3f negation failed!\n");
+			success = false;
+		}
+		if (-vPos3i != vec3i(-1, -2, -3))
+		{
+			std::printf("vec3i negation failed!\n");
+			success = false;
+		}
+		if (-vPos4f != vec4f(-1, -2, -3, -4))
+		{
+			std::printf("vec4f negation failed!\n");
+			success = false;
+		}
+		if (-vPos4i != vec4i(-1, -2, -3, -4))
+		{
+			std::printf("vec4i negation failed!\n");
+			success = false;
+		}
+		if (-vPos5f != vec5f(-1, -2, -3, -4, -5))
+		{
+			std::printf("vec4f negation failed!\n");
+			success = false;
+		}
+		if (-vPos5i != vec5i(-1, -2, -3, -4, -5))
+		{
+			std::printf("vec5i negation failed!\n");
+			success = false;
+		}
 	}
 
 	return success;

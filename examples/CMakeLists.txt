@@ -9,6 +9,7 @@ set (HEADERS
 	${INCLUDE_DIR}/vec.h
 	${INCLUDE_DIR}/rotor.h
 	${INCLUDE_DIR}/onb.h
+	${INCLUDE_DIR}/vecUtils.h
 	)
 
 set (MATH_SOURCES
