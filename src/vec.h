@@ -886,10 +886,6 @@ namespace hxm
         float& operator[](uint32_t idx);
         float operator[](uint32_t idx) const;
 
-        // TODO jjensen: remove copy and set
-        vec4f& copy(const vec4f& v);
-        vec4f& set(float x, float y, float z, float w);
-
         uint32_t minCompIdx() const;    // the index of the smallest component of this vector
         float dot(const vec4f& rhs) const;
         float length() const;
@@ -1463,10 +1459,6 @@ namespace hxm
         bool operator!=(const vec5f& other) const;
         float& operator[](uint32_t idx);
         float operator[](uint32_t idx) const;
-
-        // TODO jjensen: remove copy and set
-        vec5f& copy(const vec5f& v);
-        vec5f& set(float x, float y, float z, float w, float v);
 
         uint32_t minCompIdx() const;    // the index of the smallest component of this vector
         float dot(const vec5f& rhs) const;

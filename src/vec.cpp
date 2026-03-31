@@ -827,25 +827,6 @@ namespace hxm
         return _v[idx];
     }
 
-    // TODO jjensen: remove copy and set
-    vec4f& vec4f::copy(const vec4f& v)
-    {
-        x = v.x;
-        y = v.y;
-        z = v.z;
-        w = v.w;
-        return *this;
-    }
-
-    vec4f& vec4f::set(float x, float y, float z, float w)
-    {
-        this->x = x;
-        this->y = y;
-        this->z = z;
-        this->w = w;
-        return *this;
-    }
-
     uint32_t vec4f::minCompIdx() const
     {
         uint32_t minIdx = 0;
@@ -1367,27 +1348,6 @@ namespace hxm
     float vec5f::operator[](uint32_t idx) const
     {
         return _v[idx];
-    }
-
-    // TODO jjensen: remove copy and set
-    vec5f& vec5f::copy(const vec5f& v)
-    {
-        this->x = v.x;
-        this->y = v.y;
-        this->z = v.z;
-        this->w = v.w;
-        this->v = v.v;
-        return *this;
-    }
-
-    vec5f& vec5f::set(float x, float y, float z, float w, float v)
-    {
-        this->x = x;
-        this->y = y;
-        this->z = z;
-        this->w = w;
-        this->v = v;
-        return *this;
     }
 
     uint32_t vec5f::minCompIdx() const
