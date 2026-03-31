@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include "vec.h"
+#include "vecUtils.h"
 #include "aabb.h"
 #include "mat.h"
 #include "hxMath.h"

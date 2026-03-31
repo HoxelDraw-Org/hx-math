@@ -71,9 +71,6 @@ namespace hxm
         float length() const;
         float normalize();  // returns the length before normalization
 
-        // TODO: move to utils file
-        uint32_t minCompIdx() const;    // the index of the smallest component of this vector
-
         vec2f();
         vec2f(float v);
         vec2f(float x, float y);
@@ -454,9 +451,6 @@ namespace hxm
         float& operator[](uint32_t idx);
         float  operator[](uint32_t idx) const;
 
-        // TODO move to utils file
-        uint32_t minCompIdx() const;    // the index of the smallest component of this vector
-        
         float dot(const vec3f& rhs) const;
         float length() const;
         float normalize(); // returns the length before normalization
@@ -886,7 +880,6 @@ namespace hxm
         float& operator[](uint32_t idx);
         float operator[](uint32_t idx) const;
 
-        uint32_t minCompIdx() const;    // the index of the smallest component of this vector
         float dot(const vec4f& rhs) const;
         float length() const;
         float normalize();  // returns length before normalization
@@ -1008,7 +1001,7 @@ namespace hxm
 
     inline vec4f round(const vec4f& v)
     {
-        return vec4f(std::roundf(v.x), std::roundf(v.y), std::roundf(v.z), std::roundf(v.w));
+        return vec4f(std::round(v.x), std::round(v.y), std::round(v.z), std::round(v.w));
     }
 
     inline vec4f vabs(vec4f v)
@@ -1138,20 +1131,6 @@ namespace hxm
         v.z = std::abs(v.z);
         v.w = std::abs(v.w);
         return v;
-    }
-
-    // TODO: move to utils file?
-    inline int firstNonZeroComponent(const vec4i& v)
-    {
-        for (int idx = 0; idx < 4; idx++)
-        {
-            if (v[idx] != 0)
-            {
-                return idx;
-            }
-        }
-
-        return -1;
     }
 
     // handles negative values in vec a
@@ -1313,18 +1292,6 @@ namespace hxm
         return lhs;
     }
 
-    // TODO: move to a utils file?
-    inline size_t countEqualComponents(const vec4u& a, const vec4u& b)
-    {
-        size_t result = 0;
-        result += a.x == b.x ? 1 : 0;
-        result += a.y == b.y ? 1 : 0;
-        result += a.z == b.z ? 1 : 0;
-        result += a.w == b.w ? 1 : 0;
-        return result;
-    }
-
-
     // VEC4U8 -----------------------------------------------------------------
     class vec4u8 {
         // Members
@@ -1460,7 +1427,6 @@ namespace hxm
         float& operator[](uint32_t idx);
         float operator[](uint32_t idx) const;
 
-        uint32_t minCompIdx() const;    // the index of the smallest component of this vector
         float dot(const vec5f& rhs) const;
         float length() const;
         float normalize();  // returns length before normalization
@@ -1694,20 +1660,6 @@ namespace hxm
         v.w = std::abs(v.w);
         v.v = std::abs(v.v);
         return v;
-    }
-
-    // TODO: move to a utils file?
-    inline int firstNonZeroComponent(const vec5i& v)
-    {
-        for (int idx = 0; idx < 5; idx++)
-        {
-            if (v[idx] != 0)
-            {
-                return idx;
-            }
-        }
-
-        return -1;
     }
 
     // handles negative values in vec a

@@ -20,10 +20,8 @@ Tested in MSVC and GCC (Ubuntu)
 - mat3
 
 ### Axis-Aligned Bounding Box
-- aabb4f
-- aabb4i
-- aabb3f
-- aabb3i
+- aabb4f, aabb4i
+- aabb3f, aabb3i
 
 ### Rotors
 - rotor4
@@ -47,10 +45,13 @@ etc.
 
 ### TODO:
 - Standardize ~~vec~~, mat, and aabb APIs
+- Move helper functions to utils files for vec, mat, aabb, etc.
 - ~~Add some Rotor rotation code~~
 - ~~Unit tests and/or sample project~~
 - ~~ONB (Orthonormal Basis)~~
 - Spherical-to-Cartesian and Cartesian-to-Spherical conversion
 - Header-only
 - Version number
-- Double-precision
+- Double-precision (64-bit)
+- Half precision (16-bit)
+- rotor3

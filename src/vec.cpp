@@ -87,19 +87,6 @@ namespace hxm
         return _v[idx];
     }
 
-    uint32_t vec2f::minCompIdx() const
-    {
-        uint32_t minIdx = 0;
-        float minVal = x;
-        if (y < minVal)
-        {
-            minIdx = 1;
-            minVal = y;
-        }
-
-        return minIdx;
-    }
-
     float vec2f::dot(const vec2f& rhs) const
     {
         return (x * rhs.x) + (y * rhs.y);
@@ -384,25 +371,6 @@ namespace hxm
     float vec3f::operator[](uint32_t idx) const
     {
         return _v[idx];
-    }
-
-    uint32_t vec3f::minCompIdx() const
-    {
-        uint32_t minIdx = 0;
-        float minVal = x;
-        if (y < minVal)
-        {
-            minIdx = 1;
-            minVal = y;
-        }
-
-        if (z < minVal)
-        {
-            minIdx = 2;
-            minVal = z;
-        }
-
-        return minIdx;
     }
 
     float vec3f::dot(const vec3f& rhs) const
@@ -825,39 +793,6 @@ namespace hxm
     float vec4f::operator[](uint32_t idx) const
     {
         return _v[idx];
-    }
-
-    uint32_t vec4f::minCompIdx() const
-    {
-        uint32_t minIdx = 0;
-        float minVal = FLT_MAX;
-
-        // don't consider components with -infinity values
-        if (!std::isinf(x) && x < minVal)
-        {
-            minIdx = 0;
-            minVal = x;
-        }
-
-        if (!std::isinf(y) && y < minVal)
-        {
-            minIdx = 1;
-            minVal = y;
-        }
-
-        if (!std::isinf(z) && z < minVal)
-        {
-            minIdx = 2;
-            minVal = z;
-        }
-
-        if (!std::isinf(w) && w < minVal)
-        {
-            minIdx = 3;
-            minVal = w;
-        }
-
-        return minIdx;
     }
 
     float vec4f::dot(const vec4f& rhs) const
@@ -1348,45 +1283,6 @@ namespace hxm
     float vec5f::operator[](uint32_t idx) const
     {
         return _v[idx];
-    }
-
-    uint32_t vec5f::minCompIdx() const
-    {
-        uint32_t minIdx = 0;
-        float minVal = FLT_MAX;
-
-        // don't consider components with -infinity values
-        if (!std::isinf(x) && x < minVal)
-        {
-            minIdx = 0;
-            minVal = x;
-        }
-
-        if (!std::isinf(y) && y < minVal)
-        {
-            minIdx = 1;
-            minVal = y;
-        }
-
-        if (!std::isinf(z) && z < minVal)
-        {
-            minIdx = 2;
-            minVal = z;
-        }
-
-        if (!std::isinf(w) && w < minVal)
-        {
-            minIdx = 3;
-            minVal = w;
-        }
-
-        if (!std::isinf(v) && v < minVal)
-        {
-            minIdx = 4;
-            minVal = v;
-        }
-
-        return minIdx;
     }
 
     float vec5f::dot(const vec5f& rhs) const
